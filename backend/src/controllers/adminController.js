@@ -6,15 +6,41 @@ const AiLog = require('../models/AiLog');
 
 // ── Dashboard stats ──────────────────────────────────────────────────────────
 exports.getStats = async (req, res) => {
-  const [totalUsers, activeSubscriptions, totalMatches, pendingWalis, totalAiLogs] =
-    await Promise.all([
-      User.countDocuments({ role: { $ne: 'admin' } }),
-      Subscription.countDocuments({ status: 'active' }),
-      Match.countDocuments(),
-      Wali.countDocuments({ verified: false }),
-      AiLog.countDocuments(),
-    ]);
-  res.json({ totalUsers, activeSubscriptions, totalMatches, pendingWalis, totalAiLogs });
+  const [
+    totalUsers,
+    totalMales,
+    totalFemales,
+    activeSubscriptions,
+    totalMatches,
+    pendingMatches,
+    pendingWalis,
+    totalWalis,
+    totalAiLogs,
+    aiCompletedUsers,
+  ] = await Promise.all([
+    User.countDocuments({ role: { $ne: 'admin' } }),
+    User.countDocuments({ role: 'male' }),
+    User.countDocuments({ role: 'female' }),
+    Subscription.countDocuments({ status: 'active' }),
+    Match.countDocuments(),
+    Match.countDocuments({ status: 'pending' }),
+    Wali.countDocuments({ verified: false }),
+    Wali.countDocuments(),
+    AiLog.countDocuments(),
+    User.countDocuments({ aiPhaseCompleted: true }),
+  ]);
+  res.json({
+    totalUsers,
+    totalMales,
+    totalFemales,
+    activeSubscriptions,
+    totalMatches,
+    pendingMatches,
+    pendingWalis,
+    totalWalis,
+    totalAiLogs,
+    aiCompletedUsers,
+  });
 };
 
 // ── Users ────────────────────────────────────────────────────────────────────

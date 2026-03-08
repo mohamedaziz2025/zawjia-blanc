@@ -158,6 +158,8 @@ export interface AdminStats {
   pendingMatches: number;
   totalAiLogs: number;
   pendingWalis: number;
+  aiCompletedUsers: number;
+  totalWalis: number;
 }
 
 export interface AiLog {

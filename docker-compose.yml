@@ -37,11 +37,11 @@ services:
     container_name: zawjia-backend
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "5000:5000"
     env_file:
       - ./backend/.env
     environment:
-      - PORT=3000
+      - PORT=5000
       - MONGO_URI=mongodb://mongodb:27017/Zawjia
       - REDIS_URL=redis://redis:6379
       - FRONTEND_URL=http://localhost:3001
@@ -55,7 +55,7 @@ services:
     networks:
       - zawjia-network
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:5000/health"]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -66,13 +66,13 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - NEXT_PUBLIC_API_URL=http://localhost:3000
+        - NEXT_PUBLIC_API_URL=http://localhost:5000
     container_name: zawjia-frontend
     restart: unless-stopped
     ports:
       - "3001:3001"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:3000
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
     depends_on:
       - backend
     networks:

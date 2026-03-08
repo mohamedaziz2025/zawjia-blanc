@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://72.62.71.97';
+const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://72.62.71.97:5000';
 
 const api = axios.create({ baseURL: BASE, timeout: 30_000 });
 

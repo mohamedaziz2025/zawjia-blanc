@@ -2,14 +2,14 @@
 const nextConfig = {
   images: {
     remotePatterns: [
-      { protocol: 'http', hostname: 'localhost', port: '3000', pathname: '/uploads/**' },
+      { protocol: 'http', hostname: '72.62.71.97', pathname: '/uploads/**' },
     ],
   },
   async rewrites() {
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://72.62.71.97'}/:path*`,
       },
     ];
   },

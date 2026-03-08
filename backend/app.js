@@ -35,7 +35,7 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 
 // ── CORS ─────────────────────────────────────────────────────────────────────────
-const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:3001')
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://72.62.71.97:3001')
   .split(',')
   .map((o) => o.trim());
 

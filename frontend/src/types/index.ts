@@ -157,8 +157,8 @@ export interface AdminStats {
   totalMatches: number;
   pendingMatches: number;
   totalAiLogs: number;
-  pendingWalis: number;
   aiCompletedUsers: number;
+  pendingWalis: number;
   totalWalis: number;
 }
 

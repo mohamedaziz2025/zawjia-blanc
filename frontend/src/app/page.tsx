@@ -1,11 +1,11 @@
 'use client';
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   Sparkles, Heart, Shield, Brain, ChevronRight,
   Users, Lock, MessageCircle, Check,
-  MapPin,
+  MapPin, Menu, X,
 } from 'lucide-react';
 
 // ── Background Ornament ─────────────────────────────────────────────────────
@@ -177,6 +177,9 @@ export default function LandingPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navLinks = ['Concept', 'Sécurité', 'Tarifs'];
 
   const featuresList = [
     { icon: Brain,         title: 'Nisfi IA Intelligente', desc: 'Une conversation approfondie pour cerner votre personnalité et vos attentes spirituelles.',       gradient: 'bg-rose-600' },
@@ -202,24 +205,74 @@ export default function LandingPage() {
         animate={{ y: 0, opacity: 1 }}
         className="fixed top-0 inset-x-0 z-50 px-4 md:px-6 py-4 md:py-6 flex justify-center"
       >
-        <div className="w-full max-w-6xl flex items-center justify-between bg-white/80 backdrop-blur-2xl border border-white/40 px-6 md:px-8 py-3 md:py-4 rounded-full shadow-lg shadow-black/[0.03]">
-          <div className="flex items-center gap-2">
-            <Heart size={24} className="text-rose-600 fill-rose-600" />
-            <span className="font-black text-xl md:text-2xl tracking-tighter text-gray-900 italic">zawjia</span>
+        <div className="w-full max-w-6xl bg-white/80 backdrop-blur-2xl border border-white/40 px-5 md:px-8 py-3 md:py-4 rounded-full shadow-lg shadow-black/[0.03]">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center gap-2">
+              <Heart size={24} className="text-rose-600 fill-rose-600" />
+              <span className="font-black text-xl md:text-2xl tracking-tighter text-gray-900 italic">zawjia</span>
+            </div>
+
+            {/* Desktop nav links */}
+            <div className="hidden lg:flex items-center gap-10 text-xs font-black uppercase tracking-widest text-gray-500">
+              {navLinks.map(item => (
+                <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-rose-600 transition-colors">{item}</a>
+              ))}
+            </div>
+
+            {/* Desktop buttons */}
+            <div className="hidden sm:flex items-center gap-3">
+              <Link href="/login" className="text-[10px] md:text-xs font-black tracking-widest uppercase px-5 py-3 rounded-full border border-rose-200 text-rose-600 hover:bg-rose-50 transition-all">
+                Connexion
+              </Link>
+              <Link href="/register" className="bg-rose-600 text-white text-[10px] md:text-xs font-black tracking-widest uppercase px-6 py-3 rounded-full shadow-lg shadow-rose-600/20 hover:bg-rose-700 transition-all active:scale-95">
+                S&apos;inscrire
+              </Link>
+            </div>
+
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMobileMenuOpen(prev => !prev)}
+              className="sm:hidden p-2 rounded-full border border-rose-200 text-rose-600 hover:bg-rose-50 transition-all"
+              aria-label="Menu"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
-          <div className="hidden lg:flex items-center gap-10 text-xs font-black uppercase tracking-widest text-gray-500">
-            {['Concept', 'Sécurité', 'Tarifs'].map(item => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-rose-600 transition-colors">{item}</a>
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="text-[10px] md:text-xs font-black tracking-widest uppercase px-5 py-3 rounded-full border border-rose-200 text-rose-600 hover:bg-rose-50 transition-all">
-              Connexion
-            </Link>
-            <Link href="/register" className="bg-rose-600 text-white text-[10px] md:text-xs font-black tracking-widest uppercase px-6 py-3 rounded-full shadow-lg shadow-rose-600/20 hover:bg-rose-700 transition-all active:scale-95">
-              S&apos;inscrire
-            </Link>
-          </div>
+
+          {/* Mobile dropdown menu */}
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.25 }}
+                className="sm:hidden overflow-hidden"
+              >
+                <div className="pt-4 pb-2 flex flex-col gap-3">
+                  {navLinks.map(item => (
+                    <a
+                      key={item}
+                      href={`#${item.toLowerCase()}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-xs font-black uppercase tracking-widest text-gray-500 hover:text-rose-600 transition-colors px-2 py-1"
+                    >
+                      {item}
+                    </a>
+                  ))}
+                  <div className="flex gap-3 pt-2">
+                    <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="flex-1 text-center text-[10px] font-black tracking-widest uppercase px-4 py-3 rounded-full border border-rose-200 text-rose-600 hover:bg-rose-50 transition-all">
+                      Connexion
+                    </Link>
+                    <Link href="/register" onClick={() => setMobileMenuOpen(false)} className="flex-1 text-center bg-rose-600 text-white text-[10px] font-black tracking-widest uppercase px-4 py-3 rounded-full shadow-lg shadow-rose-600/20 hover:bg-rose-700 transition-all">
+                      S&apos;inscrire
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.nav>
 

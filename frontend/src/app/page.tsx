@@ -286,7 +286,6 @@ export default function LandingPage() {
           <span className="text-gray-400 text-xs">Découvrir</span>
           <motion.div animate={{ y: [0,8,0] }} transition={{ repeat: Infinity, duration: 1.5 }}
             className="w-5 h-8 rounded-full border border-gray-300 flex items-start justify-center pt-1.5">
-          >
             <div className="w-1 h-2 bg-gold-400 rounded-full"/>
           </motion.div>
         </motion.div>

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -35,7 +35,7 @@ export default function AdminUsersPage() {
   };
   const SUB_COLORS: Record<string,{color:string;bg:string}> = {
     active:  { color:'#2D7D52',                bg:'rgba(45,125,82,0.1)'    },
-    free:    { color:'rgba(232,227,213,0.4)',   bg:'rgba(255,255,255,0.04)' },
+    free:    { color:'#9ca3af',   bg:'rgba(0,0,0,0.05)' },
     expired: { color:'rgba(248,113,113,0.8)',  bg:'rgba(239,68,68,0.08)'   },
   };
 
@@ -44,7 +44,7 @@ export default function AdminUsersPage() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="page-title">Gestion des membres</h1>
-          <p className="text-sm mt-1" style={{ color:'rgba(232,227,213,0.4)' }}>{users.length} membres inscrits</p>
+          <p className="text-sm mt-1" style={{ color:'#9ca3af' }}>{users.length} membres inscrits</p>
         </div>
         <button onClick={() => refetch()} className="btn-secondary text-xs px-3 py-2">
           <RefreshCw size={12} className={isFetching ? 'animate-spin':''}/>
@@ -54,11 +54,11 @@ export default function AdminUsersPage() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search size={13} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'rgba(232,227,213,0.25)' }}/>
+          <Search size={13} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'#d1d5db' }}/>
           <input type="text" placeholder="Rechercher par email ou prénom…" value={search} onChange={e=>setSearch(e.target.value)} className="input-field pl-9"/>
         </div>
         <div className="relative">
-          <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:'rgba(232,227,213,0.25)' }}/>
+          <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color:'#d1d5db' }}/>
           <select value={roleFilter} onChange={e=>setRole(e.target.value)} className="input-field pl-9 min-w-[150px]">
             <option value="all">Tous les rôles</option>
             <option value="male">Frères</option>
@@ -70,7 +70,7 @@ export default function AdminUsersPage() {
 
       {/* Table */}
       <div className="rounded-2xl overflow-hidden"
-           style={{ background:'rgba(17,22,32,0.85)', border:'1px solid rgba(255,255,255,0.07)' }}>
+           style={{ background:'rgba(255,255,255,0.92)', border:'1px solid rgba(0,0,0,0.08)' }}>
         {isLoading ? (
           <div className="flex items-center justify-center h-48">
             <Loader2 size={22} className="animate-spin" style={{ color:'#f87171' }}/>
@@ -79,18 +79,18 @@ export default function AdminUsersPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr style={{ borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
+                <tr style={{ borderBottom:'1px solid rgba(0,0,0,0.07)' }}>
                   {['Membre','Rôle','Statut','Abonnement','Phase IA','Inscrit le','Actions'].map(h => (
                     <th key={h} className="px-4 py-3.5 text-left text-[10px] font-semibold tracking-widest uppercase whitespace-nowrap"
-                        style={{ color:'rgba(232,227,213,0.3)' }}>{h}</th>
+                        style={{ color:'#9ca3af' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((u, i) => (
                   <motion.tr key={u._id} initial={{ opacity:0,y:4 }} animate={{ opacity:1,y:0 }} transition={{ delay:i*0.02 }}
-                    style={{ borderBottom:'1px solid rgba(255,255,255,0.04)', opacity:u.banned ? 0.55:1 }}
-                    onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(255,255,255,0.025)'}
+                    style={{ borderBottom:'1px solid rgba(0,0,0,0.05)', opacity:u.banned ? 0.55:1 }}
+                    onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(0,0,0,0.035)'}
                     onMouseLeave={e=>(e.currentTarget as HTMLElement).style.background='transparent'}>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2.5">
@@ -99,8 +99,8 @@ export default function AdminUsersPage() {
                           {u.firstName?.[0] ?? '?'}
                         </div>
                         <div className="min-w-0">
-                          <p className="font-medium truncate max-w-[140px]" style={{ color:'#E8E3D5' }}>{u.firstName ?? '—'}</p>
-                          <p className="text-xs truncate max-w-[140px]" style={{ color:'rgba(232,227,213,0.35)' }}>{u.email}</p>
+                          <p className="font-medium truncate max-w-[140px]" style={{ color:'#111827' }}>{u.firstName ?? '—'}</p>
+                          <p className="text-xs truncate max-w-[140px]" style={{ color:'#9ca3af' }}>{u.email}</p>
                         </div>
                       </div>
                     </td>
@@ -123,12 +123,12 @@ export default function AdminUsersPage() {
                       <div className="flex gap-0.5 mb-1">
                         {Array.from({length:8},(_,j) => (
                           <div key={j} className="w-1.5 h-1.5 rounded-full"
-                               style={{ background:u.aiPhaseCompleted?'#C8384E':'rgba(255,255,255,0.1)' }}/>
+                               style={{ background:u.aiPhaseCompleted?'#C8384E':'rgba(0,0,0,0.08)' }}/>
                         ))}
                       </div>
-                      <p className="text-[10px]" style={{ color:'rgba(232,227,213,0.3)' }}>{u.aiPhaseCompleted?'Complète':'En cours'}</p>
+                      <p className="text-[10px]" style={{ color:'#9ca3af' }}>{u.aiPhaseCompleted?'Complète':'En cours'}</p>
                     </td>
-                    <td className="px-4 py-3.5 whitespace-nowrap text-xs" style={{ color:'rgba(232,227,213,0.35)' }}>
+                    <td className="px-4 py-3.5 whitespace-nowrap text-xs" style={{ color:'#9ca3af' }}>
                       {formatDate(u.createdAt)}
                     </td>
                     <td className="px-4 py-3.5">
@@ -159,7 +159,7 @@ export default function AdminUsersPage() {
               </tbody>
             </table>
             {filtered.length === 0 && (
-              <div className="text-center py-12 text-sm" style={{ color:'rgba(232,227,213,0.3)' }}>
+              <div className="text-center py-12 text-sm" style={{ color:'#9ca3af' }}>
                 {search ? 'Aucun résultat pour cette recherche' : 'Aucun membre'}
               </div>
             )}

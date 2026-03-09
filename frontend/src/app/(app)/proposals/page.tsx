@@ -41,7 +41,7 @@ function ProposalCard({ proposal, onChoice, isLoading }: {
         }}>
           {/* Front */}
           <div className="absolute inset-0 rounded-2xl overflow-hidden cursor-pointer"
-               style={{ backfaceVisibility: 'hidden', background: 'rgba(17,22,32,0.9)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 40px rgba(0,0,0,0.4)' }}>
+               style={{ backfaceVisibility: 'hidden', background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(0,0,0,0.09)', boxShadow: '0 4px 40px rgba(0,0,0,0.4)' }}>
 
             {/* Top accent */}
             <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, transparent, ${scoreColor}, transparent)` }}/>
@@ -51,7 +51,7 @@ function ProposalCard({ proposal, onChoice, isLoading }: {
               <div className="flex items-start justify-between mb-5">
                 <div>
                   <span className="text-[10px] font-semibold tracking-widest uppercase"
-                        style={{ color: 'rgba(232,227,213,0.35)' }}>
+                        style={{ color: '#9ca3af' }}>
                     Compatibilité
                   </span>
                   <div className="flex items-baseline gap-1.5 mt-0.5">
@@ -68,7 +68,7 @@ function ProposalCard({ proposal, onChoice, isLoading }: {
                 {/* Circular progress ring */}
                 <div className="relative w-16 h-16">
                   <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
-                    <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="2.5"/>
+                    <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(0,0,0,0.07)" strokeWidth="2.5"/>
                     <motion.circle
                       cx="18" cy="18" r="14"
                       fill="none"
@@ -87,23 +87,23 @@ function ProposalCard({ proposal, onChoice, isLoading }: {
                 </div>
               </div>
 
-              <div className="h-px w-full mb-4" style={{ background: 'rgba(255,255,255,0.06)' }}/>
+              <div className="h-px w-full mb-4" style={{ background: 'rgba(0,0,0,0.07)' }}/>
 
               {/* Info */}
               <div className="space-y-2.5 mb-4">
-                <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(232,227,213,0.7)' }}>
-                  <MapPin size={12} style={{ color: 'rgba(232,227,213,0.3)', flexShrink: 0 }}/>
+                <div className="flex items-center gap-2 text-sm" style={{ color: '#374151' }}>
+                  <MapPin size={12} style={{ color: '#9ca3af', flexShrink: 0 }}/>
                   {proposal.city}{proposal.country && `, ${proposal.country}`}
                 </div>
                 {proposal.age && (
-                  <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(232,227,213,0.7)' }}>
-                    <span style={{ color: 'rgba(232,227,213,0.3)', fontSize: '11px', width: 12 }}>👤</span>
+                  <div className="flex items-center gap-2 text-sm" style={{ color: '#374151' }}>
+                    <span style={{ color: '#9ca3af', fontSize: '11px', width: 12 }}>👤</span>
                     {proposal.age} ans · {maritalStatusLabel(proposal.maritalStatus ?? '')}
                   </div>
                 )}
                 {proposal.religiousPractice && (
-                  <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(232,227,213,0.7)' }}>
-                    <span style={{ color: 'rgba(232,227,213,0.3)', fontSize: '11px', width: 12 }}>🕌</span>
+                  <div className="flex items-center gap-2 text-sm" style={{ color: '#374151' }}>
+                    <span style={{ color: '#9ca3af', fontSize: '11px', width: 12 }}>🕌</span>
                     {religiousPracticeLabel(proposal.religiousPractice)}
                   </div>
                 )}
@@ -114,14 +114,14 @@ function ProposalCard({ proposal, onChoice, isLoading }: {
                 <div className="flex flex-wrap gap-1.5 mb-4">
                   {(proposal.mainValues ?? []).slice(0,4).map((v) => (
                     <span key={v} className="badge text-[10px]"
-                          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(232,227,213,0.55)' }}>
+                          style={{ background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)', color: '#6b7280' }}>
                       {v}
                     </span>
                   ))}
                 </div>
               )}
 
-              <p className="text-[10px] text-center" style={{ color: 'rgba(232,227,213,0.25)' }}>
+              <p className="text-[10px] text-center" style={{ color: '#d1d5db' }}>
                 Appuyer pour voir la vision du mariage
               </p>
             </div>
@@ -129,29 +129,29 @@ function ProposalCard({ proposal, onChoice, isLoading }: {
 
           {/* Back */}
           <div className="absolute inset-0 rounded-2xl overflow-hidden cursor-pointer flex flex-col p-6"
-               style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', background: 'rgba(17,22,32,0.95)', border: '1px solid rgba(255,255,255,0.08)' }}>
+               style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(0,0,0,0.09)' }}>
             <div className="h-1 w-full mb-4" style={{ background: `linear-gradient(90deg, transparent, ${scoreColor}80, transparent)` }}/>
             <p className="text-[10px] font-semibold tracking-widest uppercase mb-2.5"
-               style={{ color: 'rgba(232,227,213,0.35)' }}>Vision du mariage</p>
+               style={{ color: '#9ca3af' }}>Vision du mariage</p>
             {proposal.marriageVision ? (
               <p className="text-sm leading-relaxed italic flex-1 overflow-y-auto"
-                 style={{ color: 'rgba(232,227,213,0.75)' }}>
+                 style={{ color: '#374151' }}>
                 &ldquo;{proposal.marriageVision}&rdquo;
               </p>
             ) : (
-              <p className="text-sm italic flex-1" style={{ color: 'rgba(232,227,213,0.3)' }}>
+              <p className="text-sm italic flex-1" style={{ color: '#9ca3af' }}>
                 Non renseigné lors de la phase IA
               </p>
             )}
             {proposal.physicalDescription && (
-              <div className="mt-4 pt-4 space-y-1.5 text-xs" style={{ borderTop: '1px solid rgba(255,255,255,0.06)', color: 'rgba(232,227,213,0.55)' }}>
+              <div className="mt-4 pt-4 space-y-1.5 text-xs" style={{ borderTop: '1px solid rgba(0,0,0,0.07)', color: '#6b7280' }}>
                 <p className="text-[10px] font-semibold tracking-widest uppercase mb-2"
-                   style={{ color: 'rgba(232,227,213,0.3)' }}>Description physique</p>
+                   style={{ color: '#9ca3af' }}>Description physique</p>
                 {proposal.physicalDescription.height && <p>Taille : {proposal.physicalDescription.height} cm</p>}
                 {proposal.physicalDescription.bodyType && <p>Morphologie : {proposal.physicalDescription.bodyType}</p>}
               </div>
             )}
-            <p className="text-[10px] text-center mt-4" style={{ color: 'rgba(232,227,213,0.25)' }}>
+            <p className="text-[10px] text-center mt-4" style={{ color: '#d1d5db' }}>
               Appuyer pour revenir
             </p>
           </div>
@@ -204,13 +204,13 @@ export default function ProposalsPage() {
     return (
       <div className="h-[60vh] flex flex-col items-center justify-center gap-4 text-center">
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-2"
-             style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <Lock size={26} style={{ color: 'rgba(232,227,213,0.3)' }}/>
+             style={{ background: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.09)' }}>
+          <Lock size={26} style={{ color: '#9ca3af' }}/>
         </div>
-        <h2 className="font-display font-bold text-[#E8E3D5]" style={{ fontSize: '1.3rem', letterSpacing: '-0.025em' }}>
+        <h2 className="font-display font-bold text-gray-900" style={{ fontSize: '1.3rem', letterSpacing: '-0.025em' }}>
           Analyse IA requise
         </h2>
-        <p className="text-sm max-w-sm" style={{ color: 'rgba(232,227,213,0.45)' }}>
+        <p className="text-sm max-w-sm" style={{ color: '#6b7280' }}>
           Terminez les 8 phases avec Nisfi IA pour débloquer les propositions.
         </p>
         <Link href="/ai-chat" className="btn-primary mt-2">
@@ -227,10 +227,10 @@ export default function ProposalsPage() {
              style={{ background: 'rgba(200,56,78,0.1)', border: '1px solid rgba(200,56,78,0.2)' }}>
           <Star size={26} style={{ color: '#C8384E' }}/>
         </div>
-        <h2 className="font-display font-bold text-[#E8E3D5]" style={{ fontSize: '1.3rem', letterSpacing: '-0.025em' }}>
+        <h2 className="font-display font-bold text-gray-900" style={{ fontSize: '1.3rem', letterSpacing: '-0.025em' }}>
           Abonnement requis
         </h2>
-        <p className="text-sm max-w-sm" style={{ color: 'rgba(232,227,213,0.45)' }}>
+        <p className="text-sm max-w-sm" style={{ color: '#6b7280' }}>
           Souscrivez un abonnement pour accéder aux propositions de profils compatibles.
         </p>
         <Link href="/subscription" className="btn-primary mt-2">
@@ -247,7 +247,7 @@ export default function ProposalsPage() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="page-title">Propositions du jour</h1>
-          <p className="text-sm mt-1" style={{ color: 'rgba(232,227,213,0.4)' }}>
+          <p className="text-sm mt-1" style={{ color: '#9ca3af' }}>
             Profils soigneusement sélectionnés selon votre compatibilité
           </p>
         </div>
@@ -259,7 +259,7 @@ export default function ProposalsPage() {
       {isLoading && (
         <div className="flex flex-col items-center justify-center h-64 gap-3">
           <Loader2 size={26} className="animate-spin" style={{ color: '#C8384E' }}/>
-          <p className="text-sm" style={{ color: 'rgba(232,227,213,0.4)' }}>Calcul des compatibilités…</p>
+          <p className="text-sm" style={{ color: '#9ca3af' }}>Calcul des compatibilités…</p>
         </div>
       )}
 
@@ -275,10 +275,10 @@ export default function ProposalsPage() {
           {visibleProposals.length === 0 ? (
             <div className="h-[50vh] flex flex-col items-center justify-center gap-4 text-center">
               <CheckCircle2 size={40} style={{ color: 'rgba(200,56,78,0.5)' }}/>
-              <h3 className="font-display font-semibold text-[#E8E3D5]" style={{ fontSize: '1.1rem', letterSpacing: '-0.02em' }}>
+              <h3 className="font-display font-semibold text-gray-900" style={{ fontSize: '1.1rem', letterSpacing: '-0.02em' }}>
                 {proposals.length === 0 ? 'Aucune proposition pour le moment' : 'Vous avez traité toutes les propositions !'}
               </h3>
-              <p className="text-sm max-w-xs" style={{ color: 'rgba(232,227,213,0.4)' }}>
+              <p className="text-sm max-w-xs" style={{ color: '#9ca3af' }}>
                 {proposals.length === 0
                   ? 'Revenez demain, de nouveaux profils sont ajoutés régulièrement.'
                   : 'Revenez demain pour de nouvelles propositions.'}
@@ -301,7 +301,7 @@ export default function ProposalsPage() {
           )}
 
           {visibleProposals.length > 0 && (
-            <p className="text-center text-[11px]" style={{ color: 'rgba(232,227,213,0.25)' }}>
+            <p className="text-center text-[11px]" style={{ color: '#d1d5db' }}>
               {visibleProposals.length} profil{visibleProposals.length > 1 ? 's' : ''} · Cliquer sur une carte pour les détails
             </p>
           )}

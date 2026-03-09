@@ -79,12 +79,12 @@ function PlanCard({ plan, currentStatus, onSubscribe, loading }: {
       whileHover={{ y: -5, transition: { duration: 0.25 } }}
       className="relative flex flex-col p-7 rounded-2xl overflow-hidden cursor-default"
       style={plan.highlight ? {
-        background: 'rgba(17,22,32,0.9)',
+        background: 'rgba(255,255,255,0.92)',
         border: `1px solid ${plan.accent}35`,
         boxShadow: `0 0 60px ${plan.accent}15, 0 4px 40px rgba(0,0,0,0.5), inset 0 1px 0 ${plan.accent}15`,
       } : {
-        background: 'rgba(17,22,32,0.7)',
-        border: '1px solid rgba(255,255,255,0.07)',
+        background: 'rgba(255,255,255,0.92)',
+        border: '1px solid rgba(0,0,0,0.08)',
         boxShadow: '0 4px 40px rgba(0,0,0,0.3)',
       }}
     >
@@ -117,18 +117,18 @@ function PlanCard({ plan, currentStatus, onSubscribe, loading }: {
           {plan.name}
         </p>
         <div className="flex items-baseline gap-1.5">
-          <span className="font-display font-bold text-[#E8E3D5]"
+          <span className="font-display font-bold text-gray-900"
                 style={{ fontSize: '2.4rem', letterSpacing: '-0.04em' }}>
             {plan.price}
           </span>
-          <span className="text-sm" style={{ color: 'rgba(232,227,213,0.4)' }}>/{plan.period}</span>
+          <span className="text-sm" style={{ color: '#9ca3af' }}>/{plan.period}</span>
         </div>
       </div>
 
       {/* Features */}
       <ul className="space-y-2.5 flex-1 mb-6">
         {plan.features.map((f) => (
-          <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: 'rgba(232,227,213,0.75)', letterSpacing: '-0.01em' }}>
+          <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: '#374151', letterSpacing: '-0.01em' }}>
             <Check size={13} className="flex-shrink-0 mt-0.5" style={{ color: plan.accent }}/>
             {f}
           </li>
@@ -187,12 +187,12 @@ export default function SubscriptionPage() {
                     style={{ background: 'rgba(200,56,78,0.1)', border: '1px solid rgba(200,56,78,0.2)', color: '#C8384E' }}>
           <Crown size={12}/> Abonnements Zawjia
         </motion.div>
-        <motion.h1 variants={fadeUp} className="font-display font-bold text-[#E8E3D5] mb-3"
+        <motion.h1 variants={fadeUp} className="font-display font-bold text-gray-900 mb-3"
                    style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', letterSpacing: '-0.035em' }}>
           Investissez dans votre avenir
         </motion.h1>
         <motion.p variants={fadeUp} className="max-w-md mx-auto text-sm leading-relaxed"
-                  style={{ color: 'rgba(232,227,213,0.45)' }}>
+                  style={{ color: '#6b7280' }}>
           Les fonctionnalités de base sont gratuites. L&apos;abonnement débloque le matching et les propositions de profils compatibles.
         </motion.p>
       </motion.div>
@@ -210,9 +210,9 @@ export default function SubscriptionPage() {
               <CheckCircle2 size={18} className="text-emerald-400"/>
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#E8E3D5]">Abonnement actif ✓</p>
+              <p className="text-sm font-semibold text-gray-900">Abonnement actif ✓</p>
               {status.endDate && (
-                <p className="text-xs" style={{ color: 'rgba(232,227,213,0.4)' }}>Expire le {formatDate(status.endDate)}</p>
+                <p className="text-xs" style={{ color: '#9ca3af' }}>Expire le {formatDate(status.endDate)}</p>
               )}
             </div>
             <span className="ml-auto badge text-xs" style={{ background: 'rgba(45,125,82,0.12)', border: '1px solid rgba(45,125,82,0.25)', color: '#3cbe88' }}>
@@ -243,7 +243,7 @@ export default function SubscriptionPage() {
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
         className="max-w-lg mx-auto text-center p-5 rounded-2xl text-xs leading-relaxed"
-        style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)', color: 'rgba(232,227,213,0.38)' }}
+        style={{ background: 'rgba(0,0,0,0.035)', border: '1px solid rgba(0,0,0,0.07)', color: '#9ca3af' }}
       >
         <Sparkles size={12} className="inline mr-1.5 opacity-60"/>
         Paiement sécurisé — Annulation possible à tout moment — Données protégées conformément au RGPD

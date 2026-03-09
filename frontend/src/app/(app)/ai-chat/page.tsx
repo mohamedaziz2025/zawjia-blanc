@@ -26,10 +26,10 @@ function TypingIndicator() {
         <Brain size={14} className="text-white"/>
       </div>
       <div className="px-4 py-3 rounded-2xl rounded-bl-sm flex gap-1.5 items-center"
-           style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+           style={{ background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.09)' }}>
         {[0,1,2].map((i) => (
           <motion.div key={i} className="w-1.5 h-1.5 rounded-full"
-            style={{ background: 'rgba(232,227,213,0.5)' }}
+            style={{ background: '#6b7280' }}
             animate={{ y: [0, -5, 0], opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 0.8, delay: i * 0.18, repeat: Infinity }}
           />
@@ -56,14 +56,14 @@ function ChatBubble({ msg }: { msg: ChatMessage }) {
       )}
       <div className={cn('max-w-[78%] px-4 py-3 text-sm leading-relaxed',
         isUser
-          ? 'rounded-2xl rounded-br-sm text-[#E8E3D5]'
+          ? 'rounded-2xl rounded-br-sm text-gray-900'
           : 'rounded-2xl rounded-bl-sm text-navy-100',
       )} style={isUser ? {
         background: 'linear-gradient(135deg, rgba(200,56,78,0.2), rgba(200,56,78,0.08))',
         border: '1px solid rgba(200,56,78,0.25)',
       } : {
-        background: 'rgba(255,255,255,0.05)',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'rgba(0,0,0,0.06)',
+        border: '1px solid rgba(0,0,0,0.09)',
       }}>
         {msg.content.split('\n').map((line, i) => (
           <span key={i}>{line}{i < msg.content.split('\n').length - 1 && <br/>}</span>
@@ -138,7 +138,7 @@ export default function AiChatPage() {
         initial={{ opacity:0, y:-12 }} animate={{ opacity:1, y:0 }}
         transition={{ duration:0.45 }}
         className="flex items-center gap-3 px-4 py-3.5 rounded-2xl flex-shrink-0"
-        style={{ background: 'rgba(17,22,32,0.7)', border: '1px solid rgba(255,255,255,0.07)', backdropFilter: 'blur(20px)' }}
+        style={{ background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(0,0,0,0.08)', backdropFilter: 'blur(20px)' }}
       >
         <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
              style={{ background: 'linear-gradient(135deg, #2D7D52, #1a6640)', boxShadow: '0 0 20px rgba(45,125,82,0.4)' }}>
@@ -146,16 +146,16 @@ export default function AiChatPage() {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <h1 className="font-display font-semibold text-[#E8E3D5] text-sm" style={{ letterSpacing: '-0.01em' }}>
+            <h1 className="font-display font-semibold text-gray-900 text-sm" style={{ letterSpacing: '-0.01em' }}>
               Nisfi IA
             </h1>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"
                    style={{ boxShadow: '0 0 6px rgba(60,190,136,0.7)' }}/>
-              <span className="text-[10px]" style={{ color: 'rgba(232,227,213,0.4)' }}>En ligne</span>
+              <span className="text-[10px]" style={{ color: '#9ca3af' }}>En ligne</span>
             </div>
           </div>
-          <p className="text-[11px] truncate" style={{ color: 'rgba(232,227,213,0.4)' }}>
+          <p className="text-[11px] truncate" style={{ color: '#9ca3af' }}>
             {completed ? '✓ Analyse complète — Matching débloqué' : `Phase ${phase}/8 — ${phaseLabel(phase)}`}
           </p>
         </div>
@@ -170,14 +170,14 @@ export default function AiChatPage() {
                 className="h-1.5 rounded-full"
                 style={{
                   width: '18px',
-                  background: completed || p.n < phase ? '#C8384E' : p.n === phase ? 'rgba(200,56,78,0.4)' : 'rgba(255,255,255,0.08)',
+                  background: completed || p.n < phase ? '#C8384E' : p.n === phase ? 'rgba(200,56,78,0.4)' : 'rgba(0,0,0,0.09)',
                   boxShadow: (completed || p.n < phase) ? '0 0 6px rgba(200,56,78,0.5)' : 'none',
                 }}
                 whileHover={{ scaleY: 1.5 }}
               />
             ))}
           </div>
-          <p className="text-[10px]" style={{ color: 'rgba(232,227,213,0.3)' }}>
+          <p className="text-[10px]" style={{ color: '#9ca3af' }}>
             {completed ? '8/8 ✓' : `${phase}/8`}
           </p>
         </div>
@@ -185,7 +185,7 @@ export default function AiChatPage() {
 
       {/* Chat area */}
       <div className="flex-1 flex flex-col overflow-hidden rounded-2xl"
-           style={{ background: 'rgba(9,13,20,0.85)', border: '1px solid rgba(255,255,255,0.06)' }}>
+           style={{ background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(0,0,0,0.07)' }}>
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           <AnimatePresence>
             {messages.map((msg, i) => <ChatBubble key={i} msg={msg}/>)}
@@ -204,8 +204,8 @@ export default function AiChatPage() {
             >
               <CheckCircle2 size={18} style={{ color: '#C8384E', flexShrink: 0 }}/>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-[#E8E3D5]">Analyse complète !</p>
-                <p className="text-xs" style={{ color: 'rgba(232,227,213,0.45)' }}>
+                <p className="text-sm font-semibold text-gray-900">Analyse complète !</p>
+                <p className="text-xs" style={{ color: '#6b7280' }}>
                   Votre profil IA est prêt. Le matching est débloqué.
                 </p>
               </div>
@@ -219,7 +219,7 @@ export default function AiChatPage() {
         {/* Input area */}
         {!completed && (
           <div className="p-3 flex gap-2.5 items-end"
-               style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+               style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}>
             <div className="flex-1 relative">
               <textarea
                 ref={inputRef}
@@ -254,9 +254,9 @@ export default function AiChatPage() {
         {PHASES.map((p) => (
           <div key={p.n} className="badge text-[10px] font-medium"
                style={{
-                 background: completed || p.n < phase ? 'rgba(200,56,78,0.1)' : p.n === phase ? 'rgba(45,125,82,0.1)' : 'rgba(255,255,255,0.03)',
-                 border: `1px solid ${completed || p.n < phase ? 'rgba(200,56,78,0.22)' : p.n === phase ? 'rgba(45,125,82,0.25)' : 'rgba(255,255,255,0.07)'}`,
-                 color: completed || p.n < phase ? '#C8384E' : p.n === phase ? '#3cbe88' : 'rgba(232,227,213,0.3)',
+                 background: completed || p.n < phase ? 'rgba(200,56,78,0.1)' : p.n === phase ? 'rgba(45,125,82,0.1)' : 'rgba(0,0,0,0.04)',
+                 border: `1px solid ${completed || p.n < phase ? 'rgba(200,56,78,0.22)' : p.n === phase ? 'rgba(45,125,82,0.25)' : 'rgba(0,0,0,0.08)'}`,
+                 color: completed || p.n < phase ? '#C8384E' : p.n === phase ? '#3cbe88' : '#9ca3af',
                }}>
             {(completed || p.n < phase) && <CheckCircle2 size={9}/>}
             {p.n}. {p.label}

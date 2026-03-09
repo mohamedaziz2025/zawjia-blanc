@@ -41,8 +41,8 @@ function SidebarNavItem({ item, collapsed, onClose }: { item: NavItem; collapsed
       title={collapsed ? item.label : undefined}
       className={cn(
         'relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group select-none',
-        isActive  ? 'text-white' : locked ? 'text-navy-700 cursor-not-allowed' : 'text-navy-300 hover:text-[#E8E3D5]',
-        !isActive && !locked && 'hover:bg-white/[0.04]',
+        isActive  ? 'text-gray-900' : locked ? 'text-gray-400 cursor-not-allowed' : 'text-gray-500 hover:text-gray-900',
+        !isActive && !locked && 'hover:bg-black/[0.04]',
       )}
     >
       {/* Active bg */}
@@ -50,7 +50,7 @@ function SidebarNavItem({ item, collapsed, onClose }: { item: NavItem; collapsed
         <motion.div
           layoutId="active-nav-bg"
           className="absolute inset-0 rounded-xl"
-          style={{ background: 'linear-gradient(135deg, rgba(200,56,78,0.22) 0%, rgba(200,56,78,0.08) 100%)', border: '1px solid rgba(200,56,78,0.28)' }}
+          style={{ background: 'linear-gradient(135deg, rgba(200,56,78,0.15) 0%, rgba(200,56,78,0.05) 100%)', border: '1px solid rgba(200,56,78,0.25)' }}
           transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
         />
       )}
@@ -59,7 +59,7 @@ function SidebarNavItem({ item, collapsed, onClose }: { item: NavItem; collapsed
         size={17}
         className={cn(
           'relative flex-shrink-0 transition-colors duration-200',
-          isActive ? 'text-gold-400' : locked ? 'text-navy-700' : 'text-navy-400 group-hover:text-navy-200',
+          isActive ? 'text-gold-400' : locked ? 'text-gray-300' : 'text-gray-400 group-hover:text-gray-700',
         )}
       />
 
@@ -79,7 +79,7 @@ function SidebarNavItem({ item, collapsed, onClose }: { item: NavItem; collapsed
 
       {locked && !collapsed && (
         <span className="relative ml-auto text-[9px] font-medium px-1.5 py-0.5 rounded-full"
-              style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(232,227,213,0.25)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              style={{ background: 'rgba(0,0,0,0.05)', color: '#9ca3af', border: '1px solid rgba(0,0,0,0.08)' }}>
           Verrouillé
         </span>
       )}
@@ -114,9 +114,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         mobile ? 'w-72' : collapsed ? 'w-[70px]' : 'w-[230px]',
       )}
       style={{
-        background: 'rgba(9,13,20,0.95)',
+        background: 'rgba(255,255,255,0.97)',
         backdropFilter: 'blur(24px)',
-        borderRight: '1px solid rgba(255,255,255,0.055)',
+        borderRight: '1px solid rgba(0,0,0,0.07)',
       }}
     >
       {/* Logo */}
@@ -133,7 +133,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             {(!collapsed || mobile) && (
               <motion.span
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="font-display font-bold text-[#E8E3D5] text-base tracking-tight"
+                className="font-display font-bold text-gray-900 text-base tracking-tight"
                 style={{ letterSpacing: '-0.02em' }}
               >
                 Zawjia
@@ -145,15 +145,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {!mobile && (
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="ml-auto p-1 rounded-lg transition-all duration-200 hover:bg-white/[0.06]"
-            style={{ color: 'rgba(232,227,213,0.3)', flexShrink: 0 }}
+            className="ml-auto p-1 rounded-lg transition-all duration-200 hover:bg-black/[0.05]"
+            style={{ color: '#9ca3af', flexShrink: 0 }}
           >
             <ChevronRight size={14} className={cn('transition-transform duration-300', !collapsed && 'rotate-180')}/>
           </button>
         )}
         {mobile && (
-          <button onClick={() => setMobileOpen(false)} className="ml-auto p-1.5 rounded-lg hover:bg-white/[0.06] transition-colors"
-                  style={{ color: 'rgba(232,227,213,0.4)' }}>
+          <button onClick={() => setMobileOpen(false)} className="ml-auto p-1.5 rounded-lg hover:bg-black/[0.05] transition-colors"
+                  style={{ color: '#6b7280' }}>
             <X size={16}/>
           </button>
         )}
@@ -168,23 +168,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         ) : (
           <div className="flex items-center gap-2.5 p-2.5 rounded-xl"
-               style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+               style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.07)' }}>
             <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
                  style={{ background: 'linear-gradient(135deg, rgba(200,56,78,0.22), rgba(200,56,78,0.07))', border: '1px solid rgba(200,56,78,0.28)' }}>
               <span className="text-sm font-bold" style={{ color: '#C8384E' }}>{user.firstName?.[0] ?? '?'}</span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-[#E8E3D5] truncate" style={{ letterSpacing: '-0.01em' }}>
+              <p className="text-xs font-semibold text-gray-900 truncate" style={{ letterSpacing: '-0.01em' }}>
                 {user.firstName ?? 'Utilisateur'}
               </p>
-              <p className="text-[10px] truncate" style={{ color: 'rgba(232,227,213,0.35)' }}>{user.email}</p>
+              <p className="text-[10px] truncate" style={{ color: '#9ca3af' }}>{user.email}</p>
             </div>
           </div>
         )}
       </div>
 
       {/* Divider */}
-      <div className="mx-3 mb-3 h-px" style={{ background: 'rgba(255,255,255,0.055)' }}/>
+      <div className="mx-3 mb-3 h-px" style={{ background: 'rgba(0,0,0,0.07)' }}/>
 
       {/* Nav */}
       <nav className="flex-1 px-2.5 space-y-0.5 overflow-y-auto">
@@ -204,17 +204,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="mx-3 mb-3 p-3 rounded-xl"
-            style={{ background: 'rgba(200,56,78,0.06)', border: '1px solid rgba(200,56,78,0.12)' }}
+            style={{ background: 'rgba(200,56,78,0.06)', border: '1px solid rgba(200,56,78,0.14)' }}
           >
             <div className="flex items-center justify-between mb-2">
-              <p className="text-[10px] font-semibold" style={{ color: 'rgba(232,227,213,0.4)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              <p className="text-[10px] font-semibold" style={{ color: '#9ca3af', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                 Analyse IA
               </p>
               <p className="text-[10px] font-bold" style={{ color: '#C8384E' }}>
                 {user.aiPhaseCompleted ? '8/8' : '?/8'}
               </p>
             </div>
-            <div className="h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.07)' }}>
+            <div className="h-1 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.08)' }}>
               <motion.div
                 className="h-full rounded-full"
                 style={{ background: 'linear-gradient(90deg, #a8243c, #C8384E)' }}
@@ -228,7 +228,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       </AnimatePresence>
 
       {/* Divider */}
-      <div className="mx-3 h-px" style={{ background: 'rgba(255,255,255,0.055)' }}/>
+      <div className="mx-3 h-px" style={{ background: 'rgba(0,0,0,0.07)' }}/>
 
       {/* Logout */}
       <div className={cn('p-2.5 flex-shrink-0', collapsed && !mobile && 'flex justify-center')}>
@@ -238,9 +238,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             'flex items-center gap-3 text-sm px-3 py-2.5 rounded-xl w-full transition-all duration-200',
             collapsed && !mobile && 'w-auto justify-center',
           )}
-          style={{ color: 'rgba(232,227,213,0.35)' }}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.cssText += 'color:rgba(248,113,113,0.9);background:rgba(248,113,113,0.07)'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.cssText = (e.currentTarget as HTMLElement).style.cssText.replace(/color:[^;]+;|background:[^;]+;/g,''); (e.currentTarget as HTMLElement).style.color='rgba(232,227,213,0.35)'; (e.currentTarget as HTMLElement).style.background='transparent'; }}
+          style={{ color: '#9ca3af' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.cssText += 'color:#dc2626;background:rgba(220,38,38,0.06)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.cssText = (e.currentTarget as HTMLElement).style.cssText.replace(/color:[^;]+;|background:[^;]+;/g,''); (e.currentTarget as HTMLElement).style.color='#9ca3af'; (e.currentTarget as HTMLElement).style.background='transparent'; }}
           title={collapsed ? 'Déconnexion' : undefined}
         >
           <LogOut size={15}/>
@@ -251,7 +251,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: '#070b10' }}>
+    <div className="flex h-screen overflow-hidden" style={{ background: '#f8f7f4' }}>
       {/* Desktop sidebar */}
       <div className="hidden md:flex flex-shrink-0">
         <Sidebar/>
@@ -265,7 +265,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="fixed inset-0 z-40 backdrop-blur-sm md:hidden"
-              style={{ background: 'rgba(0,0,0,0.7)' }}
+              style={{ background: 'rgba(0,0,0,0.35)' }}
               onClick={() => setMobileOpen(false)}
             />
             <motion.div
@@ -283,9 +283,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top bar */}
         <header className="flex items-center gap-3 px-4 md:px-6 py-3.5 flex-shrink-0"
-                style={{ borderBottom: '1px solid rgba(255,255,255,0.055)', background: 'rgba(7,11,16,0.85)', backdropFilter: 'blur(20px)' }}>
+                style={{ borderBottom: '1px solid rgba(0,0,0,0.07)', background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(20px)' }}>
           <button onClick={() => setMobileOpen(true)} className="md:hidden p-2 rounded-lg transition-colors"
-                  style={{ color: 'rgba(232,227,213,0.4)' }}>
+                  style={{ color: '#6b7280' }}>
             <Menu size={20}/>
           </button>
 
@@ -294,15 +294,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           {/* Sub badge */}
           <div className={cn('badge text-xs font-semibold', user.subscriptionStatus === 'active'
             ? 'bg-emerald-400/10 border border-emerald-400/20 text-emerald-400'
-            : 'border text-navy-500')}
-            style={ user.subscriptionStatus !== 'active' ? { borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' } : {} }
+            : 'border text-gray-500')}
+            style={ user.subscriptionStatus !== 'active' ? { borderColor: 'rgba(0,0,0,0.1)', background: 'rgba(0,0,0,0.04)' } : {} }
           >
             <Crown size={9}/>
             {user.subscriptionStatus === 'active' ? 'Premium' : 'Gratuit'}
           </div>
 
-          <button className="relative w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-white/[0.06]"
-                  style={{ border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(232,227,213,0.4)' }}>
+          <button className="relative w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 hover:bg-black/[0.05]"
+                  style={{ border: '1px solid rgba(0,0,0,0.08)', color: '#6b7280' }}>
             <Bell size={14}/>
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full"
                   style={{ background: '#C8384E', boxShadow: '0 0 6px rgba(200,56,78,0.7)' }}/>

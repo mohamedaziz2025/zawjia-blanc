@@ -29,15 +29,15 @@ function StatCard({ icon: Icon, label, value, sub, accent }: {
           <Icon size={18} style={{ color: accent }}/>
         </div>
         <span className="text-[10px] font-semibold tracking-widest uppercase"
-              style={{ color: 'rgba(232,227,213,0.28)' }}>
+              style={{ color: '#d1d5db' }}>
           {label}
         </span>
       </div>
-      <p className="font-display font-bold text-[#E8E3D5]"
+      <p className="font-display font-bold text-gray-900"
          style={{ fontSize: '1.7rem', letterSpacing: '-0.03em', lineHeight: 1 }}>
         {value}
       </p>
-      {sub && <p className="text-[11px] mt-1.5" style={{ color: 'rgba(232,227,213,0.38)' }}>{sub}</p>}
+      {sub && <p className="text-[11px] mt-1.5" style={{ color: '#9ca3af' }}>{sub}</p>}
     </motion.div>
   );
 }
@@ -47,18 +47,18 @@ function StepProgress({ done, label, link, num }: { done: boolean; label: string
   return (
     <Link href={done ? '#' : link}
           className={cn('flex items-center gap-3.5 p-3 rounded-xl transition-all duration-200 group',
-            done ? 'opacity-50 cursor-default pointer-events-none' : 'hover:bg-white/[0.04]')}>
+            done ? 'opacity-50 cursor-default pointer-events-none' : 'hover:bg-black/[0.04]')}>
       <div className={cn(
         'w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-[11px] font-bold transition-all duration-300',
         done ? 'bg-emerald-500/20 border border-emerald-400/40 text-emerald-400' : 'border text-navy-500 group-hover:border-gold-400/40 group-hover:text-gold-400',
-      )} style={!done ? { borderColor: 'rgba(255,255,255,0.1)' } : {}}>
+      )} style={!done ? { borderColor: 'rgba(0,0,0,0.08)' } : {}}>
         {done ? <CheckCircle2 size={13} className="text-emerald-400"/> : num}
       </div>
-      <span className={cn('text-sm flex-1', done ? 'text-navy-500 line-through' : 'text-navy-200 group-hover:text-[#E8E3D5]')}
+      <span className={cn('text-sm flex-1', done ? 'text-gray-500 line-through' : 'text-gray-700 group-hover:text-gray-900')}
             style={{ letterSpacing: '-0.01em' }}>
         {label}
       </span>
-      {!done && <ArrowRight size={13} className="text-navy-700 group-hover:text-gold-400 transition-colors flex-shrink-0"/>}
+      {!done && <ArrowRight size={13} className="text-gray-400 group-hover:text-gold-400 transition-colors flex-shrink-0"/>}
     </Link>
   );
 }
@@ -91,11 +91,11 @@ export default function DashboardPage() {
                   style={{ color: 'rgba(200,56,78,0.8)' }}>
           Assalamu alaikum
         </motion.p>
-        <motion.h1 variants={fadeUp} className="font-display font-bold text-[#E8E3D5]"
+        <motion.h1 variants={fadeUp} className="font-display font-bold text-gray-900"
                    style={{ fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', letterSpacing: '-0.03em', lineHeight: 1.15 }}>
           Bienvenue, {greeting} 🌙
         </motion.h1>
-        <motion.p variants={fadeUp} className="text-sm" style={{ color: 'rgba(232,227,213,0.45)' }}>
+        <motion.p variants={fadeUp} className="text-sm" style={{ color: '#6b7280' }}>
           Voici un aperçu de votre avancement sur Zawjia.
         </motion.p>
       </motion.div>
@@ -122,7 +122,7 @@ export default function DashboardPage() {
           <div className="flex items-start justify-between mb-5">
             <div>
               <h2 className="section-title mb-0.5">Votre parcours</h2>
-              <p className="text-xs" style={{ color: 'rgba(232,227,213,0.35)' }}>Complétez chaque étape</p>
+              <p className="text-xs" style={{ color: '#9ca3af' }}>Complétez chaque étape</p>
             </div>
             <span className="badge text-xs font-bold"
                   style={{ background: 'rgba(200,56,78,0.1)', border: '1px solid rgba(200,56,78,0.2)', color: '#C8384E' }}>
@@ -132,7 +132,7 @@ export default function DashboardPage() {
 
           {/* Progress bar */}
           <div className="mb-5">
-            <div className="h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+            <div className="h-1 rounded-full overflow-hidden" style={{ background: 'rgba(0,0,0,0.07)' }}>
               <motion.div
                 className="h-full rounded-full"
                 style={{ background: 'linear-gradient(90deg, #a8243c, #C8384E, #f07a8a)' }}
@@ -150,9 +150,9 @@ export default function DashboardPage() {
           </div>
 
           {/* IA phase segments */}
-          <div className="mt-5 p-4 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="mt-5 p-4 rounded-xl" style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.07)' }}>
             <div className="flex items-center justify-between mb-3">
-              <p className="text-xs font-semibold" style={{ color: 'rgba(232,227,213,0.6)', letterSpacing: '-0.01em' }}>
+              <p className="text-xs font-semibold" style={{ color: '#4b5563', letterSpacing: '-0.01em' }}>
                 Nisfi IA — Progression
               </p>
               <p className="text-xs font-bold" style={{ color: '#C8384E' }}>
@@ -172,13 +172,13 @@ export default function DashboardPage() {
                       ? 'linear-gradient(90deg, #a8243c, #C8384E)'
                       : i === phase - 1 && !user.aiPhaseCompleted
                       ? 'rgba(200,56,78,0.35)'
-                      : 'rgba(255,255,255,0.07)',
+                      : 'rgba(0,0,0,0.08)',
                     originX: 0,
                   }}
                 />
               ))}
             </div>
-            <p className="text-[11px] mt-2" style={{ color: 'rgba(232,227,213,0.33)' }}>
+            <p className="text-[11px] mt-2" style={{ color: '#9ca3af' }}>
               {user.aiPhaseCompleted ? '✓ Analyse complète — Matching débloqué' : `Prochaine étape : ${phaseLabel(phase)}`}
             </p>
             {!user.aiPhaseCompleted && (
@@ -206,10 +206,10 @@ export default function DashboardPage() {
               </div>
               {!isPremium ? (
                 <>
-                  <h3 className="font-display font-semibold text-[#E8E3D5] mb-2" style={{ letterSpacing: '-0.02em' }}>
+                  <h3 className="font-display font-semibold text-gray-900 mb-2" style={{ letterSpacing: '-0.02em' }}>
                     Passez au Premium
                   </h3>
-                  <p className="text-xs leading-relaxed mb-4" style={{ color: 'rgba(232,227,213,0.45)' }}>
+                  <p className="text-xs leading-relaxed mb-4" style={{ color: '#6b7280' }}>
                     Matching illimité, révélation photo accélérée, priorité dans l&apos;algorithme.
                   </p>
                   <Link href="/subscription" className="btn-primary w-full text-xs py-2.5">
@@ -218,10 +218,10 @@ export default function DashboardPage() {
                 </>
               ) : (
                 <>
-                  <h3 className="font-display font-semibold text-[#E8E3D5] mb-2" style={{ letterSpacing: '-0.02em' }}>
+                  <h3 className="font-display font-semibold text-gray-900 mb-2" style={{ letterSpacing: '-0.02em' }}>
                     Découvrir des profils
                   </h3>
-                  <p className="text-xs leading-relaxed mb-4" style={{ color: 'rgba(232,227,213,0.45)' }}>
+                  <p className="text-xs leading-relaxed mb-4" style={{ color: '#6b7280' }}>
                     Des profils compatibles vous attendent. Consultez les propositions.
                   </p>
                   <Link href="/proposals" className="btn-primary w-full text-xs py-2.5">
@@ -236,7 +236,7 @@ export default function DashboardPage() {
           {aiProfile?.personalityTraits?.length > 0 && (
             <div className="glass-card p-5">
               <h3 className="text-xs font-semibold mb-3.5 flex items-center gap-2"
-                  style={{ color: 'rgba(232,227,213,0.7)', letterSpacing: '0.02em' }}>
+                  style={{ color: '#374151', letterSpacing: '0.02em' }}>
                 <Brain size={13} className="text-emerald-400"/> Mon profil IA
               </h3>
               <div className="flex flex-wrap gap-1.5">
@@ -249,7 +249,7 @@ export default function DashboardPage() {
               </div>
               {aiProfile.marriageVision && (
                 <p className="text-[11px] mt-3 leading-relaxed italic line-clamp-3"
-                   style={{ color: 'rgba(232,227,213,0.4)' }}>
+                   style={{ color: '#9ca3af' }}>
                   &ldquo;{aiProfile.marriageVision}&rdquo;
                 </p>
               )}
@@ -266,14 +266,14 @@ export default function DashboardPage() {
           {matchCount > 0 && (
             <div className="glass-card p-5">
               <h3 className="text-xs font-semibold mb-3 flex items-center gap-2"
-                  style={{ color: 'rgba(232,227,213,0.7)' }}>
+                  style={{ color: '#374151' }}>
                 <Users size={13} className="text-gold-400"/> Mes matchs
               </h3>
               <p className="font-display font-bold text-gradient-gold"
                  style={{ fontSize: '2rem', letterSpacing: '-0.03em' }}>
                 {matchCount}
               </p>
-              <p className="text-xs mt-1 mb-3" style={{ color: 'rgba(232,227,213,0.4)' }}>
+              <p className="text-xs mt-1 mb-3" style={{ color: '#9ca3af' }}>
                 match{matchCount > 1 ? 's' : ''} confirmé{matchCount > 1 ? 's' : ''}
               </p>
               <Link href="/matches" className="btn-secondary w-full text-xs py-2">

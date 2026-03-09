@@ -40,10 +40,10 @@ export default function AdminAiLogsPage() {
               <motion.div key={log._id}
                 initial={{ opacity:0,y:4 }} animate={{ opacity:1,y:0 }} transition={{ delay:i*0.02 }}
                 className="rounded-2xl overflow-hidden"
-                style={{ background:'rgba(17,22,32,0.85)', border:'1px solid rgba(255,255,255,0.07)' }}>
+                style={{ background:'rgba(255,255,255,0.92)', border:'1px solid rgba(0,0,0,0.08)' }}>
                 <button onClick={() => setExpanded(isOpen ? null : log._id)}
                   className="w-full flex items-center gap-3 p-4 text-left transition-colors"
-                  onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(255,255,255,0.02)'}
+                  onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(0,0,0,0.03)'}
                   onMouseLeave={e=>(e.currentTarget as HTMLElement).style.background='transparent'}>
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                        style={{ background:'rgba(200,56,78,0.08)', border:'1px solid rgba(200,56,78,0.15)' }}>
@@ -51,18 +51,18 @@ export default function AdminAiLogsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
-                      <p className="text-sm font-medium truncate" style={{ color:'#E8E3D5' }}>
-                        Phase {log.phase ?? '?'} — <span style={{ color:'rgba(232,227,213,0.4)' }}>user</span>{' '}
-                        <code className="text-xs" style={{ color:'rgba(232,227,213,0.35)' }}>
+                      <p className="text-sm font-medium truncate" style={{ color:'#111827' }}>
+                        Phase {log.phase ?? '?'} — <span style={{ color:'#9ca3af' }}>user</span>{' '}
+                        <code className="text-xs" style={{ color:'#9ca3af' }}>
                           {typeof log.userId === 'object' ? (log.userId as any)?.email ?? (log.userId as any)?._id : log.userId}
                         </code>
                       </p>
-                      <span className="text-xs shrink-0" style={{ color:'rgba(232,227,213,0.25)' }}>{formatDate(log.createdAt)}</span>
+                      <span className="text-xs shrink-0" style={{ color:'#d1d5db' }}>{formatDate(log.createdAt)}</span>
                     </div>
-                    <p className="text-xs mt-0.5 truncate" style={{ color:'rgba(232,227,213,0.35)' }}>{log.prompt}</p>
+                    <p className="text-xs mt-0.5 truncate" style={{ color:'#9ca3af' }}>{log.prompt}</p>
                   </div>
                   <ChevronDown size={14} className={`shrink-0 transition-transform ${isOpen ? 'rotate-180':''}`}
-                               style={{ color:'rgba(232,227,213,0.25)' }}/>
+                               style={{ color:'#d1d5db' }}/>
                 </button>
 
                 <AnimatePresence>
@@ -71,17 +71,17 @@ export default function AdminAiLogsPage() {
                       initial={{ height:0,opacity:0 }} animate={{ height:'auto',opacity:1 }}
                       exit={{ height:0,opacity:0 }} transition={{ duration:0.2 }}
                       className="overflow-hidden"
-                      style={{ borderTop:'1px solid rgba(255,255,255,0.06)' }}>
+                      style={{ borderTop:'1px solid rgba(0,0,0,0.07)' }}>
                       <div className="p-4 space-y-3.5"
-                           style={{ background:'rgba(9,13,20,0.6)' }}>
+                           style={{ background:'rgba(255,255,255,0.95)' }}>
                         <div className="flex gap-2.5">
                           <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                               style={{ background:'rgba(255,255,255,0.06)' }}>
-                            <User size={11} style={{ color:'rgba(232,227,213,0.4)' }}/>
+                               style={{ background:'rgba(0,0,0,0.07)' }}>
+                            <User size={11} style={{ color:'#9ca3af' }}/>
                           </div>
                           <div>
-                            <p className="text-xs mb-1" style={{ color:'rgba(232,227,213,0.3)' }}>Message utilisateur</p>
-                            <p className="text-sm whitespace-pre-wrap leading-relaxed" style={{ color:'#E8E3D5' }}>{log.prompt}</p>
+                            <p className="text-xs mb-1" style={{ color:'#9ca3af' }}>Message utilisateur</p>
+                            <p className="text-sm whitespace-pre-wrap leading-relaxed" style={{ color:'#111827' }}>{log.prompt}</p>
                           </div>
                         </div>
                         <div className="flex gap-2.5">
@@ -90,19 +90,19 @@ export default function AdminAiLogsPage() {
                             <Bot size={11} style={{ color:'#C8384E' }}/>
                           </div>
                           <div>
-                            <p className="text-xs mb-1" style={{ color:'rgba(232,227,213,0.3)' }}>Réponse Nisfi IA</p>
-                            <p className="text-sm whitespace-pre-wrap leading-relaxed" style={{ color:'rgba(232,227,213,0.7)' }}>{log.response}</p>
+                            <p className="text-xs mb-1" style={{ color:'#9ca3af' }}>Réponse Nisfi IA</p>
+                            <p className="text-sm whitespace-pre-wrap leading-relaxed" style={{ color:'#374151' }}>{log.response}</p>
                           </div>
                         </div>
                         {(log.tokensUsed != null || log.model) && (
                           <div className="flex gap-2 pt-1">
                             {log.tokensUsed != null && (
-                              <span className="badge text-[10px]" style={{ color:'rgba(232,227,213,0.35)', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)' }}>
+                              <span className="badge text-[10px]" style={{ color:'#9ca3af', background:'rgba(0,0,0,0.05)', border:'1px solid rgba(0,0,0,0.09)' }}>
                                 {log.tokensUsed} tokens
                               </span>
                             )}
                             {log.model && (
-                              <span className="badge text-[10px]" style={{ color:'rgba(232,227,213,0.35)', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.08)' }}>
+                              <span className="badge text-[10px]" style={{ color:'#9ca3af', background:'rgba(0,0,0,0.05)', border:'1px solid rgba(0,0,0,0.09)' }}>
                                 {log.model}
                               </span>
                             )}
@@ -117,7 +117,7 @@ export default function AdminAiLogsPage() {
           })}
           {logs.length === 0 && (
             <div className="rounded-2xl p-12 text-center text-sm"
-                 style={{ background:'rgba(17,22,32,0.85)', border:'1px solid rgba(255,255,255,0.07)', color:'rgba(232,227,213,0.3)' }}>
+                 style={{ background:'rgba(255,255,255,0.92)', border:'1px solid rgba(0,0,0,0.08)', color:'#9ca3af' }}>
               Aucun log disponible
             </div>
           )}

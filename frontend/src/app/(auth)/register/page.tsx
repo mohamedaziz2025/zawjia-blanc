@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -85,7 +85,7 @@ export default function RegisterPage() {
   };
 
   const errStyle = { color:'rgba(248,113,113,0.85)', fontSize:'11px', marginTop:'5px', display:'block' };
-  const cardBase = { borderRadius:'16px', border:'1px solid rgba(255,255,255,0.07)', background:'rgba(255,255,255,0.03)', padding:'16px 20px' };
+  const cardBase = { borderRadius:'16px', border:'1px solid rgba(0,0,0,0.08)', background:'rgba(0,0,0,0.04)', padding:'16px 20px' };
 
   return (
     <motion.div initial={{ opacity:0, y:24 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.55, ease:[0.16,1,0.3,1] }}>
@@ -94,10 +94,10 @@ export default function RegisterPage() {
         <AnimatePresence mode="wait">
           <motion.div key={step} initial={{ opacity:0,y:8 }} animate={{ opacity:1,y:0 }} exit={{ opacity:0,y:-8 }}
             transition={{ duration:0.28 }}>
-            <h1 className="font-display font-bold" style={{ fontSize:'1.75rem', letterSpacing:'-0.03em', color:'#E8E3D5' }}>
+            <h1 className="font-display font-bold" style={{ fontSize:'1.75rem', letterSpacing:'-0.03em', color:'#111827' }}>
               {STEPS[step].title}
             </h1>
-            <p className="text-sm mt-1" style={{ color:'rgba(232,227,213,0.45)' }}>{STEPS[step].sub}</p>
+            <p className="text-sm mt-1" style={{ color:'#6b7280' }}>{STEPS[step].sub}</p>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -106,7 +106,7 @@ export default function RegisterPage() {
       <div className="flex gap-2 mb-7">
         {STEPS.map((_,i) => (
           <div key={i} className="flex-1 h-0.5 rounded-full transition-all duration-500"
-               style={{ background: i <= step ? '#C8384E' : 'rgba(255,255,255,0.08)' }}/>
+               style={{ background: i <= step ? '#C8384E' : 'rgba(0,0,0,0.09)' }}/>
         ))}
       </div>
 
@@ -116,7 +116,7 @@ export default function RegisterPage() {
           {step === 0 && (
             <motion.div key="s0" initial={{ opacity:0,x:30 }} animate={{ opacity:1,x:0 }} exit={{ opacity:0,x:-30 }}
               transition={{ duration:0.3 }} className="space-y-3">
-              <p className="text-sm text-center mb-5" style={{ color:'rgba(232,227,213,0.45)' }}>
+              <p className="text-sm text-center mb-5" style={{ color:'#6b7280' }}>
                 Zawjia adapte votre parcours selon votre profil pour respecter les valeurs islamiques.
               </p>
               {([
@@ -128,18 +128,18 @@ export default function RegisterPage() {
                   <button key={v} type="button" onClick={() => setValue('role', v)}
                     className="w-full text-left flex items-center gap-4 rounded-2xl p-5 transition-all duration-300"
                     style={{
-                      border: active ? '1.5px solid #C8384E' : '1px solid rgba(255,255,255,0.08)',
-                      background: active ? 'rgba(200,56,78,0.08)' : 'rgba(255,255,255,0.02)',
+                      border: active ? '1.5px solid #C8384E' : '1px solid rgba(0,0,0,0.09)',
+                      background: active ? 'rgba(200,56,78,0.08)' : 'rgba(0,0,0,0.03)',
                       boxShadow: active ? '0 0 20px rgba(200,56,78,0.15)' : 'none',
                     }}>
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
-                         style={{ background:'rgba(255,255,255,0.06)' }}>{emoji}</div>
+                         style={{ background:'rgba(0,0,0,0.07)' }}>{emoji}</div>
                     <div className="flex-1">
-                      <p className="font-semibold text-sm" style={{ color:'#E8E3D5' }}>{title}</p>
-                      <p className="text-xs mt-0.5" style={{ color:'rgba(232,227,213,0.4)' }}>{sub}</p>
+                      <p className="font-semibold text-sm" style={{ color:'#111827' }}>{title}</p>
+                      <p className="text-xs mt-0.5" style={{ color:'#9ca3af' }}>{sub}</p>
                     </div>
                     <div className="w-5 h-5 rounded-full flex items-center justify-center transition-all"
-                         style={{ border:`2px solid ${active ? '#C8384E' : 'rgba(255,255,255,0.2)'}`, background: active ? '#C8384E' : 'transparent' }}>
+                         style={{ border:`2px solid ${active ? '#C8384E' : 'rgba(0,0,0,0.15)'}`, background: active ? '#C8384E' : 'transparent' }}>
                       {active && <div className="w-2 h-2 rounded-full bg-white"/>}
                     </div>
                   </button>
@@ -164,14 +164,14 @@ export default function RegisterPage() {
                   <input {...register('password')} type={show ? 'text':'password'} placeholder="••••••••" className="input-field pr-12" autoComplete="new-password"/>
                   <button type="button" onClick={() => setShow(!show)}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
-                    style={{ color:'rgba(232,227,213,0.35)' }}
-                    onMouseEnter={e=>(e.currentTarget as HTMLElement).style.color='rgba(232,227,213,0.7)'}
-                    onMouseLeave={e=>(e.currentTarget as HTMLElement).style.color='rgba(232,227,213,0.35)'}>
+                    style={{ color:'#9ca3af' }}
+                    onMouseEnter={e=>(e.currentTarget as HTMLElement).style.color='#374151'}
+                    onMouseLeave={e=>(e.currentTarget as HTMLElement).style.color='#9ca3af'}>
                     {show ? <EyeOff size={16}/> : <Eye size={16}/>}
                   </button>
                 </div>
                 {errors.password && <span style={errStyle}>{errors.password.message}</span>}
-                <p className="text-[11px] mt-1.5" style={{ color:'rgba(232,227,213,0.3)' }}>8+ caractères, 1 majuscule, 1 chiffre</p>
+                <p className="text-[11px] mt-1.5" style={{ color:'#9ca3af' }}>8+ caractères, 1 majuscule, 1 chiffre</p>
               </div>
               <div>
                 <label className="label">Confirmer le mot de passe</label>
@@ -179,9 +179,9 @@ export default function RegisterPage() {
                   <input {...register('confirmPassword')} type={show2 ? 'text':'password'} placeholder="••••••••" className="input-field pr-12" autoComplete="new-password"/>
                   <button type="button" onClick={() => setShow2(!show2)}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
-                    style={{ color:'rgba(232,227,213,0.35)' }}
-                    onMouseEnter={e=>(e.currentTarget as HTMLElement).style.color='rgba(232,227,213,0.7)'}
-                    onMouseLeave={e=>(e.currentTarget as HTMLElement).style.color='rgba(232,227,213,0.35)'}>
+                    style={{ color:'#9ca3af' }}
+                    onMouseEnter={e=>(e.currentTarget as HTMLElement).style.color='#374151'}
+                    onMouseLeave={e=>(e.currentTarget as HTMLElement).style.color='#9ca3af'}>
                     {show2 ? <EyeOff size={16}/> : <Eye size={16}/>}
                   </button>
                 </div>
@@ -236,12 +236,12 @@ export default function RegisterPage() {
             <motion.div key="s3" initial={{ opacity:0,x:30 }} animate={{ opacity:1,x:0 }} exit={{ opacity:0,x:-30 }}
               transition={{ duration:0.3 }} className="space-y-4">
               <div className="rounded-2xl p-4 text-sm leading-relaxed space-y-2.5 max-h-44 overflow-y-auto"
-                   style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)' }}>
+                   style={{ background:'rgba(0,0,0,0.04)', border:'1px solid rgba(0,0,0,0.08)' }}>
                 <p className="font-semibold text-[11px] tracking-widest uppercase" style={{ color:'#C8384E' }}>
                   Charte Éthique Islamique Zawjia
                 </p>
-                <p style={{ color:'rgba(232,227,213,0.6)' }}>En vous inscrivant, vous vous engagez à :</p>
-                <ul className="space-y-1.5" style={{ color:'rgba(232,227,213,0.5)' }}>
+                <p style={{ color:'#4b5563' }}>En vous inscrivant, vous vous engagez à :</p>
+                <ul className="space-y-1.5" style={{ color:'#6b7280' }}>
                   {[
                     'Avoir une démarche sérieuse orientée vers le mariage',
                     'Ne pas partager de contenus inconvenants',
@@ -262,14 +262,14 @@ export default function RegisterPage() {
                 <div className="relative mt-0.5 flex-shrink-0">
                   <input {...register('hasAcceptedCharter')} type="checkbox" className="sr-only peer"/>
                   <div className="w-5 h-5 rounded-md transition-all duration-200 flex items-center justify-center peer-checked:bg-[#C8384E]"
-                       style={{ border:'1.5px solid rgba(255,255,255,0.2)' }}>
+                       style={{ border:'1.5px solid rgba(0,0,0,0.15)' }}>
                     <svg className="hidden peer-checked:block w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7"/>
                     </svg>
                   </div>
                 </div>
                 <p className="text-sm leading-relaxed transition-colors"
-                   style={{ color:'rgba(232,227,213,0.55)' }}>
+                   style={{ color:'#6b7280' }}>
                   J&apos;ai lu et j&apos;accepte la charte éthique islamique. Je m&apos;engage à une démarche sérieuse orientée vers le mariage.
                 </p>
               </label>
@@ -298,7 +298,7 @@ export default function RegisterPage() {
       </form>
 
       <div className="mt-6 text-center">
-        <p className="text-sm" style={{ color:'rgba(232,227,213,0.4)' }}>
+        <p className="text-sm" style={{ color:'#9ca3af' }}>
           Déjà inscrit(e) ?{' '}
           <Link href="/login" className="font-semibold transition-colors" style={{ color:'#C8384E' }}
             onMouseEnter={e=>(e.currentTarget as HTMLElement).style.color='rgba(200,56,78,0.7)'}

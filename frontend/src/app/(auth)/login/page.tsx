@@ -66,11 +66,11 @@ export default function LoginPage() {
     >
       {/* Header */}
       <motion.div variants={fadeUp} className="space-y-2">
-        <h1 className="font-display font-bold text-[#E8E3D5]"
+        <h1 className="font-display font-bold text-gray-900"
             style={{ fontSize: '2rem', letterSpacing: '-0.03em' }}>
           Bon retour
         </h1>
-        <p className="text-sm" style={{ color: 'rgba(232,227,213,0.45)' }}>
+        <p className="text-sm" style={{ color: '#6b7280' }}>
           Connectez-vous à votre espace Zawjia
         </p>
       </motion.div>
@@ -81,7 +81,7 @@ export default function LoginPage() {
           <label className="label">Adresse e-mail</label>
           <div className="relative">
             <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
-                  style={{ color: 'rgba(232,227,213,0.25)' }}/>
+                  style={{ color: '#d1d5db' }}/>
             <input
               {...register('email')}
               type="email"
@@ -103,7 +103,7 @@ export default function LoginPage() {
           <label className="label">Mot de passe</label>
           <div className="relative">
             <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
-                  style={{ color: 'rgba(232,227,213,0.25)' }}/>
+                  style={{ color: '#d1d5db' }}/>
             <input
               {...register('password')}
               type={show ? 'text' : 'password'}
@@ -115,7 +115,7 @@ export default function LoginPage() {
               type="button"
               onClick={() => setShow(!show)}
               className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
-              style={{ color: 'rgba(232,227,213,0.35)' }}
+              style={{ color: '#9ca3af' }}
             >
               {show ? <EyeOff size={15}/> : <Eye size={15}/>}
             </button>
@@ -138,9 +138,9 @@ export default function LoginPage() {
         </div>
       </motion.form>
 
-      <motion.div variants={fadeUp} className="text-center text-sm" style={{ color: 'rgba(232,227,213,0.4)' }}>
+      <motion.div variants={fadeUp} className="text-center text-sm" style={{ color: '#6b7280' }}>
         Pas encore de compte ?{' '}
-        <Link href="/register" className="font-semibold transition-colors hover:text-[#E8E3D5]"
+        <Link href="/register" className="font-semibold transition-colors hover:text-gray-900"
               style={{ color: '#C8384E' }}>
           S&apos;inscrire gratuitement
         </Link>
@@ -150,9 +150,9 @@ export default function LoginPage() {
         variants={fadeUp}
         className="p-4 rounded-xl text-xs text-center"
         style={{
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.06)',
-          color: 'rgba(232,227,213,0.3)',
+          background: 'rgba(0,0,0,0.04)',
+          border: '1px solid rgba(0,0,0,0.07)',
+          color: '#6b7280',
         }}
       >
         🔒 Données protégées conformément au RGPD — Aucun partage sans consentement

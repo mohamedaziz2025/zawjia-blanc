@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
@@ -30,7 +30,7 @@ export default function AdminMatchesPage() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="page-title">Gestion des matchs</h1>
-          <p className="text-sm mt-1" style={{ color:'rgba(232,227,213,0.4)' }}>{matches.length} matchs en base</p>
+          <p className="text-sm mt-1" style={{ color:'#9ca3af' }}>{matches.length} matchs en base</p>
         </div>
         <button onClick={() => refetch()} className="btn-secondary text-xs px-3 py-2">
           <RefreshCw size={12} className={isFetching ? 'animate-spin':''}/>
@@ -38,12 +38,12 @@ export default function AdminMatchesPage() {
       </div>
 
       <div className="relative max-w-md">
-        <Search size={13} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'rgba(232,227,213,0.25)' }}/>
+        <Search size={13} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'#d1d5db' }}/>
         <input type="text" placeholder="Filtrer par ID utilisateur…" value={search} onChange={e=>setSearch(e.target.value)} className="input-field pl-9"/>
       </div>
 
       <div className="rounded-2xl overflow-hidden"
-           style={{ background:'rgba(17,22,32,0.85)', border:'1px solid rgba(255,255,255,0.07)' }}>
+           style={{ background:'rgba(255,255,255,0.92)', border:'1px solid rgba(0,0,0,0.08)' }}>
         {isLoading ? (
           <div className="flex items-center justify-center h-48">
             <Loader2 size={22} className="animate-spin" style={{ color:'#f87171' }}/>
@@ -52,26 +52,26 @@ export default function AdminMatchesPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr style={{ borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
+                <tr style={{ borderBottom:'1px solid rgba(0,0,0,0.07)' }}>
                   {['#','User 1','User 2','Statut','Photo','Décisions','Créé le'].map(h => (
-                    <th key={h} className="px-4 py-3.5 text-left text-[10px] font-semibold tracking-widest uppercase whitespace-nowrap" style={{ color:'rgba(232,227,213,0.3)' }}>{h}</th>
+                    <th key={h} className="px-4 py-3.5 text-left text-[10px] font-semibold tracking-widest uppercase whitespace-nowrap" style={{ color:'#9ca3af' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((m, i) => (
                   <motion.tr key={m._id} initial={{ opacity:0,y:4 }} animate={{ opacity:1,y:0 }} transition={{ delay:i*0.02 }}
-                    style={{ borderBottom:'1px solid rgba(255,255,255,0.04)' }}
-                    onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(255,255,255,0.025)'}
+                    style={{ borderBottom:'1px solid rgba(0,0,0,0.05)' }}
+                    onMouseEnter={e=>(e.currentTarget as HTMLElement).style.background='rgba(0,0,0,0.035)'}
                     onMouseLeave={e=>(e.currentTarget as HTMLElement).style.background='transparent'}>
-                    <td className="px-4 py-3.5 font-mono text-xs" style={{ color:'rgba(232,227,213,0.3)' }}>#{i+1}</td>
+                    <td className="px-4 py-3.5 font-mono text-xs" style={{ color:'#9ca3af' }}>#{i+1}</td>
                     <td className="px-4 py-3.5">
-                      <code className="text-xs rounded px-2 py-1" style={{ background:'rgba(255,255,255,0.04)', color:'rgba(232,227,213,0.5)' }}>
+                      <code className="text-xs rounded px-2 py-1" style={{ background:'rgba(0,0,0,0.05)', color:'#6b7280' }}>
                         {String(typeof m.user1==='object'?(m.user1 as any)._id??m.user1:m.user1).slice(-8)}
                       </code>
                     </td>
                     <td className="px-4 py-3.5">
-                      <code className="text-xs rounded px-2 py-1" style={{ background:'rgba(255,255,255,0.04)', color:'rgba(232,227,213,0.5)' }}>
+                      <code className="text-xs rounded px-2 py-1" style={{ background:'rgba(0,0,0,0.05)', color:'#6b7280' }}>
                         {String(typeof m.user2==='object'?(m.user2 as any)._id??m.user2:m.user2).slice(-8)}
                       </code>
                     </td>
@@ -80,14 +80,14 @@ export default function AdminMatchesPage() {
                         {m.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5 text-center text-sm" style={{ color:m.photoUnlocked?'#2D7D52':'rgba(255,255,255,0.15)' }}>
+                    <td className="px-4 py-3.5 text-center text-sm" style={{ color:m.photoUnlocked?'#2D7D52':'rgba(0,0,0,0.12)' }}>
                       {m.photoUnlocked ? '✓' : '—'}
                     </td>
-                    <td className="px-4 py-3.5 text-xs space-y-0.5" style={{ color:'rgba(232,227,213,0.45)' }}>
+                    <td className="px-4 py-3.5 text-xs space-y-0.5" style={{ color:'#6b7280' }}>
                       <p>♂ {m.finalAcceptedByMale ? '✓' : '—'}</p>
                       <p>♀ {m.finalAcceptedByFemale ? '✓' : '—'}</p>
                     </td>
-                    <td className="px-4 py-3.5 whitespace-nowrap text-xs" style={{ color:'rgba(232,227,213,0.35)' }}>
+                    <td className="px-4 py-3.5 whitespace-nowrap text-xs" style={{ color:'#9ca3af' }}>
                       {formatDate(m.createdAt)}
                     </td>
                   </motion.tr>
@@ -95,7 +95,7 @@ export default function AdminMatchesPage() {
               </tbody>
             </table>
             {filtered.length === 0 && (
-              <div className="text-center py-12 text-sm" style={{ color:'rgba(232,227,213,0.3)' }}>Aucun match</div>
+              <div className="text-center py-12 text-sm" style={{ color:'#9ca3af' }}>Aucun match</div>
             )}
           </div>
         )}

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -34,13 +34,13 @@ function Section({ icon: Icon, title, accent = '#C8384E', delay = 0, children }:
   return (
     <motion.div initial={{ opacity:0,y:18 }} animate={{ opacity:1,y:0 }} transition={{ duration:0.5,ease:[0.16,1,0.3,1],delay }}
       className="rounded-2xl p-6"
-      style={{ background:'rgba(17,22,32,0.85)', border:'1px solid rgba(255,255,255,0.07)' }}>
-      <div className="flex items-center gap-2.5 mb-5 pb-4" style={{ borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
+      style={{ background:'rgba(255,255,255,0.92)', border:'1px solid rgba(0,0,0,0.08)' }}>
+      <div className="flex items-center gap-2.5 mb-5 pb-4" style={{ borderBottom:'1px solid rgba(0,0,0,0.07)' }}>
         <div className="w-7 h-7 rounded-lg flex items-center justify-center"
              style={{ background:`${accent}15`, border:`1px solid ${accent}30` }}>
           <Icon size={14} style={{ color: accent }}/>
         </div>
-        <h3 className="font-semibold text-sm" style={{ color:'#E8E3D5' }}>{title}</h3>
+        <h3 className="font-semibold text-sm" style={{ color:'#111827' }}>{title}</h3>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{children}</div>
     </motion.div>
@@ -121,7 +121,7 @@ export default function ProfilePage() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="page-title">Mon profil</h1>
-          <p className="text-sm mt-1" style={{ color:'rgba(232,227,213,0.4)' }}>
+          <p className="text-sm mt-1" style={{ color:'#9ca3af' }}>
             Renseignez vos informations pour améliorer votre matching
           </p>
         </div>
@@ -136,7 +136,7 @@ export default function ProfilePage() {
       {/* Avatar card */}
       <motion.div initial={{ opacity:0,y:16 }} animate={{ opacity:1,y:0 }} transition={{ duration:0.5,ease:[0.16,1,0.3,1] }}
         className="rounded-2xl p-6 flex items-center gap-5"
-        style={{ background:'rgba(17,22,32,0.9)', border:'1px solid rgba(255,255,255,0.07)' }}>
+        style={{ background:'rgba(255,255,255,0.92)', border:'1px solid rgba(0,0,0,0.08)' }}>
         <div className="relative flex-shrink-0">
           <div className="w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center"
                style={{ background:'linear-gradient(135deg,rgba(200,56,78,0.25),rgba(200,56,78,0.05))', border:'2px solid rgba(200,56,78,0.3)' }}>
@@ -153,16 +153,16 @@ export default function ProfilePage() {
           <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handlePhoto}/>
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-semibold font-display" style={{ color:'#E8E3D5', fontSize:'1.05rem', letterSpacing:'-0.02em' }}>
+          <p className="font-semibold font-display" style={{ color:'#111827', fontSize:'1.05rem', letterSpacing:'-0.02em' }}>
             {user?.firstName ?? 'Votre prénom'}
           </p>
-          <p className="text-sm truncate" style={{ color:'rgba(232,227,213,0.45)' }}>{user?.email}</p>
-          <p className="text-[11px] mt-1.5" style={{ color:'rgba(232,227,213,0.25)' }}>
+          <p className="text-sm truncate" style={{ color:'#6b7280' }}>{user?.email}</p>
+          <p className="text-[11px] mt-1.5" style={{ color:'#d1d5db' }}>
             Votre photo restera masquée jusqu&apos;au match réciproque
           </p>
         </div>
         {photoMutation.isPending && (
-          <div className="flex items-center gap-2 text-xs" style={{ color:'rgba(232,227,213,0.4)' }}>
+          <div className="flex items-center gap-2 text-xs" style={{ color:'#9ca3af' }}>
             <Loader2 size={13} className="animate-spin"/> Envoi…
           </div>
         )}
@@ -203,11 +203,11 @@ export default function ProfilePage() {
             <label className="relative inline-flex items-center cursor-pointer">
               <input {...register('willingToRelocate')} type="checkbox" className="sr-only peer"/>
               <div className="w-10 h-5 rounded-full transition-colors peer-checked:bg-[#C8384E]"
-                   style={{ background:'rgba(255,255,255,0.1)' }}>
+                   style={{ background:'rgba(0,0,0,0.08)' }}>
                 <div className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform peer-checked:translate-x-5"/>
               </div>
             </label>
-            <span className="text-sm" style={{ color:'rgba(232,227,213,0.65)' }}>Prêt(e) à déménager</span>
+            <span className="text-sm" style={{ color:'#4b5563' }}>Prêt(e) à déménager</span>
           </div>
         </Section>
 

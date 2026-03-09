@@ -38,8 +38,8 @@ function FeatureCard({ icon: Icon, title, desc, gradient }: {
       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 ${gradient}`}>
         <Icon size={22} className="text-white"/>
       </div>
-      <h3 className="text-[#E8E3D5] font-semibold mb-2 text-base">{title}</h3>
-      <p className="text-navy-300 text-sm leading-relaxed">{desc}</p>
+      <h3 className="text-gray-800 font-semibold mb-2 text-base">{title}</h3>
+      <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
     </motion.div>
   );
 }
@@ -52,8 +52,8 @@ function Step({ n, title, desc }: { n: number; title: string; desc: string }) {
         {n}
       </div>
       <div>
-        <h4 className="text-[#E8E3D5] font-semibold mb-1">{title}</h4>
-        <p className="text-navy-300 text-sm leading-relaxed">{desc}</p>
+        <h4 className="text-gray-800 font-semibold mb-1">{title}</h4>
+        <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
       </div>
     </motion.div>
   );
@@ -77,15 +77,15 @@ function PricingCard({ name, price, period, features, highlight }: {
         </div>
       )}
       <div>
-        <p className="text-navy-300 text-sm mb-1">{name}</p>
+        <p className="text-gray-500 text-sm mb-1">{name}</p>
         <div className="flex items-baseline gap-1">
           <span className="text-4xl font-display font-bold text-gradient-gold">{price}</span>
-          <span className="text-navy-400 text-sm">/{period}</span>
+          <span className="text-gray-400 text-sm">/{period}</span>
         </div>
       </div>
       <ul className="space-y-3 flex-1">
         {features.map((f) => (
-          <li key={f} className="flex items-center gap-2 text-sm text-navy-200">
+          <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
             <Check size={14} className="text-emerald-400 flex-shrink-0"/>
             {f}
           </li>
@@ -180,16 +180,16 @@ export default function LandingPage() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.16,1,0.3,1] }}
         className="fixed top-0 inset-x-0 z-50 px-4 sm:px-8 py-4
-                   bg-navy-900/60 backdrop-blur-xl border-b border-border/40"
+                   bg-white/80 backdrop-blur-xl border-b border-black/[0.07]"
       >
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gold-400/10 border border-gold-400/30 flex items-center justify-center">
               <Sparkles size={16} className="text-gold-400"/>
             </div>
-            <span className="font-display font-bold text-[#E8E3D5] text-lg tracking-tight">Zawjia</span>
+            <span className="font-display font-bold text-gray-900 text-lg tracking-tight">Zawjia</span>
           </Link>
-          <div className="hidden md:flex items-center gap-8 text-sm text-navy-300">
+          <div className="hidden md:flex items-center gap-8 text-sm text-gray-500">
             <a href="#features"   className="hover:text-gold-400 transition-colors">Fonctionnalités</a>
             <a href="#how"        className="hover:text-gold-400 transition-colors">Comment ça marche</a>
             <a href="#pricing"    className="hover:text-gold-400 transition-colors">Tarifs</a>
@@ -226,7 +226,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16,1,0.3,1] }}
             className="text-5xl sm:text-6xl md:text-7xl font-display font-bold leading-tight mb-6"
           >
-            <span className="text-[#E8E3D5]">Trouvez votre</span>
+            <span className="text-gray-900">Trouvez votre</span>
             <br />
             <span className="text-gradient-hero">moitié selon</span>
             <br />
@@ -237,7 +237,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-navy-200 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto"
+            className="text-gray-600 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl mx-auto"
           >
             Zawjia est la première plateforme de mariage islamique qui analyse vos valeurs, 
             votre rapport à la religion et votre vision du foyer grâce à une IA conversationnelle 
@@ -263,7 +263,7 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.7 }}
-            className="mt-16 grid grid-cols-3 divide-x divide-border/40 max-w-md mx-auto"
+            className="mt-16 grid grid-cols-3 divide-x divide-black/10 max-w-md mx-auto"
           >
             {[
               { label: 'Membres', value: '12k+' },
@@ -272,7 +272,7 @@ export default function LandingPage() {
             ].map(({ label, value }) => (
               <div key={label} className="px-6 text-center">
                 <p className="text-2xl font-display font-bold text-gradient-gold">{value}</p>
-                <p className="text-xs text-navy-400 mt-1">{label}</p>
+                <p className="text-xs text-gray-400 mt-1">{label}</p>
               </div>
             ))}
           </motion.div>
@@ -283,9 +283,9 @@ export default function LandingPage() {
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          <span className="text-navy-500 text-xs">Découvrir</span>
+          <span className="text-gray-400 text-xs">Découvrir</span>
           <motion.div animate={{ y: [0,8,0] }} transition={{ repeat: Infinity, duration: 1.5 }}
-            className="w-5 h-8 rounded-full border border-navy-600 flex items-start justify-center pt-1.5"
+            className="w-5 h-8 rounded-full border border-gray-300 flex items-start justify-center pt-1.5">
           >
             <div className="w-1 h-2 bg-gold-400 rounded-full"/>
           </motion.div>
@@ -302,9 +302,9 @@ export default function LandingPage() {
           <p className="font-arabic text-2xl text-gold-400 mb-3 leading-loose">
             وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا
           </p>
-          <p className="text-navy-300 text-sm italic">
+          <p className="text-gray-500 text-sm italic">
             « Et parmi Ses signes, Il a créé pour vous des époux tirés de vous-mêmes, pour que vous trouviez en eux la quiétude. »
-            <span className="text-navy-400 ml-1 not-italic">— Coran 30:21</span>
+            <span className="text-gray-400 ml-1 not-italic">— Coran 30:21</span>
           </p>
         </div>
       </motion.section>
@@ -320,10 +320,10 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-gold-400/10 border border-gold-400/20 text-gold-400 text-xs font-medium">
               <Star size={12}/> FONCTIONNALITÉS
             </div>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-[#E8E3D5] mb-4">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4">
               Une plateforme pensée pour <span className="text-gradient-gold">vous</span>
             </h2>
-            <p className="text-navy-300 max-w-xl mx-auto">
+            <p className="text-gray-500 max-w-xl mx-auto">
               Chaque fonctionnalité a été conçue pour respecter les valeurs islamiques tout en offrant une expérience moderne et fluide.
             </p>
           </motion.div>
@@ -336,7 +336,7 @@ export default function LandingPage() {
 
       {/* ── AI Section (visual) ──────────────────────────────────────────────── */}
       <section className="py-20 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-navy-800/30 to-emerald-900/10"/>
+        <div className="absolute inset-0 bg-gradient-to-r from-rose-50/50 to-emerald-50/30"/>
         <motion.div
           initial="hidden" whileInView="show" viewport={{ once: true, margin: '-100px' }}
           variants={stagger}
@@ -346,15 +346,15 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-emerald-400/10 border border-emerald-400/20 text-emerald-400 text-xs font-medium">
               <Brain size={12}/> NISFI IA
             </div>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-[#E8E3D5] mb-5">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-5">
               L&apos;intelligence artificielle au service de votre <span className="text-gradient-gold">projet de vie</span>
             </h2>
-            <p className="text-navy-300 leading-relaxed mb-6">
-              Nisfi IA n&apos;est pas un simple questionnaire. C&apos;est une conversation profonde qui explore vos valeurs, votre rapport à l&apos;Islam, votre vision du mariage et de la famille à travers <strong className="text-[#E8E3D5]">8 phases progressives</strong>.
+            <p className="text-gray-500 leading-relaxed mb-6">
+              Nisfi IA n&apos;est pas un simple questionnaire. C&apos;est une conversation profonde qui explore vos valeurs, votre rapport à l&apos;Islam, votre vision du mariage et de la famille à travers <strong className="text-gray-800">8 phases progressives</strong>.
             </p>
             <ul className="space-y-3">
               {['Analyse de votre pratique religieuse', 'Exploration de vos valeurs et éthique', 'Vision du rôle conjugal et familial', 'Profil psychologique et de communication', 'Synthèse et score de compatibilité global'].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-sm text-navy-200">
+                <li key={item} className="flex items-center gap-3 text-sm text-gray-600">
                   <div className="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center flex-shrink-0">
                     <Check size={10} className="text-emerald-400"/>
                   </div>
@@ -366,15 +366,15 @@ export default function LandingPage() {
 
           {/* Chat preview mockup */}
           <motion.div variants={fadeUp} className="glass-card p-6 relative">
-            <div className="flex items-center gap-3 mb-5 pb-4 border-b border-border/40">
+            <div className="flex items-center gap-3 mb-5 pb-4 border-b border-black/[0.07]">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
                 <Brain size={18} className="text-white"/>
               </div>
               <div>
-                <p className="text-sm font-semibold text-[#E8E3D5]">Nisfi IA</p>
+                <p className="text-sm font-semibold text-gray-900">Nisfi IA</p>
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"/>
-                  <p className="text-xs text-navy-400">En ligne</p>
+                  <p className="text-xs text-gray-400">En ligne</p>
                 </div>
               </div>
               <div className="ml-auto badge bg-gold-400/10 border border-gold-400/20 text-gold-400">
@@ -383,29 +383,29 @@ export default function LandingPage() {
             </div>
             <div className="space-y-4">
               <div className="flex justify-start">
-                <div className="max-w-[80%] bg-navy-800/60 rounded-2xl rounded-tl-sm p-3.5 text-sm text-navy-200 leading-relaxed">
+                <div className="max-w-[80%] bg-gray-100 rounded-2xl rounded-tl-sm p-3.5 text-sm text-gray-700 leading-relaxed">
                   Assalamu alaikum ! Je suis Nisfi, votre guide vers un mariage béni. Parlez-moi de votre pratique religieuse au quotidien...
                 </div>
               </div>
               <div className="flex justify-end">
-                <div className="max-w-[80%] bg-gold-400/15 border border-gold-400/20 rounded-2xl rounded-tr-sm p-3.5 text-sm text-[#E8E3D5] leading-relaxed">
+                <div className="max-w-[80%] bg-gold-400/15 border border-gold-400/20 rounded-2xl rounded-tr-sm p-3.5 text-sm text-gray-800 leading-relaxed">
                   J&apos;essaie de prier mes 5 prières chaque jour. Le vendredi est particulièrement important pour moi...
                 </div>
               </div>
               <div className="flex justify-start">
-                <div className="max-w-[80%] bg-navy-800/60 rounded-2xl rounded-tl-sm p-3.5 text-sm text-navy-200 leading-relaxed">
+                <div className="max-w-[80%] bg-gray-100 rounded-2xl rounded-tl-sm p-3.5 text-sm text-gray-700 leading-relaxed">
                   MashaAllah, c&apos;est une belle démarche. Quelle importance accordez-vous à la connaissance islamique dans votre parcours ?
                 </div>
               </div>
-              <div className="flex items-center gap-2 mt-3 px-3 py-2.5 bg-navy-800/40 rounded-xl border border-border/40">
+              <div className="flex items-center gap-2 mt-3 px-3 py-2.5 bg-gray-50 rounded-xl border border-black/[0.07]">
                 <input
                   type="text"
                   placeholder="Répondez à Nisfi..."
-                  className="flex-1 bg-transparent text-sm outline-none text-navy-300 placeholder:text-navy-500"
+                  className="flex-1 bg-transparent text-sm outline-none text-gray-500 placeholder:text-gray-400"
                   readOnly
                 />
                 <button className="w-7 h-7 rounded-lg bg-gold-400 flex items-center justify-center flex-shrink-0">
-                  <ChevronRight size={14} className="text-navy-900"/>
+                  <ChevronRight size={14} className="text-white"/>
                 </button>
               </div>
             </div>
@@ -421,10 +421,10 @@ export default function LandingPage() {
           className="max-w-4xl mx-auto"
         >
           <motion.div variants={fadeUp} className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-navy-600/40 border border-border text-navy-300 text-xs font-medium">
+            <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-gray-100 border border-gray-200 text-gray-500 text-xs font-medium">
               <Zap size={12}/> PROCESSUS
             </div>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-[#E8E3D5] mb-4">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4">
               Comment ça <span className="text-gradient-gold">fonctionne</span>
             </h2>
           </motion.div>
@@ -447,10 +447,10 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-gold-400/10 border border-gold-400/20 text-gold-400 text-xs font-medium">
               <Crown size={12}/> ABONNEMENTS
             </div>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-[#E8E3D5] mb-4">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4">
               Investissez dans votre <span className="text-gradient-gold">avenir commun</span>
             </h2>
-            <p className="text-navy-300 max-w-xl mx-auto">
+            <p className="text-gray-500 max-w-xl mx-auto">
               Commencez l&apos;analyse IA gratuitement. Débloquez le matching pour rencontrer votre moitié.
             </p>
           </motion.div>
@@ -474,10 +474,10 @@ export default function LandingPage() {
             <div className="w-14 h-14 mx-auto mb-6 rounded-2xl bg-gold-400/15 border border-gold-400/30 flex items-center justify-center">
               <Heart size={24} className="text-gold-400"/>
             </div>
-            <h2 className="text-3xl font-display font-bold text-[#E8E3D5] mb-4">
+            <h2 className="text-3xl font-display font-bold text-gray-900 mb-4">
               Que Allah facilite votre union
             </h2>
-            <p className="text-navy-300 mb-8 leading-relaxed">
+            <p className="text-gray-500 mb-8 leading-relaxed">
               Rejoignez des milliers de musulmans qui ont fait confiance à Zawjia pour trouver leur moitié dans le respect des valeurs islamiques.
             </p>
             <Link href="/register" className="btn-primary px-10 py-4 text-base">
@@ -488,18 +488,18 @@ export default function LandingPage() {
       </section>
 
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
-      <footer className="border-t border-border/40 py-10 px-4">
+      <footer className="border-t border-black/[0.07] py-10 px-4 bg-white/60">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-gold-400/10 border border-gold-400/30 flex items-center justify-center">
               <Sparkles size={13} className="text-gold-400"/>
             </div>
-            <span className="font-display font-bold text-[#E8E3D5]">Zawjia</span>
+            <span className="font-display font-bold text-gray-900">Zawjia</span>
           </div>
-          <p className="text-navy-500 text-xs text-center">
+          <p className="text-gray-400 text-xs text-center">
             © 2026 Zawjia — Plateforme de mariage islamique · Tous droits réservés
           </p>
-          <div className="flex gap-5 text-xs text-navy-400">
+          <div className="flex gap-5 text-xs text-gray-400">
             <a href="#" className="hover:text-gold-400 transition-colors">Confidentialité</a>
             <a href="#" className="hover:text-gold-400 transition-colors">CGU</a>
             <a href="#" className="hover:text-gold-400 transition-colors">Contact</a>

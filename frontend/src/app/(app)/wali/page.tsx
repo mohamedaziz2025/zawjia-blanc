@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -35,13 +35,13 @@ export default function WaliPage() {
     return (
       <div className="h-[60vh] flex flex-col items-center justify-center text-center gap-4">
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-2"
-             style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.07)' }}>
-          <Info size={26} style={{ color:'rgba(232,227,213,0.3)' }}/>
+             style={{ background:'rgba(0,0,0,0.05)', border:'1px solid rgba(0,0,0,0.08)' }}>
+          <Info size={26} style={{ color:'#9ca3af' }}/>
         </div>
-        <h2 className="font-display font-semibold" style={{ color:'#E8E3D5', fontSize:'1.1rem', letterSpacing:'-0.02em' }}>
+        <h2 className="font-display font-semibold" style={{ color:'#111827', fontSize:'1.1rem', letterSpacing:'-0.02em' }}>
           Fonctionnalité réservée aux sœurs
         </h2>
-        <p className="text-sm max-w-xs" style={{ color:'rgba(232,227,213,0.4)' }}>
+        <p className="text-sm max-w-xs" style={{ color:'#9ca3af' }}>
           L&apos;ajout d&apos;un Wali est uniquement disponible pour les profils féminins.
         </p>
       </div>
@@ -54,7 +54,7 @@ export default function WaliPage() {
     <div className="space-y-5 max-w-2xl mx-auto">
       <div>
         <h1 className="page-title">Mon Wali</h1>
-        <p className="text-sm mt-1" style={{ color:'rgba(232,227,213,0.4)' }}>
+        <p className="text-sm mt-1" style={{ color:'#9ca3af' }}>
           Ajoutez les coordonnées de votre Wali pour compléter votre démarche
         </p>
       </div>
@@ -68,11 +68,11 @@ export default function WaliPage() {
           <Sparkles size={17} style={{ color:'#C8384E' }}/>
         </div>
         <div>
-          <h3 className="text-sm font-semibold mb-1.5" style={{ color:'#E8E3D5' }}>Pourquoi un Wali ?</h3>
-          <p className="text-xs leading-relaxed" style={{ color:'rgba(232,227,213,0.5)' }}>
+          <h3 className="text-sm font-semibold mb-1.5" style={{ color:'#111827' }}>Pourquoi un Wali ?</h3>
+          <p className="text-xs leading-relaxed" style={{ color:'#6b7280' }}>
             Conformément à la sunnah, le mariage islamique requiert la présence d&apos;un Wali (tuteur) pour la femme.
             Ses coordonnées seront transmises au frère uniquement en cas de{' '}
-            <strong style={{ color:'rgba(232,227,213,0.75)' }}>match réciproque final validé par les deux parties</strong>.
+            <strong style={{ color:'#374151' }}>match réciproque final validé par les deux parties</strong>.
             Elles sont protégées et chiffrées.
           </p>
         </div>
@@ -81,7 +81,7 @@ export default function WaliPage() {
       {/* Form */}
       <motion.div initial={{ opacity:0,y:16 }} animate={{ opacity:1,y:0 }} transition={{ duration:0.5,ease:[0.16,1,0.3,1],delay:0.08 }}
         className="rounded-2xl p-6"
-        style={{ background:'rgba(17,22,32,0.85)', border:'1px solid rgba(255,255,255,0.07)' }}>
+        style={{ background:'rgba(255,255,255,0.92)', border:'1px solid rgba(0,0,0,0.08)' }}>
         <h2 className="section-title mb-5">Informations du Wali</h2>
 
         <form onSubmit={handleSubmit(d => mutation.mutate(d))} className="space-y-4">
@@ -89,7 +89,7 @@ export default function WaliPage() {
           <div>
             <label className="label">Nom complet</label>
             <div className="relative">
-              <User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'rgba(232,227,213,0.25)' }}/>
+              <User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'#d1d5db' }}/>
               <input {...register('name')} className="input-field pl-9" placeholder="Mohammed Al-Farouq"/>
             </div>
             {errors.name && <span style={errStyle}>{errors.name.message}</span>}
@@ -99,7 +99,7 @@ export default function WaliPage() {
           <div>
             <label className="label">Lien de parenté</label>
             <div className="relative">
-              <Heart size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'rgba(232,227,213,0.25)' }}/>
+              <Heart size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'#d1d5db' }}/>
               <select {...register('relationship')} className="input-field pl-9">
                 <option value="">Sélectionner</option>
                 <option value="father">Père</option>
@@ -117,7 +117,7 @@ export default function WaliPage() {
           <div>
             <label className="label">Téléphone</label>
             <div className="relative">
-              <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'rgba(232,227,213,0.25)' }}/>
+              <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'#d1d5db' }}/>
               <input {...register('phone')} type="tel" className="input-field pl-9" placeholder="+33 6 XX XX XX XX"/>
             </div>
             {errors.phone && <span style={errStyle}>{errors.phone.message}</span>}
@@ -127,7 +127,7 @@ export default function WaliPage() {
           <div>
             <label className="label">Adresse e-mail</label>
             <div className="relative">
-              <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'rgba(232,227,213,0.25)' }}/>
+              <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color:'#d1d5db' }}/>
               <input {...register('email')} type="email" className="input-field pl-9" placeholder="wali@mail.com"/>
             </div>
             {errors.email && <span style={errStyle}>{errors.email.message}</span>}
@@ -149,8 +149,8 @@ export default function WaliPage() {
 
       {/* Privacy note */}
       <div className="flex items-center justify-center gap-2 text-center">
-        <Shield size={11} style={{ color:'rgba(232,227,213,0.2)' }}/>
-        <p className="text-[11px]" style={{ color:'rgba(232,227,213,0.25)' }}>
+        <Shield size={11} style={{ color:'#d1d5db' }}/>
+        <p className="text-[11px]" style={{ color:'#d1d5db' }}>
           Coordonnées chiffrées · Jamais visibles par d&apos;autres membres · Transmises uniquement en cas de match validé
         </p>
       </div>

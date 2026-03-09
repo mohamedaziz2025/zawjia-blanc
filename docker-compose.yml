@@ -37,7 +37,7 @@ services:
     container_name: zawjia-blanc-backend
     restart: unless-stopped
     ports:
-      - "5001:5000"
+      - "5050:5000"
     env_file:
       - ./backend/.env
     environment:
@@ -56,7 +56,7 @@ services:
     networks:
       - zawjia-blanc-network
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://72.62.71.97:5001/health"]
+      test: ["CMD", "wget", "-qO-", "http://72.62.71.97:5050/health"]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -67,13 +67,13 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - NEXT_PUBLIC_API_URL=http://72.62.71.97:5001
+        - NEXT_PUBLIC_API_URL=http://72.62.71.97:5050
     container_name: zawjia-blanc-frontend
     restart: unless-stopped
     ports:
       - "30000:30000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://72.62.71.97:5001
+      - NEXT_PUBLIC_API_URL=http://72.62.71.97:5050
     depends_on:
       - backend
     networks:

@@ -92,6 +92,7 @@ export default function AdminWalisPage() {
               </h2>
               <div className="rounded-2xl overflow-hidden"
                    style={{ background:'rgba(255,255,255,0.92)', border:'1px solid rgba(0,0,0,0.08)' }}>
+                <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr style={{ borderBottom:'1px solid rgba(0,0,0,0.07)' }}>
@@ -119,6 +120,7 @@ export default function AdminWalisPage() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               </div>
             </div>
           )}

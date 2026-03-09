@@ -146,7 +146,7 @@ export default function MatchesPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { label: 'Réciproques', count: groups.matched.length,  accent: '#2D7D52' },
           { label: 'En attente',  count: groups.pending.length,   accent: '#C8384E' },

@@ -10,10 +10,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   }));
 
   return (
-    <html lang="fr" className="dark">
+    <html lang="fr">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="color-scheme" content="light" />
         <title>Zawjia — Mariage Islamique</title>
         <meta name="description" content="La plateforme de mariage islamique guidée par l'IA" />
         <link rel="icon" href="/favicon.ico" />
@@ -32,8 +33,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             toastOptions={{
               className: 'toast-custom',
               duration: 4000,
-              success: { iconTheme: { primary: '#2D7D52', secondary: '#070b10' } },
-              error:   { iconTheme: { primary: '#C8384E', secondary: '#070b10' } },
+            success: { iconTheme: { primary: '#2D7D52', secondary: '#ffffff' } },
+            error:   { iconTheme: { primary: '#C8384E', secondary: '#ffffff' } },
             }}
           />
         </QueryClientProvider>

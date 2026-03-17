@@ -1,6 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Sparkles, Shield, Zap, Heart } from 'lucide-react';
 
 const FEATURES = [
@@ -11,10 +12,13 @@ const FEATURES = [
 ];
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isRegister = pathname === '/register';
+
   return (
     <div className="min-h-screen flex">
       {/* ── Left decorative panel ─────────────────────────────────────────── */}
-      <div className="hidden lg:flex flex-col justify-between w-[45%] p-14 relative overflow-hidden"
+      <div className={`${isRegister ? 'hidden' : 'hidden lg:flex'} flex-col justify-between w-[45%] p-14 relative overflow-hidden`}
            style={{ background: 'linear-gradient(160deg, #fdf4f5 0%, #fff5f5 50%, #fdf9f9 100%)' }}>
 
         {/* Aurora orbs */}

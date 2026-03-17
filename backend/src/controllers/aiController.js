@@ -1,6 +1,7 @@
 const AIProfile = require('../models/AIProfile');
 const AiLog = require('../models/AiLog');
 const { queryAI, extractProfileUpdate, cleanResponse } = require('../services/aiService');
+const { AI_QUESTIONS } = require('../config/questionnaire');
 
 exports.chat = async (req, res) => {
   const { prompt } = req.body;
@@ -13,14 +14,14 @@ exports.chat = async (req, res) => {
   }
 
   // Construire l'historique complet envoyé à l'IA
-  const history = (profile.conversationHistory || []).map((m) => ({
+  const history = (profile.conversationHistory || []).slice(-16).map((m) => ({
     role: m.role,
     content: m.content,
   }));
   history.push({ role: 'user', content: prompt });
 
   // Appel IA
-  const rawResponse = await queryAI(history);
+  const rawResponse = await queryAI(history, req.user.role === 'female' ? 'female' : 'male');
 
   // Séparer la réponse affichée et les données de profil
   const userFacingResponse = cleanResponse(rawResponse);
@@ -89,4 +90,9 @@ exports.getMyProfile = async (req, res) => {
   // Ne pas exposer l'historique brut
   const { conversationHistory, ...safe } = profile.toObject();
   res.json(safe);
+};
+
+exports.getAiQuestionnaire = async (req, res) => {
+  const role = req.user.role === 'female' ? 'female' : 'male';
+  res.json({ role, categories: AI_QUESTIONS[role] });
 };

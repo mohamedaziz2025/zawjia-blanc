@@ -10,7 +10,7 @@ import { aiApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { getErrorMessage, phaseLabel } from '@/lib/utils';
 import { cn } from '@/lib/utils';
-import type { ChatMessage } from '@/types';
+import type { AiQuestionnaireResponse, ChatMessage } from '@/types';
 import Link from 'next/link';
 
 const PHASES = Array.from({ length: 8 }, (_, i) => ({
@@ -18,11 +18,22 @@ const PHASES = Array.from({ length: 8 }, (_, i) => ({
   label: phaseLabel(i + 1),
 }));
 
+const PHASE_TO_CATEGORY: Record<number, string> = {
+  1: 'religion',
+  2: 'personality',
+  3: 'vision',
+  4: 'communication',
+  5: 'lifestyle',
+  6: 'family',
+  7: 'finance_and_projects',
+  8: 'parenting',
+};
+
 function TypingIndicator() {
   return (
     <div className="flex items-end gap-2.5 max-w-sm">
       <div className="w-8 h-8 rounded-2xl flex items-center justify-center flex-shrink-0 mb-1"
-           style={{ background: 'linear-gradient(135deg, #2D7D52, #1a6640)', boxShadow: '0 0 16px rgba(45,125,82,0.4)' }}>
+           style={{ background: 'linear-gradient(135deg, #a8243c, #C8384E)', boxShadow: '0 0 16px rgba(200,56,78,0.4)' }}>
         <Brain size={14} className="text-white"/>
       </div>
       <div className="px-4 py-3 rounded-2xl rounded-bl-sm flex gap-1.5 items-center"
@@ -50,7 +61,7 @@ function ChatBubble({ msg }: { msg: ChatMessage }) {
     >
       {!isUser && (
         <div className="w-8 h-8 rounded-2xl flex items-center justify-center flex-shrink-0 mb-0.5"
-             style={{ background: 'linear-gradient(135deg, #2D7D52, #1a6640)', boxShadow: '0 0 14px rgba(45,125,82,0.35)' }}>
+             style={{ background: 'linear-gradient(135deg, #a8243c, #C8384E)', boxShadow: '0 0 14px rgba(200,56,78,0.35)' }}>
           <Brain size={13} className="text-white"/>
         </div>
       )}
@@ -62,8 +73,8 @@ function ChatBubble({ msg }: { msg: ChatMessage }) {
         background: 'linear-gradient(135deg, rgba(200,56,78,0.2), rgba(200,56,78,0.08))',
         border: '1px solid rgba(200,56,78,0.25)',
       } : {
-        background: 'rgba(0,0,0,0.06)',
-        border: '1px solid rgba(0,0,0,0.09)',
+        background: 'rgba(200,56,78,0.08)',
+        border: '1px solid rgba(200,56,78,0.18)',
       }}>
         {msg.content.split('\n').map((line, i) => (
           <span key={i}>{line}{i < msg.content.split('\n').length - 1 && <br/>}</span>
@@ -84,6 +95,13 @@ export default function AiChatPage() {
   const inputRef  = useRef<HTMLTextAreaElement>(null);
 
   const { data: aiProfile } = useQuery({ queryKey: ['ai-profile'], queryFn: () => aiApi.getProfile().then(r => r.data) });
+  const { data: aiQuestionnaire } = useQuery<AiQuestionnaireResponse>({
+    queryKey: ['ai-questionnaire'],
+    queryFn: () => aiApi.getQuestionnaire().then((r) => r.data),
+  });
+
+  const currentCategory = PHASE_TO_CATEGORY[phase] || 'vision';
+  const suggestedQuestions = (aiQuestionnaire?.categories?.[currentCategory] || []).slice(0, 3);
 
   useEffect(() => {
     if (aiProfile) { setPhase(aiProfile.currentPhase ?? 1); if (user?.aiPhaseCompleted) setCompleted(true); }
@@ -93,7 +111,7 @@ export default function AiChatPage() {
     if (messages.length === 0) {
       setMessages([{
         role: 'assistant',
-        content: `Assalamu alaikum wa rahmatullahi wa barakatuh${user?.firstName ? `, ${user.firstName}` : ''} ! 🌙\n\nJe suis Nisfi, votre guide vers un mariage béni. Notre conversation se déroulera en ${PHASES.length} phases progressives.\n\nNous commençons par la phase 1 : **${phaseLabel(phase)}**.\n\nParlez-moi de vous — qui êtes-vous en quelques mots ?`,
+        content: `Assalamu alaikum wa rahmatullahi wa barakatuh${user?.firstName ? `, ${user.firstName}` : ''} ! 🌙\n\nJe suis Zawj IA, votre guide vers un mariage béni. Notre conversation se déroulera en ${PHASES.length} phases progressives.\n\nNous commençons par la phase 1 : **${phaseLabel(phase)}**.\n\nParlez-moi de vous — qui êtes-vous en quelques mots ?`,
         timestamp: Date.now(),
       }]);
     }
@@ -141,17 +159,17 @@ export default function AiChatPage() {
         style={{ background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(0,0,0,0.08)', backdropFilter: 'blur(20px)' }}
       >
         <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-             style={{ background: 'linear-gradient(135deg, #2D7D52, #1a6640)', boxShadow: '0 0 20px rgba(45,125,82,0.4)' }}>
+             style={{ background: 'linear-gradient(135deg, #a8243c, #C8384E)', boxShadow: '0 0 20px rgba(200,56,78,0.4)' }}>
           <Brain size={19} className="text-white"/>
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
             <h1 className="font-display font-semibold text-gray-900 text-sm" style={{ letterSpacing: '-0.01em' }}>
-              Nisfi IA
+              Zawj IA
             </h1>
             <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"
-                   style={{ boxShadow: '0 0 6px rgba(60,190,136,0.7)' }}/>
+              <div className="w-1.5 h-1.5 rounded-full animate-pulse"
+                   style={{ background: '#C8384E', boxShadow: '0 0 6px rgba(200,56,78,0.8)' }}/>
               <span className="text-[10px]" style={{ color: '#9ca3af' }}>En ligne</span>
             </div>
           </div>
@@ -226,7 +244,7 @@ export default function AiChatPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Répondez à Nisfi… (Entrée pour envoyer)"
+                placeholder="Répondez à Zawj IA… (Entrée pour envoyer)"
                 rows={1}
                 disabled={loading}
                 className="input-field resize-none leading-relaxed"
@@ -245,6 +263,31 @@ export default function AiChatPage() {
             >
               {loading ? <Loader2 size={15} className="animate-spin"/> : <Send size={15}/>}
             </button>
+          </div>
+        )}
+
+        {!completed && suggestedQuestions.length > 0 && (
+          <div className="px-3 pb-3">
+            <p className="text-[11px] mb-2" style={{ color: '#9ca3af' }}>
+              Suggestions pour cette phase
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {suggestedQuestions.map((question) => (
+                <button
+                  key={question}
+                  type="button"
+                  onClick={() => setInput(question)}
+                  className="badge text-[11px] transition-opacity hover:opacity-90"
+                  style={{
+                    background: 'rgba(200,56,78,0.08)',
+                    border: '1px solid rgba(200,56,78,0.2)',
+                    color: '#C8384E',
+                  }}
+                >
+                  <Sparkles size={10}/>{question}
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </div>

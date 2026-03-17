@@ -43,6 +43,7 @@ export default api;
 export const authApi = {
   register: (data: object) => api.post('/auth/register', data),
   login:    (data: object) => api.post('/auth/login', data),
+  getRegisterQuestionnaire: () => api.get('/auth/register-questionnaire'),
   acceptCharter:   () => api.post('/auth/accept-charter'),
   deleteAccount:   () => api.delete('/auth/delete-account'),
 };
@@ -62,6 +63,7 @@ export const userApi = {
 export const aiApi = {
   chat:       (prompt: string) => api.post('/ai/chat', { prompt }),
   getProfile: () => api.get('/ai/profile'),
+  getQuestionnaire: () => api.get('/ai/questionnaire'),
 };
 
 // ── Matching ───────────────────────────────────────────────────────────────────

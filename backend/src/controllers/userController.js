@@ -11,6 +11,9 @@ const ALLOWED_PROFILE_FIELDS = [
   'maritalStatus', 'hadPreviousMarriage', 'children',
   'religiousPractice', 'prayers', 'religiousFollowing', 'madhhab',
   'wantsChildren', 'willingToRelocate',
+  'hijra', 'hijraCountry',
+  'femaleProfile', 'maleProfile',
+  'searchCriteria',
 ];
 
 const REQUIRED_FOR_COMPLETION = [

@@ -22,6 +22,56 @@ const schema = z.object({
   country:            z.string().min(2,'Pays requis'),
   city:               z.string().min(2,'Ville requise'),
   maritalStatus:      z.enum(['single','divorced','widowed'], { required_error:'Situation requise' }),
+  dateOfBirth:        z.string().optional(),
+  nationality:        z.string().optional(),
+  origin:             z.string().optional(),
+  ethnicity:          z.enum(['arab','african','turkish','caucasian','asian','indian','latin','other']).optional(),
+  hadPreviousMarriage:z.enum(['true','false']).optional(),
+  childrenHas:        z.enum(['true','false']).optional(),
+  childrenCount:      z.coerce.number().min(0).max(20).optional(),
+  religiousPractice:  z.enum(['little','practicing','very_practicing']).optional(),
+  prayers:            z.enum(['regular','irregular','rarely']).optional(),
+  religiousFollowing: z.enum(['none','self_taught','student']).optional(),
+  madhhab:            z.enum(['hanafi','maliki','shafii','hanbali','none']).optional(),
+  wantsChildren:      z.enum(['yes','no','undecided']).optional(),
+  willingToRelocate:  z.enum(['true','false']).optional(),
+  hijra:              z.enum(['already_done','possible_with_country','not_desired']).optional(),
+  hijraCountry:       z.string().optional(),
+  femaleVeil:         z.enum(['hijab','niqab','none']).optional(),
+  femaleAcceptPolygamy:z.enum(['yes','no','conditional']).optional(),
+  femaleWantsToWork:  z.enum(['yes','no','flexible']).optional(),
+  maleProfessionalSituation:z.enum(['student','employee','entrepreneur','other']).optional(),
+  maleFinancialStability:z.enum(['stable','building']).optional(),
+  malePolygamyStatus: z.enum(['no','possible','already_married']).optional(),
+  criteriaAgeMin: z.coerce.number().min(18).max(99).optional(),
+  criteriaAgeMax: z.coerce.number().min(18).max(99).optional(),
+  criteriaMaritalStatuses: z.string().optional(),
+  criteriaAcceptWithChildren: z.enum(['yes','no','limited','conditional','any']).optional(),
+  criteriaChildrenLimit: z.coerce.number().min(0).max(20).optional(),
+  criteriaNationalities: z.string().optional(),
+  criteriaOrigins: z.string().optional(),
+  criteriaEthnicities: z.string().optional(),
+  criteriaDesiredResidence: z.enum(['same_country','europe_only','worldwide','any']).optional(),
+  criteriaDesiredReligiousPractice: z.enum(['little','practicing','very_practicing','any']).optional(),
+  criteriaPrayersExpectation: z.enum(['regular_required','progress_accepted','any']).optional(),
+  criteriaMadhhabType: z.enum(['same','any','specific']).optional(),
+  criteriaMadhhabSpecific: z.string().optional(),
+  criteriaReligiousFollowing: z.enum(['student','self_taught','serious_self_taught','any']).optional(),
+  criteriaHijraVision: z.enum(['must_hijra','open_hijra','not_desired','any']).optional(),
+  criteriaHeightMin: z.coerce.number().min(120).max(230).optional(),
+  criteriaHeightMax: z.coerce.number().min(120).max(230).optional(),
+  criteriaBodyType: z.enum(['slim','average','strong','any']).optional(),
+  criteriaFemaleHijab: z.enum(['required','niqab_only','hijab_ok','any']).optional(),
+  criteriaMaleBeard: z.enum(['required','preferred','any']).optional(),
+  criteriaDesiredWork: z.enum(['yes','no','flexible','any']).optional(),
+  criteriaMaleProfessionalMinimum: z.enum(['student_ok','employee_min','entrepreneur','any']).optional(),
+  criteriaMaleFinancialStabilityReq: z.enum(['required','building_ok','any']).optional(),
+  criteriaMaleAmbition: z.enum(['very_ambitious','stable','any']).optional(),
+  criteriaPolygamy: z.enum(['yes','no','conditional','future_possible','monogamy_only','any']).optional(),
+  criteriaAcceptAlreadyMarried: z.enum(['yes','no','any']).optional(),
+  criteriaWantsChildren: z.enum(['yes','no','undecided','any']).optional(),
+  criteriaDesiredChildrenCount: z.coerce.number().min(0).max(12).optional(),
+  criteriaRelocation: z.enum(['required','flexible','not_required','yes','no','any']).optional(),
   hasAcceptedCharter: z.literal(true, { errorMap: () => ({ message:'Vous devez accepter la charte' }) }),
 }).refine(d => d.password === d.confirmPassword, { message:'Mots de passe différents', path:['confirmPassword'] });
 type FormData = z.infer<typeof schema>;
@@ -30,6 +80,7 @@ const STEPS = [
   { title:'Votre profil',     sub:'Comment souhaitez-vous être accompagné(e) ?' },
   { title:'Vos identifiants', sub:'Créez vos accès sécurisés' },
   { title:'À propos de vous', sub:'Informations de base pour le matching' },
+  { title:'Questionnaire',    sub:'Religion, valeurs et projet de vie' },
   { title:'Charte éthique',   sub:'Un engagement pour une démarche sérieuse' },
 ];
 
@@ -51,12 +102,15 @@ export default function RegisterPage() {
   });
 
   const selectedRole = watch('role');
+  const childrenHas = watch('childrenHas');
+  const hijra = watch('hijra');
 
   const nextStep = async () => {
     const fieldsMap: Array<Array<keyof FormData>> = [
       ['role'],
       ['email','password','confirmPassword'],
       ['firstName','age','country','city','maritalStatus'],
+      ['religiousPractice','prayers','wantsChildren'],
       ['hasAcceptedCharter'],
     ];
     const ok = await trigger(fieldsMap[step]);
@@ -68,7 +122,74 @@ export default function RegisterPage() {
       const res = await authApi.register({
         email:data.email, password:data.password, role:data.role,
         firstName:data.firstName, age:data.age, country:data.country,
-        city:data.city, maritalStatus:data.maritalStatus, hasAcceptedCharter:true,
+        city:data.city, maritalStatus:data.maritalStatus,
+        dateOfBirth: data.dateOfBirth || undefined,
+        nationality: data.nationality || undefined,
+        origin: data.origin || undefined,
+        ethnicity: data.ethnicity,
+        hadPreviousMarriage: data.hadPreviousMarriage === undefined ? undefined : data.hadPreviousMarriage === 'true',
+        children: data.childrenHas === undefined ? undefined : {
+          has: data.childrenHas === 'true',
+          count: data.childrenHas === 'true' ? Number(data.childrenCount || 0) : 0,
+        },
+        religiousPractice: data.religiousPractice,
+        prayers: data.prayers,
+        religiousFollowing: data.religiousFollowing,
+        madhhab: data.madhhab,
+        wantsChildren: data.wantsChildren,
+        willingToRelocate: data.willingToRelocate === undefined ? undefined : data.willingToRelocate === 'true',
+        hijra: data.hijra,
+        hijraCountry: data.hijraCountry || undefined,
+        femaleProfile: data.role === 'female' ? {
+          veil: data.femaleVeil,
+          acceptPolygamy: data.femaleAcceptPolygamy,
+          wantsToWork: data.femaleWantsToWork,
+        } : undefined,
+        maleProfile: data.role === 'male' ? {
+          professionalSituation: data.maleProfessionalSituation,
+          financialStability: data.maleFinancialStability,
+          polygamyStatus: data.malePolygamyStatus,
+        } : undefined,
+        searchCriteria: {
+          ageMin: data.criteriaAgeMin,
+          ageMax: data.criteriaAgeMax,
+          acceptedMaritalStatuses: data.criteriaMaritalStatuses
+            ? data.criteriaMaritalStatuses.split(',').map((v) => v.trim()).filter(Boolean)
+            : undefined,
+          acceptWithChildren: data.criteriaAcceptWithChildren,
+          childrenLimit: data.criteriaChildrenLimit,
+          preferredNationalities: data.criteriaNationalities
+            ? data.criteriaNationalities.split(',').map((v) => v.trim()).filter(Boolean)
+            : undefined,
+          preferredOrigins: data.criteriaOrigins
+            ? data.criteriaOrigins.split(',').map((v) => v.trim()).filter(Boolean)
+            : undefined,
+          preferredEthnicities: data.criteriaEthnicities
+            ? data.criteriaEthnicities.split(',').map((v) => v.trim()).filter(Boolean)
+            : undefined,
+          desiredResidence: data.criteriaDesiredResidence,
+          desiredReligiousPractice: data.criteriaDesiredReligiousPractice,
+          prayersExpectation: data.criteriaPrayersExpectation,
+          madhhabPreferenceType: data.criteriaMadhhabType,
+          madhhabSpecific: data.criteriaMadhhabSpecific,
+          desiredReligiousFollowing: data.criteriaReligiousFollowing,
+          hijraVision: data.criteriaHijraVision,
+          heightMin: data.criteriaHeightMin,
+          heightMax: data.criteriaHeightMax,
+          preferredBodyType: data.criteriaBodyType,
+          femaleHijabPreference: data.criteriaFemaleHijab,
+          maleBeardPreference: data.criteriaMaleBeard,
+          desiredWorkPreference: data.criteriaDesiredWork,
+          maleProfessionalMinimum: data.criteriaMaleProfessionalMinimum,
+          maleFinancialStabilityRequirement: data.criteriaMaleFinancialStabilityReq,
+          maleAmbition: data.criteriaMaleAmbition,
+          polygamyPreference: data.criteriaPolygamy,
+          acceptAlreadyMarried: data.criteriaAcceptAlreadyMarried,
+          wantsChildrenPreference: data.criteriaWantsChildren,
+          desiredChildrenCount: data.criteriaDesiredChildrenCount,
+          relocationRequirement: data.criteriaRelocation,
+        },
+        hasAcceptedCharter:true,
       });
       const { token, role, userId } = res.data;
       try {
@@ -116,9 +237,21 @@ export default function RegisterPage() {
           {step === 0 && (
             <motion.div key="s0" initial={{ opacity:0,x:30 }} animate={{ opacity:1,x:0 }} exit={{ opacity:0,x:-30 }}
               transition={{ duration:0.3 }} className="space-y-3">
-              <p className="text-sm text-center mb-5" style={{ color:'#6b7280' }}>
-                Zawjia adapte votre parcours selon votre profil pour respecter les valeurs islamiques.
-              </p>
+              <div className="text-center rounded-2xl p-4 mb-5" style={{ background:'rgba(200,56,78,0.06)', border:'1px solid rgba(200,56,78,0.18)' }}>
+                <p className="font-arabic text-lg" style={{ color:'#C8384E' }}>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+                <h2 className="font-display font-bold mt-2" style={{ color:'#111827', fontSize:'1.2rem', letterSpacing:'-0.03em' }}>
+                  Votre chemin vers<br/>un mariage béni
+                </h2>
+                <p className="text-xs mt-2" style={{ color:'#6b7280' }}>
+                  Zawjia allie valeurs islamiques et intelligence artificielle pour vous accompagner dans une démarche sérieuse et pudique.
+                </p>
+                <ul className="mt-3 text-xs space-y-1" style={{ color:'#4b5563' }}>
+                  <li>Analyse IA sur 8 phases approfondies</li>
+                  <li>Matching basé sur la compatibilité réelle</li>
+                  <li>Système Wali intégré et sécurisé</li>
+                  <li>Confidentialité et pudeur garanties</li>
+                </ul>
+              </div>
               {([
                 { v:'male',   emoji:'👳', title:'Frère (Homme)',  sub:"Recherche d'une épouse" },
                 { v:'female', emoji:'🧕', title:'Sœur (Femme)',   sub:"Recherche d'un époux" },
@@ -234,6 +367,340 @@ export default function RegisterPage() {
           {/* Step 3: Charter */}
           {step === 3 && (
             <motion.div key="s3" initial={{ opacity:0,x:30 }} animate={{ opacity:1,x:0 }} exit={{ opacity:0,x:-30 }}
+              transition={{ duration:0.3 }} className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="label">Date de naissance</label>
+                  <input {...register('dateOfBirth')} type="date" className="input-field"/>
+                </div>
+                <div>
+                  <label className="label">Nationalité</label>
+                  <input {...register('nationality')} placeholder="Française" className="input-field"/>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="label">Origine</label>
+                  <input {...register('origin')} placeholder="Maghreb, Afrique de l'Ouest..." className="input-field"/>
+                </div>
+                <div>
+                  <label className="label">Ethnie</label>
+                  <select {...register('ethnicity')} className="input-field">
+                    <option value="">Choisir</option>
+                    <option value="arab">Arabe</option>
+                    <option value="african">Africaine</option>
+                    <option value="turkish">Turque</option>
+                    <option value="caucasian">Caucasienne</option>
+                    <option value="asian">Asiatique</option>
+                    <option value="indian">Indienne</option>
+                    <option value="latin">Latine</option>
+                    <option value="other">Autre</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="label">Niveau de pratique</label>
+                  <select {...register('religiousPractice')} className="input-field">
+                    <option value="">Choisir</option>
+                    <option value="little">Peu pratiquant(e)</option>
+                    <option value="practicing">Pratiquant(e)</option>
+                    <option value="very_practicing">Très pratiquant(e)</option>
+                  </select>
+                  {errors.religiousPractice && <span style={errStyle}>{errors.religiousPractice.message}</span>}
+                </div>
+                <div>
+                  <label className="label">Prières</label>
+                  <select {...register('prayers')} className="input-field">
+                    <option value="">Choisir</option>
+                    <option value="regular">Régulières</option>
+                    <option value="irregular">Irrégulières</option>
+                    <option value="rarely">Rarement</option>
+                  </select>
+                  {errors.prayers && <span style={errStyle}>{errors.prayers.message}</span>}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="label">Suivi religieux</label>
+                  <select {...register('religiousFollowing')} className="input-field">
+                    <option value="">Choisir</option>
+                    <option value="none">Aucun</option>
+                    <option value="self_taught">Autodidacte</option>
+                    <option value="student">Étudiant(e)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="label">Madhhab</label>
+                  <select {...register('madhhab')} className="input-field">
+                    <option value="">Choisir</option>
+                    <option value="hanafi">Hanafi</option>
+                    <option value="maliki">Maliki</option>
+                    <option value="shafii">Shafi'i</option>
+                    <option value="hanbali">Hanbali</option>
+                    <option value="none">Aucun</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="label">Souhaite des enfants</label>
+                  <select {...register('wantsChildren')} className="input-field">
+                    <option value="">Choisir</option>
+                    <option value="yes">Oui</option>
+                    <option value="no">Non</option>
+                    <option value="undecided">Indécis(e)</option>
+                  </select>
+                  {errors.wantsChildren && <span style={errStyle}>{errors.wantsChildren.message}</span>}
+                </div>
+                <div>
+                  <label className="label">Prêt(e) à déménager</label>
+                  <select {...register('willingToRelocate')} className="input-field">
+                    <option value="">Choisir</option>
+                    <option value="true">Oui</option>
+                    <option value="false">Non</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="label">Déjà été marié(e)</label>
+                  <select {...register('hadPreviousMarriage')} className="input-field">
+                    <option value="">Choisir</option>
+                    <option value="true">Oui</option>
+                    <option value="false">Non</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="label">A des enfants</label>
+                  <select {...register('childrenHas')} className="input-field">
+                    <option value="">Choisir</option>
+                    <option value="true">Oui</option>
+                    <option value="false">Non</option>
+                  </select>
+                </div>
+              </div>
+
+              {childrenHas === 'true' && (
+                <div>
+                  <label className="label">Nombre d'enfants</label>
+                  <input {...register('childrenCount')} type="number" min={0} className="input-field" placeholder="1"/>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="label">Hijra</label>
+                  <select {...register('hijra')} className="input-field">
+                    <option value="">Choisir</option>
+                    <option value="already_done">Déjà faite</option>
+                    <option value="possible_with_country">Envisageable</option>
+                    <option value="not_desired">Non souhaitée</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="label">Pays hijra (si envisagée)</label>
+                  <input {...register('hijraCountry')} disabled={hijra !== 'possible_with_country'} placeholder="Maroc, Qatar..." className="input-field disabled:opacity-60"/>
+                </div>
+              </div>
+
+              {selectedRole === 'female' && (
+                <div style={cardBase} className="space-y-3">
+                  <p className="text-xs font-semibold uppercase tracking-wider" style={{ color:'#C8384E' }}>Profil spécifique sœur</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="label">Voile</label>
+                      <select {...register('femaleVeil')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="hijab">Hijab</option>
+                        <option value="niqab">Niqab</option>
+                        <option value="none">Aucun</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Polygamie</label>
+                      <select {...register('femaleAcceptPolygamy')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="yes">Oui</option>
+                        <option value="no">Non</option>
+                        <option value="conditional">Sous conditions</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Souhaite travailler</label>
+                      <select {...register('femaleWantsToWork')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="yes">Oui</option>
+                        <option value="no">Non</option>
+                        <option value="flexible">Au choix</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {selectedRole === 'male' && (
+                <div style={cardBase} className="space-y-3">
+                  <p className="text-xs font-semibold uppercase tracking-wider" style={{ color:'#C8384E' }}>Profil spécifique frère</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="label">Situation pro</label>
+                      <select {...register('maleProfessionalSituation')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="student">Étudiant</option>
+                        <option value="employee">Salarié</option>
+                        <option value="entrepreneur">Entrepreneur</option>
+                        <option value="other">Autre</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Stabilité financière</label>
+                      <select {...register('maleFinancialStability')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="stable">Oui</option>
+                        <option value="building">En construction</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">Polygamie</label>
+                      <select {...register('malePolygamyStatus')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="no">Non</option>
+                        <option value="possible">Possible</option>
+                        <option value="already_married">Déjà marié</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div style={cardBase} className="space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color:'#C8384E' }}>
+                  {selectedRole === 'male' ? 'Ce que le frère recherche' : 'Ce que la sœur recherche'}
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="label">Âge min recherché</label>
+                    <input {...register('criteriaAgeMin')} type="number" min={18} max={99} className="input-field" placeholder="20"/>
+                  </div>
+                  <div>
+                    <label className="label">Âge max recherché</label>
+                    <input {...register('criteriaAgeMax')} type="number" min={18} max={99} className="input-field" placeholder="35"/>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="label">Statuts matrimoniaux acceptés</label>
+                    <input {...register('criteriaMaritalStatuses')} className="input-field" placeholder="single, divorced, widowed"/>
+                  </div>
+                  <div>
+                    <label className="label">Avec enfants</label>
+                    <select {...register('criteriaAcceptWithChildren')} className="input-field">
+                      <option value="">Choisir</option>
+                      <option value="yes">Oui</option>
+                      <option value="no">Non</option>
+                      <option value="limited">Oui, limite</option>
+                      <option value="conditional">Oui, sous conditions</option>
+                      <option value="any">Peu importe</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="label">Nationalités (séparées par virgule)</label>
+                    <input {...register('criteriaNationalities')} className="input-field" placeholder="Marocaine, Française"/>
+                  </div>
+                  <div>
+                    <label className="label">Origines (séparées par virgule)</label>
+                    <input {...register('criteriaOrigins')} className="input-field" placeholder="Maghreb, Afrique de l'Ouest"/>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="label">Niveau religieux recherché</label>
+                    <select {...register('criteriaDesiredReligiousPractice')} className="input-field">
+                      <option value="">Choisir</option>
+                      <option value="little">Peu pratiquant(e)</option>
+                      <option value="practicing">Pratiquant(e)</option>
+                      <option value="very_practicing">Très pratiquant(e)</option>
+                      <option value="any">Peu importe</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">Prières</label>
+                    <select {...register('criteriaPrayersExpectation')} className="input-field">
+                      <option value="">Choisir</option>
+                      <option value="regular_required">Régulières obligatoires</option>
+                      <option value="progress_accepted">Progression acceptée</option>
+                      <option value="any">Peu importe</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="label">Polygamie</label>
+                    <select {...register('criteriaPolygamy')} className="input-field">
+                      <option value="">Choisir</option>
+                      <option value="yes">Oui</option>
+                      <option value="no">Non</option>
+                      <option value="conditional">Sous conditions</option>
+                      <option value="future_possible">Possible dans le futur</option>
+                      <option value="monogamy_only">Monogamie uniquement</option>
+                      <option value="any">Peu importe</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">Prêt(e) à déménager</label>
+                    <select {...register('criteriaRelocation')} className="input-field">
+                      <option value="">Choisir</option>
+                      <option value="required">Oui obligatoire</option>
+                      <option value="flexible">Flexible</option>
+                      <option value="not_required">Non obligatoire</option>
+                      <option value="yes">Oui</option>
+                      <option value="no">Non</option>
+                      <option value="any">Peu importe</option>
+                    </select>
+                  </div>
+                </div>
+
+                {selectedRole === 'male' ? (
+                  <div>
+                    <label className="label">Port du hijab</label>
+                    <select {...register('criteriaFemaleHijab')} className="input-field">
+                      <option value="">Choisir</option>
+                      <option value="required">Obligatoire</option>
+                      <option value="niqab_only">Niqab uniquement</option>
+                      <option value="hijab_ok">Hijab suffisant</option>
+                      <option value="any">Peu importe</option>
+                    </select>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="label">Barbe</label>
+                    <select {...register('criteriaMaleBeard')} className="input-field">
+                      <option value="">Choisir</option>
+                      <option value="required">Oui obligatoire</option>
+                      <option value="preferred">Souhaitée</option>
+                      <option value="any">Peu importe</option>
+                    </select>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Step 4: Charter */}
+          {step === 4 && (
+            <motion.div key="s4" initial={{ opacity:0,x:30 }} animate={{ opacity:1,x:0 }} exit={{ opacity:0,x:-30 }}
               transition={{ duration:0.3 }} className="space-y-4">
               <div className="rounded-2xl p-4 text-sm leading-relaxed space-y-2.5 max-h-44 overflow-y-auto"
                    style={{ background:'rgba(0,0,0,0.04)', border:'1px solid rgba(0,0,0,0.08)' }}>

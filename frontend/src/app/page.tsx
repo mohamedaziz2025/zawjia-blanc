@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import Link from 'next/link';
 import {
   Sparkles, Heart, Shield, Brain, ChevronRight,
-  Users, Lock, MessageCircle, Check,
+  Check,
   MapPin, Menu, X,
 } from 'lucide-react';
 
@@ -70,10 +70,10 @@ function MatchOverlay() {
           <Heart className="fill-white" size={32} />
         </div>
       </div>
-      <h4 className="text-lg md:text-xl font-black text-center mb-2 leading-tight">Match parfait !</h4>
-      <p className="text-white/80 text-center text-[10px] md:text-xs mb-6 font-medium">Salma correspond à 94% de vos critères de valeurs.</p>
+      <h4 className="text-lg md:text-xl font-black text-center mb-2 leading-tight">Belle compatibilité</h4>
+      <p className="text-white/80 text-center text-[10px] md:text-xs mb-6 font-medium">Un profil aligné avec vos valeurs essentielles vient d&apos;être trouvé.</p>
       <button className="w-full bg-white text-[#FF4D6D] py-3 rounded-2xl font-black text-sm shadow-lg hover:bg-gray-50 transition-colors">
-        Envoyer un Salam
+        Voir le profil
       </button>
     </motion.div>
   );
@@ -185,9 +185,6 @@ export default function LandingPage() {
     { icon: Brain,         title: 'Nisfi IA Intelligente', desc: 'Une conversation approfondie pour cerner votre personnalité et vos attentes spirituelles.',       gradient: 'bg-rose-600' },
     { icon: Heart,         title: 'Matching de Valeurs',   desc: 'Notre algorithme privilégie la compatibilité profonde au-delà des simples apparences.',           gradient: 'bg-rose-500' },
     { icon: Shield,        title: 'Pudeur & Sécurité',     desc: 'Vos photos sont floutées par défaut. Vous gardez le contrôle total sur votre image.',            gradient: 'bg-rose-700' },
-    { icon: Users,         title: 'Accès Wali',            desc: 'Une intégration fluide du tuteur dans le processus pour garantir une démarche noble.',           gradient: 'bg-rose-800' },
-    { icon: Lock,          title: 'Données Protégées',     desc: 'Anonymat garanti et cryptage de haut niveau pour vos échanges privés.',                          gradient: 'bg-gray-800' },
-    { icon: MessageCircle, title: 'Salons Respectueux',    desc: 'Des cadres de discussion supervisés pour favoriser des échanges sains.',                          gradient: 'bg-rose-400' },
   ];
 
   const plansList = [

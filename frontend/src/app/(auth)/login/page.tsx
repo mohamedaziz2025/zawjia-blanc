@@ -29,7 +29,10 @@ export default function LoginPage() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated()) router.replace('/dashboard');
+    if (isAuthenticated()) {
+      const role = useAuthStore.getState().user?.role;
+      router.replace(role === 'admin' ? '/admin' : '/ai-chat');
+    }
   }, [isAuthenticated, router]);
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
@@ -51,7 +54,7 @@ export default function LoginPage() {
       }
       setAuth(token, profile);
       toast.success('Bienvenue !');
-      window.location.href = role === 'admin' ? '/admin' : '/dashboard';
+      window.location.href = role === 'admin' ? '/admin' : '/ai-chat';
     } catch (err) {
       toast.error(getErrorMessage(err));
     }

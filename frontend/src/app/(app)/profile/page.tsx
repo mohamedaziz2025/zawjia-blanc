@@ -25,6 +25,15 @@ const schema = z.object({
   willingToRelocate:  z.coerce.boolean().optional(),
   nationality:        z.string().optional(),
   ethnicity:          z.enum(['arab','african','turkish','caucasian','asian','indian','latin','other']).optional(),
+  criteriaAgeMin:     z.coerce.number().min(18).max(99).optional(),
+  criteriaAgeMax:     z.coerce.number().min(18).max(99).optional(),
+  criteriaMaritalStatuses: z.string().optional(),
+  criteriaDesiredReligiousPractice: z.enum(['little','practicing','very_practicing','any']).optional(),
+  criteriaPrayersExpectation: z.enum(['regular_required','progress_accepted','any']).optional(),
+  criteriaPolygamy: z.enum(['yes','no','conditional','future_possible','monogamy_only','any']).optional(),
+  criteriaRelocation: z.enum(['required','flexible','not_required','yes','no','any']).optional(),
+  criteriaFemaleHijab: z.enum(['required','niqab_only','hijab_ok','any']).optional(),
+  criteriaMaleBeard: z.enum(['required','preferred','any']).optional(),
 });
 type FormData = z.infer<typeof schema>;
 
@@ -84,11 +93,47 @@ export default function ProfilePage() {
       willingToRelocate: data.user.willingToRelocate,
       nationality:       data.user.nationality ?? '',
       ethnicity:         data.user.ethnicity,
+      criteriaAgeMin: data.user.searchCriteria?.ageMin,
+      criteriaAgeMax: data.user.searchCriteria?.ageMax,
+      criteriaMaritalStatuses: data.user.searchCriteria?.acceptedMaritalStatuses?.join(', ') ?? '',
+      criteriaDesiredReligiousPractice: data.user.searchCriteria?.desiredReligiousPractice,
+      criteriaPrayersExpectation: data.user.searchCriteria?.prayersExpectation,
+      criteriaPolygamy: data.user.searchCriteria?.polygamyPreference,
+      criteriaRelocation: data.user.searchCriteria?.relocationRequirement,
+      criteriaFemaleHijab: data.user.searchCriteria?.femaleHijabPreference,
+      criteriaMaleBeard: data.user.searchCriteria?.maleBeardPreference,
     } : undefined,
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: FormData) => userApi.updateProfile(data),
+    mutationFn: (data: FormData) => userApi.updateProfile({
+      firstName: data.firstName,
+      kunya: data.kunya,
+      age: data.age,
+      country: data.country,
+      city: data.city,
+      maritalStatus: data.maritalStatus,
+      religiousPractice: data.religiousPractice,
+      prayers: data.prayers,
+      madhhab: data.madhhab,
+      wantsChildren: data.wantsChildren,
+      willingToRelocate: data.willingToRelocate,
+      nationality: data.nationality,
+      ethnicity: data.ethnicity,
+      searchCriteria: {
+        ageMin: data.criteriaAgeMin,
+        ageMax: data.criteriaAgeMax,
+        acceptedMaritalStatuses: data.criteriaMaritalStatuses
+          ? data.criteriaMaritalStatuses.split(',').map((v) => v.trim()).filter(Boolean)
+          : undefined,
+        desiredReligiousPractice: data.criteriaDesiredReligiousPractice,
+        prayersExpectation: data.criteriaPrayersExpectation,
+        polygamyPreference: data.criteriaPolygamy,
+        relocationRequirement: data.criteriaRelocation,
+        femaleHijabPreference: data.criteriaFemaleHijab,
+        maleBeardPreference: data.criteriaMaleBeard,
+      },
+    }),
     onSuccess: (res) => {
       updateUser(res.data);
       qc.invalidateQueries({ queryKey: ['profile'] });
@@ -257,6 +302,77 @@ export default function ProfilePage() {
               <option value="other">Autre</option>
             </select>
           </Field>
+        </Section>
+
+        <Section icon={Heart} title="Critères recherchés" accent="#C8384E" delay={0.24}>
+          <Field label="Âge minimum recherché">
+            <input {...register('criteriaAgeMin')} type="number" className="input-field" placeholder="20"/>
+          </Field>
+          <Field label="Âge maximum recherché">
+            <input {...register('criteriaAgeMax')} type="number" className="input-field" placeholder="35"/>
+          </Field>
+          <Field label="Statuts matrimoniaux acceptés (virgules)">
+            <input {...register('criteriaMaritalStatuses')} className="input-field" placeholder="single, divorced"/>
+          </Field>
+          <Field label="Niveau religieux recherché">
+            <select {...register('criteriaDesiredReligiousPractice')} className="input-field">
+              <option value="">Choisir</option>
+              <option value="little">Peu pratiquant</option>
+              <option value="practicing">Pratiquant</option>
+              <option value="very_practicing">Très pratiquant</option>
+              <option value="any">Peu importe</option>
+            </select>
+          </Field>
+          <Field label="Prières">
+            <select {...register('criteriaPrayersExpectation')} className="input-field">
+              <option value="">Choisir</option>
+              <option value="regular_required">Régulières obligatoires</option>
+              <option value="progress_accepted">En progression acceptée</option>
+              <option value="any">Peu importe</option>
+            </select>
+          </Field>
+          <Field label="Polygamie">
+            <select {...register('criteriaPolygamy')} className="input-field">
+              <option value="">Choisir</option>
+              <option value="yes">Oui</option>
+              <option value="no">Non</option>
+              <option value="conditional">Sous conditions</option>
+              <option value="future_possible">Possible dans le futur</option>
+              <option value="monogamy_only">Monogamie uniquement</option>
+              <option value="any">Peu importe</option>
+            </select>
+          </Field>
+          <Field label="Déménagement">
+            <select {...register('criteriaRelocation')} className="input-field">
+              <option value="">Choisir</option>
+              <option value="required">Oui obligatoire</option>
+              <option value="flexible">Flexible</option>
+              <option value="not_required">Non obligatoire</option>
+              <option value="yes">Oui</option>
+              <option value="no">Non</option>
+              <option value="any">Peu importe</option>
+            </select>
+          </Field>
+          {user?.role === 'male' ? (
+            <Field label="Port du hijab recherché">
+              <select {...register('criteriaFemaleHijab')} className="input-field">
+                <option value="">Choisir</option>
+                <option value="required">Obligatoire</option>
+                <option value="niqab_only">Niqab uniquement</option>
+                <option value="hijab_ok">Hijab suffisant</option>
+                <option value="any">Peu importe</option>
+              </select>
+            </Field>
+          ) : (
+            <Field label="Barbe recherchée">
+              <select {...register('criteriaMaleBeard')} className="input-field">
+                <option value="">Choisir</option>
+                <option value="required">Oui obligatoire</option>
+                <option value="preferred">Souhaitée</option>
+                <option value="any">Peu importe</option>
+              </select>
+            </Field>
+          )}
         </Section>
 
         <div className="flex justify-end pt-1">

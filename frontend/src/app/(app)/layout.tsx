@@ -19,9 +19,9 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
+  { href: '/ai-chat',      label: 'Zawj IA',       icon: Brain },
   { href: '/dashboard',    label: 'Accueil',       icon: LayoutDashboard },
   { href: '/profile',      label: 'Mon profil',    icon: User },
-  { href: '/ai-chat',      label: 'Nisfi IA',      icon: Brain },
   { href: '/proposals',    label: 'Propositions',  icon: Heart,     gate: (u) => Boolean(u?.aiPhaseCompleted) },
   { href: '/matches',      label: 'Mes matchs',    icon: Users },
   { href: '/subscription', label: 'Abonnement',    icon: Crown },

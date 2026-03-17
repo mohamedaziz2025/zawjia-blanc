@@ -1,10 +1,20 @@
 /**
- * AI service — wraps OpenAI Chat Completions.
+ * AI service — supports Google Gemini and OpenAI.
  * Accepts an array of messages so conversation history is preserved.
  */
 const axios = require('axios');
+const { AI_QUESTIONS } = require('../config/questionnaire');
 
-const SYSTEM_PROMPT = `Tu es Nisfi, un assistant islamique spécialisé dans le mariage (nikah).
+function buildSystemPrompt(role = 'male') {
+  const catalog = AI_QUESTIONS[role] || AI_QUESTIONS.male;
+  const categoriesBlock = Object.entries(catalog)
+    .map(([category, questions]) => {
+      const list = questions.map((q, index) => `${index + 1}. ${q}`).join('\n');
+      return `CATEGORIE ${category.toUpperCase()}\n${list}`;
+    })
+    .join('\n\n');
+
+  return `Tu es Nisfi, un assistant islamique spécialisé dans le mariage (nikah).
 Tu parles exclusivement en français. Ton rôle est d'analyser en profondeur la personne qui te parle
 pour constituer un profil matrimonial sérieux, conforme aux valeurs coraniques et à la Sunna.
 
@@ -68,13 +78,32 @@ APRÈS CHAQUE RÉPONSE, insère discrètement en fin de message :
 
 Mets à jour UNIQUEMENT les champs pour lesquels tu as des informations fiables. Laisse null les inconnues.
 Les scores sont de 0 à 100. "phaseCompleted":true uniquement quand toutes les 8 phases sont terminées
-ET les caractéristiques physiques collectées. "currentPhase" indique la phase en cours (1 à 8).`;
+ET les caractéristiques physiques collectées. "currentPhase" indique la phase en cours (1 à 8).
+
+QUESTIONNAIRE INTERNE A SUIVRE (adapte la formulation pour garder une conversation naturelle)
+${categoriesBlock}`;
+}
 
 /**
  * @param {Array<{role: string, content: string}>} messages  Full conversation history
+ * @param {'male'|'female'} role
  * @returns {Promise<string>} AI response text
  */
-async function queryAI(messages) {
+async function queryAI(messages, role = 'male') {
+  const provider = (process.env.AI_PROVIDER || '').toLowerCase();
+
+  if (provider === 'google' || (!provider && process.env.GOOGLE_AI_API_KEY)) {
+    return queryGoogleAI(messages, role);
+  }
+
+  if (provider === 'openai' || process.env.OPENAI_API_KEY) {
+    return queryOpenAI(messages, role);
+  }
+
+  throw new Error('No AI provider configured. Set GOOGLE_AI_API_KEY or OPENAI_API_KEY.');
+}
+
+async function queryOpenAI(messages, role) {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error('OPENAI_API_KEY not configured');
   }
@@ -82,11 +111,11 @@ async function queryAI(messages) {
   const payload = {
     model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
     messages: [
-      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'system', content: buildSystemPrompt(role) },
       ...messages,
     ],
-    temperature: 0.7,
-    max_tokens: 800,
+    temperature: 0.45,
+    max_tokens: 420,
   };
 
   const { data } = await axios.post(
@@ -97,11 +126,54 @@ async function queryAI(messages) {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         'Content-Type': 'application/json',
       },
-      timeout: 30000,
+      timeout: 15000,
     }
   );
 
   return data.choices[0].message.content;
+}
+
+async function queryGoogleAI(messages, role) {
+  if (!process.env.GOOGLE_AI_API_KEY) {
+    throw new Error('GOOGLE_AI_API_KEY not configured');
+  }
+
+  const model = process.env.GOOGLE_AI_MODEL || 'gemini-2.5-flash';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GOOGLE_AI_API_KEY}`;
+  const systemPrompt = buildSystemPrompt(role);
+  const transcript = [
+    `SYSTEM:\n${systemPrompt}`,
+    ...messages.map((m) => `${m.role.toUpperCase()}:\n${m.content}`),
+  ].join('\n\n');
+
+  const payload = {
+    contents: [
+      {
+        parts: [{ text: transcript }],
+      },
+    ],
+    generationConfig: {
+      temperature: 0.45,
+      maxOutputTokens: 420,
+    },
+  };
+
+  const { data } = await axios.post(url, payload, {
+    headers: { 'Content-Type': 'application/json' },
+    timeout: 15000,
+  });
+
+  const text = data?.candidates?.[0]?.content?.parts
+    ?.map((p) => p?.text)
+    .filter(Boolean)
+    .join('\n')
+    .trim();
+
+  if (!text) {
+    throw new Error('Empty response from Google AI');
+  }
+
+  return text;
 }
 
 /**

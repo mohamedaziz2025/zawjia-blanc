@@ -56,6 +56,57 @@ const userSchema = new mongoose.Schema({
     enum: ['yes', 'no', 'undecided'],
   },
   willingToRelocate: { type: Boolean },
+  hijra: {
+    type: String,
+    enum: ['already_done', 'possible_with_country', 'not_desired'],
+  },
+  hijraCountry: String,
+
+  femaleProfile: {
+    veil: { type: String, enum: ['hijab', 'niqab', 'none'] },
+    acceptPolygamy: { type: String, enum: ['yes', 'no', 'conditional'] },
+    wantsToWork: { type: String, enum: ['yes', 'no', 'flexible'] },
+  },
+
+  maleProfile: {
+    professionalSituation: { type: String, enum: ['student', 'employee', 'entrepreneur', 'other'] },
+    financialStability: { type: String, enum: ['stable', 'building'] },
+    polygamyStatus: { type: String, enum: ['no', 'possible', 'already_married'] },
+  },
+
+  // ── Critères recherchés (parties 4 & 5) ─────────────────────────────────────
+  searchCriteria: {
+    ageMin: Number,
+    ageMax: Number,
+    acceptedMaritalStatuses: [{ type: String, enum: ['single', 'divorced', 'widowed', 'any'] }],
+    acceptPreviouslyMarried: { type: String, enum: ['yes', 'no', 'any'] },
+    acceptWithChildren: { type: String, enum: ['yes', 'no', 'limited', 'conditional', 'any'] },
+    childrenLimit: Number,
+    preferredNationalities: [String],
+    preferredOrigins: [String],
+    preferredEthnicities: [{ type: String, enum: ['arab', 'african', 'turkish', 'caucasian', 'asian', 'indian', 'latin', 'any'] }],
+    desiredResidence: { type: String, enum: ['same_country', 'europe_only', 'worldwide', 'any'] },
+    desiredReligiousPractice: { type: String, enum: ['little', 'practicing', 'very_practicing', 'any'] },
+    prayersExpectation: { type: String, enum: ['regular_required', 'progress_accepted', 'any'] },
+    madhhabPreferenceType: { type: String, enum: ['same', 'any', 'specific'] },
+    madhhabSpecific: String,
+    desiredReligiousFollowing: { type: String, enum: ['student', 'self_taught', 'serious_self_taught', 'any'] },
+    hijraVision: { type: String, enum: ['must_hijra', 'open_hijra', 'not_desired', 'any'] },
+    heightMin: Number,
+    heightMax: Number,
+    preferredBodyType: { type: String, enum: ['slim', 'average', 'strong', 'any'] },
+    femaleHijabPreference: { type: String, enum: ['required', 'niqab_only', 'hijab_ok', 'any'] },
+    maleBeardPreference: { type: String, enum: ['required', 'preferred', 'any'] },
+    desiredWorkPreference: { type: String, enum: ['yes', 'no', 'flexible', 'any'] },
+    maleProfessionalMinimum: { type: String, enum: ['student_ok', 'employee_min', 'entrepreneur', 'any'] },
+    maleFinancialStabilityRequirement: { type: String, enum: ['required', 'building_ok', 'any'] },
+    maleAmbition: { type: String, enum: ['very_ambitious', 'stable', 'any'] },
+    polygamyPreference: { type: String, enum: ['yes', 'no', 'conditional', 'future_possible', 'monogamy_only', 'any'] },
+    acceptAlreadyMarried: { type: String, enum: ['yes', 'no', 'any'] },
+    wantsChildrenPreference: { type: String, enum: ['yes', 'no', 'undecided', 'any'] },
+    desiredChildrenCount: Number,
+    relocationRequirement: { type: String, enum: ['required', 'flexible', 'not_required', 'no', 'yes', 'any'] },
+  },
 
   // ── Photo (stockée mais cachée jusqu'au match) ────────────────────────────────
   photoPath: { type: String, select: false },

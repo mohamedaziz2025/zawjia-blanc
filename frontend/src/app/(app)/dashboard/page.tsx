@@ -153,7 +153,7 @@ export default function DashboardPage() {
           <div className="mt-5 p-4 rounded-xl" style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.07)' }}>
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-semibold" style={{ color: '#4b5563', letterSpacing: '-0.01em' }}>
-                Nisfi IA — Progression
+                Zawj IA — Progression
               </p>
               <p className="text-xs font-bold" style={{ color: '#C8384E' }}>
                 {user.aiPhaseCompleted ? '8/8 ✓' : `Phase ${phase}/8`}
@@ -183,7 +183,7 @@ export default function DashboardPage() {
             </p>
             {!user.aiPhaseCompleted && (
               <Link href="/ai-chat" className="btn-primary mt-3 w-full text-xs py-2.5">
-                Continuer avec Nisfi IA <ChevronRight size={13}/>
+                Continuer avec Zawj IA <ChevronRight size={13}/>
               </Link>
             )}
           </div>

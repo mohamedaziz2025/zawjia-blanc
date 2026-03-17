@@ -183,6 +183,50 @@ function physicalSubscore(p1, p2) {
   return factors > 0 ? score / factors : 0.5;
 }
 
+function sideCriteriaSubscore(seeker, candidate) {
+  const c = seeker?.searchCriteria;
+  if (!c) return 0.5;
+
+  let score = 0;
+  let factors = 0;
+
+  if (c.ageMin != null && candidate?.age != null) {
+    score += candidate.age >= c.ageMin ? 1 : 0;
+    factors++;
+  }
+  if (c.ageMax != null && candidate?.age != null) {
+    score += candidate.age <= c.ageMax ? 1 : 0;
+    factors++;
+  }
+  if (Array.isArray(c.acceptedMaritalStatuses) && c.acceptedMaritalStatuses.length && candidate?.maritalStatus) {
+    score += c.acceptedMaritalStatuses.includes('any') || c.acceptedMaritalStatuses.includes(candidate.maritalStatus) ? 1 : 0;
+    factors++;
+  }
+  if (c.desiredReligiousPractice && candidate?.religiousPractice) {
+    score += c.desiredReligiousPractice === 'any' || c.desiredReligiousPractice === candidate.religiousPractice ? 1 : 0;
+    factors++;
+  }
+  if (c.prayersExpectation && candidate?.prayers) {
+    const ok = c.prayersExpectation === 'any'
+      || (c.prayersExpectation === 'regular_required' && candidate.prayers === 'regular')
+      || (c.prayersExpectation === 'progress_accepted' && ['regular', 'irregular'].includes(candidate.prayers));
+    score += ok ? 1 : 0;
+    factors++;
+  }
+  if (c.relocationRequirement && candidate?.willingToRelocate != null) {
+    const ok = c.relocationRequirement === 'any'
+      || c.relocationRequirement === 'flexible'
+      || c.relocationRequirement === 'not_required'
+      || c.relocationRequirement === 'no'
+      || c.relocationRequirement === 'required'
+      || (c.relocationRequirement === 'yes' && candidate.willingToRelocate);
+    score += ok ? 1 : 0;
+    factors++;
+  }
+
+  return factors > 0 ? score / factors : 0.5;
+}
+
 /**
  * Main entry point.
  * @param {Object} user1    - User document (male)
@@ -204,12 +248,15 @@ function computeCompatibility(user1, profile1, user2, profile2) {
     physical: physicalSubscore(p1, p2),
   };
 
+  const criteriaScore = (sideCriteriaSubscore(user1, user2) + sideCriteriaSubscore(user2, user1)) / 2;
+
   const total = Object.keys(WEIGHTS).reduce(
     (sum, key) => sum + WEIGHTS[key] * scores[key],
     0
   );
 
-  return Math.round(total * 100); // 0–100
+  const blended = total * 0.8 + criteriaScore * 0.2;
+  return Math.round(blended * 100); // 0–100
 }
 
 module.exports = { computeCompatibility };

@@ -211,7 +211,7 @@ export default function ProposalsPage() {
           Analyse IA requise
         </h2>
         <p className="text-sm max-w-sm" style={{ color: '#6b7280' }}>
-          Terminez les 8 phases avec Nisfi IA pour débloquer les propositions.
+          Terminez les 8 phases avec Zawj IA pour débloquer les propositions.
         </p>
         <Link href="/ai-chat" className="btn-primary mt-2">
           Continuer l&apos;analyse <ChevronRight size={15}/>

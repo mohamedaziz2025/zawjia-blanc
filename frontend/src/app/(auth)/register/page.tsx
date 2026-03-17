@@ -1059,8 +1059,6 @@ export default function RegisterPage() {
                 )}
               </div>
               )}
-                </>
-              )}
 
               {questionnaireStep === 5 && (
                 <div style={cardBase} className="space-y-3">

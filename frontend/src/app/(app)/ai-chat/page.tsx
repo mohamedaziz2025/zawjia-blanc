@@ -68,7 +68,7 @@ function ChatBubble({ msg }: { msg: ChatMessage }) {
       <div className={cn('max-w-[78%] px-4 py-3 text-sm leading-relaxed',
         isUser
           ? 'rounded-2xl rounded-br-sm text-gray-900'
-          : 'rounded-2xl rounded-bl-sm text-navy-100',
+          : 'rounded-2xl rounded-bl-sm text-gray-900',
       )} style={isUser ? {
         background: 'linear-gradient(135deg, rgba(200,56,78,0.2), rgba(200,56,78,0.08))',
         border: '1px solid rgba(200,56,78,0.25)',

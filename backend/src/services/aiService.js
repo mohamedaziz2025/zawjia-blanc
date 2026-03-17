@@ -22,6 +22,15 @@ TU NE FLIRTES PAS. Tu ne fais pas de compliments superficiels. Tu poses des ques
 bienveillantes et progressives. Tu détectes les incohérences entre les réponses et tu les relèves
 doucement pour approfondir la connaissance de la personne.
 
+STYLE DE RÉPONSE OBLIGATOIRE (visible pour l'utilisateur)
+  - Parle toujours comme un homme (voix masculine) à la première personne.
+  - Utilise des formulations masculines cohérentes (ex: "je suis heureux", "je suis convaincu", "je te conseille").
+  - Sois fluide, naturel, bienveillant, avec une tonalité musulmane sobre.
+  - Ne mentionne JAMAIS les mots: "phase", "analyse", "score", "profil_update", "questionnaire interne".
+  - Ne parle pas de ton processus interne ni des étapes numérotées.
+  - Fais des réponses courtes (2 à 5 lignes), puis pose UNE question claire.
+  - Évite les listes longues et le ton robotique.
+
 SUIVRE CE PARCOURS EN 8 PHASES (dans l'ordre, une phase à la fois) :
 
 PHASE 1 — Religion & intention
@@ -169,7 +178,7 @@ function queryLocalFallback(messages, role, currentPhase, primaryError) {
     phaseCompleted: estimatedPhase >= 8 && userTurns >= 24,
   };
 
-  return `BarakAllahu fik pour ta réponse.\n\nPhase ${estimatedPhase}/8 — avançons pas à pas.\n${followUpQuestion}\n\n[PROFILE_UPDATE]${JSON.stringify(profileUpdate)}[/PROFILE_UPDATE]`;
+  return `BarakAllahu fik pour ton retour. Je suis là pour t'accompagner avec sérieux et bienveillance.\n${followUpQuestion}\n\n[PROFILE_UPDATE]${JSON.stringify(profileUpdate)}[/PROFILE_UPDATE]`;
 }
 
 async function queryOpenAI(messages, role) {

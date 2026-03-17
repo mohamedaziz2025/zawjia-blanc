@@ -246,16 +246,27 @@ export default function RegisterPage() {
     };
   }, [cityValue, selectedCountryCode]);
 
-  const QUESTIONNAIRE_STEPS = ['Identité', 'Religion', 'Situation', 'Profil spécifique', 'Critères', 'Validation'];
+  const QUESTIONNAIRE_STEPS = [
+    'Identité',
+    'Religion',
+    'Situation familiale',
+    'Hijra',
+    'Profil spécifique',
+    'Critères essentiels',
+    'Critères avancés',
+    'Validation',
+  ];
 
   const nextStep = async () => {
     if (step === 3) {
       const questionnaireFieldsMap: Array<Array<keyof FormData>> = [
         ['dateOfBirth','nationality','origin','ethnicity'],
-        ['religiousPractice','prayers','religiousFollowing','madhhab','wantsChildren','willingToRelocate'],
-        ['hadPreviousMarriage','childrenHas','childrenCount','hijra','hijraCountry'],
+        ['religiousPractice','prayers','religiousFollowing','madhhab'],
+        ['wantsChildren','willingToRelocate','hadPreviousMarriage','childrenHas','childrenCount'],
+        ['hijra','hijraCountry'],
         ['femaleVeil','femaleAcceptPolygamy','femaleWantsToWork','maleProfessionalSituation','maleFinancialStability','malePolygamyStatus'],
-        ['criteriaAgeMin','criteriaAgeMax','criteriaMaritalStatuses','criteriaAcceptWithChildren','criteriaNationalities','criteriaOrigins','criteriaDesiredReligiousPractice','criteriaPrayersExpectation','criteriaPolygamy','criteriaRelocation','criteriaFemaleHijab','criteriaMaleBeard'],
+        ['criteriaAgeMin','criteriaAgeMax','criteriaMaritalStatuses','criteriaAcceptWithChildren','criteriaNationalities','criteriaOrigins'],
+        ['criteriaDesiredReligiousPractice','criteriaPrayersExpectation','criteriaPolygamy','criteriaRelocation','criteriaFemaleHijab','criteriaMaleBeard'],
         [],
       ];
       const ok = await trigger(questionnaireFieldsMap[questionnaireStep]);
@@ -789,77 +800,79 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="label">Souhaite des enfants</label>
-                  <select {...register('wantsChildren')} className="input-field">
-                    <option value="">Choisir</option>
-                    <option value="yes">Oui</option>
-                    <option value="no">Non</option>
-                    <option value="undecided">Indécis(e)</option>
-                  </select>
-                  {errors.wantsChildren && <span style={errStyle}>{errors.wantsChildren.message}</span>}
-                </div>
-                <div>
-                  <label className="label">Prêt(e) à déménager</label>
-                  <select {...register('willingToRelocate')} className="input-field">
-                    <option value="">Choisir</option>
-                    <option value="true">Oui</option>
-                    <option value="false">Non</option>
-                  </select>
-                </div>
-              </div>
                 </>
               )}
 
               {questionnaireStep === 2 && (
                 <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="label">Souhaite des enfants</label>
+                      <select {...register('wantsChildren')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="yes">Oui</option>
+                        <option value="no">Non</option>
+                        <option value="undecided">Indécis(e)</option>
+                      </select>
+                      {errors.wantsChildren && <span style={errStyle}>{errors.wantsChildren.message}</span>}
+                    </div>
+                    <div>
+                      <label className="label">Prêt(e) à déménager</label>
+                      <select {...register('willingToRelocate')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="true">Oui</option>
+                        <option value="false">Non</option>
+                      </select>
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="label">Déjà été marié(e)</label>
-                  <select {...register('hadPreviousMarriage')} className="input-field">
-                    <option value="">Choisir</option>
-                    <option value="true">Oui</option>
-                    <option value="false">Non</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="label">A des enfants</label>
-                  <select {...register('childrenHas')} className="input-field">
-                    <option value="">Choisir</option>
-                    <option value="true">Oui</option>
-                    <option value="false">Non</option>
-                  </select>
-                </div>
-              </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="label">Déjà été marié(e)</label>
+                      <select {...register('hadPreviousMarriage')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="true">Oui</option>
+                        <option value="false">Non</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="label">A des enfants</label>
+                      <select {...register('childrenHas')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="true">Oui</option>
+                        <option value="false">Non</option>
+                      </select>
+                    </div>
+                  </div>
 
-              {childrenHas === 'true' && (
-                <div>
-                  <label className="label">Nombre d'enfants</label>
-                  <input {...register('childrenCount')} type="number" min={0} className="input-field" placeholder="1"/>
-                </div>
-              )}
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="label">Hijra</label>
-                  <select {...register('hijra')} className="input-field">
-                    <option value="">Choisir</option>
-                    <option value="already_done">Déjà faite</option>
-                    <option value="possible_with_country">Envisageable</option>
-                    <option value="not_desired">Non souhaitée</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="label">Pays hijra (si envisagée)</label>
-                  <input {...register('hijraCountry')} disabled={hijra !== 'possible_with_country'} placeholder="Maroc, Qatar..." className="input-field disabled:opacity-60"/>
-                </div>
-              </div>
+                  {childrenHas === 'true' && (
+                    <div>
+                      <label className="label">Nombre d'enfants</label>
+                      <input {...register('childrenCount')} type="number" min={0} className="input-field" placeholder="1"/>
+                    </div>
+                  )}
                 </>
               )}
 
-              {questionnaireStep === 3 && selectedRole === 'female' && (
+              {questionnaireStep === 3 && (
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="label">Hijra</label>
+                    <select {...register('hijra')} className="input-field">
+                      <option value="">Choisir</option>
+                      <option value="already_done">Déjà faite</option>
+                      <option value="possible_with_country">Envisageable</option>
+                      <option value="not_desired">Non souhaitée</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">Pays hijra (si envisagée)</label>
+                    <input {...register('hijraCountry')} disabled={hijra !== 'possible_with_country'} placeholder="Maroc, Qatar..." className="input-field disabled:opacity-60"/>
+                  </div>
+                </div>
+              )}
+
+              {questionnaireStep === 4 && selectedRole === 'female' && (
                 <div style={cardBase} className="space-y-3">
                   <p className="text-xs font-semibold uppercase tracking-wider" style={{ color:'#C8384E' }}>Profil spécifique sœur</p>
                   <div className="grid grid-cols-3 gap-3">
@@ -894,7 +907,7 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              {questionnaireStep === 3 && selectedRole === 'male' && (
+              {questionnaireStep === 4 && selectedRole === 'male' && (
                 <div style={cardBase} className="space-y-3">
                   <p className="text-xs font-semibold uppercase tracking-wider" style={{ color:'#C8384E' }}>Profil spécifique frère</p>
                   <div className="grid grid-cols-3 gap-3">
@@ -929,7 +942,7 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              {questionnaireStep === 4 && (
+              {questionnaireStep === 5 && (
               <div style={cardBase} className="space-y-3">
                 <p className="text-xs font-semibold uppercase tracking-wider" style={{ color:'#C8384E' }}>
                   {selectedRole === 'male' ? 'Ce que le frère recherche' : 'Ce que la sœur recherche'}
@@ -1008,6 +1021,15 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
+              </div>
+              )}
+
+              {questionnaireStep === 6 && (
+              <div style={cardBase} className="space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-wider" style={{ color:'#C8384E' }}>
+                  {selectedRole === 'male' ? 'Préférences avancées du frère' : 'Préférences avancées de la sœur'}
+                </p>
+
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="label">Polygamie</label>
@@ -1060,7 +1082,7 @@ export default function RegisterPage() {
               </div>
               )}
 
-              {questionnaireStep === 5 && (
+              {questionnaireStep === 7 && (
                 <div style={cardBase} className="space-y-3">
                   <p className="text-sm font-semibold" style={{ color:'#111827' }}>Vérification rapide</p>
                   <p className="text-xs" style={{ color:'#6b7280' }}>

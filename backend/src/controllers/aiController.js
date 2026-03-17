@@ -29,7 +29,7 @@ exports.chat = async (req, res) => {
     );
 
     // Séparer la réponse affichée et les données de profil
-    const userFacingResponse = cleanResponse(rawResponse);
+    const userFacingResponse = cleanResponse(rawResponse) || 'BarakAllahu fik pour ta réponse. Je suis là pour t\'accompagner au mieux. Peux-tu m\'en dire un peu plus avec un exemple concret ?';
     const profileUpdate = extractProfileUpdate(rawResponse);
 
     // Log de la conversation IA

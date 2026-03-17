@@ -415,40 +415,42 @@ export default function RegisterPage() {
 
               {questionnaireStep === 0 && (
                 <>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="label">Date de naissance</label>
-                  <input {...register('dateOfBirth')} type="date" className="input-field"/>
-                </div>
-                <div>
-                  <label className="label">Nationalité</label>
-                  <input {...register('nationality')} placeholder="Française" className="input-field"/>
-                </div>
-              </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="label">Date de naissance</label>
+                      <input {...register('dateOfBirth')} type="date" className="input-field"/>
+                    </div>
+                    <div>
+                      <label className="label">Nationalité</label>
+                      <input {...register('nationality')} placeholder="Française" className="input-field"/>
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="label">Origine</label>
+                      <input {...register('origin')} placeholder="Maghreb, Afrique de l'Ouest..." className="input-field"/>
+                    </div>
+                    <div>
+                      <label className="label">Ethnie</label>
+                      <select {...register('ethnicity')} className="input-field">
+                        <option value="">Choisir</option>
+                        <option value="arab">Arabe</option>
+                        <option value="african">Africaine</option>
+                        <option value="turkish">Turque</option>
+                        <option value="caucasian">Caucasienne</option>
+                        <option value="asian">Asiatique</option>
+                        <option value="indian">Indienne</option>
+                        <option value="latin">Latine</option>
+                        <option value="other">Autre</option>
+                      </select>
+                    </div>
+                  </div>
                 </>
               )}
-                <div>
+
               {questionnaireStep === 1 && (
-              <div style={cardBase} className="space-y-3">
-                  <input {...register('origin')} placeholder="Maghreb, Afrique de l'Ouest..." className="input-field"/>
-                </div>
-                <div>
-                  <label className="label">Ethnie</label>
-                  <select {...register('ethnicity')} className="input-field">
-                    <option value="">Choisir</option>
-                    <option value="arab">Arabe</option>
-                    <option value="african">Africaine</option>
-                    <option value="turkish">Turque</option>
-                    <option value="caucasian">Caucasienne</option>
-                    <option value="asian">Asiatique</option>
-                    <option value="indian">Indienne</option>
-                    <option value="latin">Latine</option>
-                    <option value="other">Autre</option>
-                  </select>
-                </div>
-              </div>
+                <>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -745,6 +747,7 @@ export default function RegisterPage() {
                   </div>
                 )}
               </div>
+                </>
               )}
 
               {questionnaireStep === 2 && (

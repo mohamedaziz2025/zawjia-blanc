@@ -56,6 +56,7 @@ export function phaseLabel(phase: number) {
 export function maritalStatusLabel(s: string) {
   const map: Record<string, string> = {
     single: 'Célibataire',
+    married: 'Marié(e)',
     divorced: 'Divorcé(e)',
     widowed: 'Veuf/Veuve',
   };

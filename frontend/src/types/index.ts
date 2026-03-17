@@ -1,6 +1,6 @@
 // ── Auth ──────────────────────────────────────────────────────────────────────
 export type UserRole = 'male' | 'female' | 'admin';
-export type MaritalStatus = 'single' | 'divorced' | 'widowed';
+export type MaritalStatus = 'single' | 'married' | 'divorced' | 'widowed';
 export type ReligiousPractice = 'little' | 'practicing' | 'very_practicing';
 export type SubscriptionStatus = 'free' | 'active' | 'expired';
 
@@ -47,7 +47,7 @@ export interface User {
   searchCriteria?: {
     ageMin?: number;
     ageMax?: number;
-    acceptedMaritalStatuses?: Array<'single' | 'divorced' | 'widowed' | 'any'>;
+    acceptedMaritalStatuses?: Array<'single' | 'married' | 'divorced' | 'widowed' | 'any'>;
     acceptWithChildren?: 'yes' | 'no' | 'limited' | 'conditional' | 'any';
     childrenLimit?: number;
     preferredNationalities?: string[];
@@ -133,6 +133,10 @@ export interface ChatResponse {
   response: string;
   aiPhaseCompleted: boolean;
   currentPhase?: number;
+}
+
+export interface AiHistoryResponse {
+  messages: ChatMessage[];
 }
 
 export interface QuestionnaireField {

@@ -10,7 +10,7 @@ import { aiApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { getErrorMessage, phaseLabel } from '@/lib/utils';
 import { cn } from '@/lib/utils';
-import type { AiQuestionnaireResponse, ChatMessage } from '@/types';
+import type { AiHistoryResponse, AiQuestionnaireResponse, ChatMessage } from '@/types';
 import Link from 'next/link';
 
 const PHASES = Array.from({ length: 8 }, (_, i) => ({
@@ -91,6 +91,7 @@ export default function AiChatPage() {
   const [loading, setLoading]     = useState(false);
   const [phase, setPhase]         = useState(1);
   const [completed, setCompleted] = useState(false);
+  const [historyInitialized, setHistoryInitialized] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef  = useRef<HTMLTextAreaElement>(null);
 
@@ -98,6 +99,10 @@ export default function AiChatPage() {
   const { data: aiQuestionnaire } = useQuery<AiQuestionnaireResponse>({
     queryKey: ['ai-questionnaire'],
     queryFn: () => aiApi.getQuestionnaire().then((r) => r.data),
+  });
+  const { data: aiHistory } = useQuery<AiHistoryResponse>({
+    queryKey: ['ai-history'],
+    queryFn: () => aiApi.getHistory().then((r) => r.data),
   });
 
   const currentCategory = PHASE_TO_CATEGORY[phase] || 'vision';
@@ -108,15 +113,22 @@ export default function AiChatPage() {
   }, [aiProfile, user]);
 
   useEffect(() => {
-    if (messages.length === 0) {
-      setMessages([{
-        role: 'assistant',
-        content: `Assalamu alaikum wa rahmatullahi wa barakatuh${user?.firstName ? `, ${user.firstName}` : ''} ! 🌙\n\nJe suis Zawj IA, votre guide vers un mariage béni. Notre conversation se déroulera en ${PHASES.length} phases progressives.\n\nNous commençons par la phase 1 : **${phaseLabel(phase)}**.\n\nParlez-moi de vous — qui êtes-vous en quelques mots ?`,
-        timestamp: Date.now(),
-      }]);
+    if (historyInitialized) return;
+
+    const historyMessages = (aiHistory?.messages || []).filter((m) => m?.content?.trim());
+    if (historyMessages.length > 0) {
+      setMessages(historyMessages);
+      setHistoryInitialized(true);
+      return;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+    setMessages([{
+      role: 'assistant',
+      content: `Assalamu alaikum wa rahmatullahi wa barakatuh${user?.firstName ? `, ${user.firstName}` : ''} ! 🌙\n\nJe suis Zawj IA, votre guide vers un mariage béni. Parlez-moi de vous en quelques mots, puis nous avancerons sereinement ensemble.`,
+      timestamp: Date.now(),
+    }]);
+    setHistoryInitialized(true);
+  }, [aiHistory, historyInitialized, user?.firstName]);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loading]);
 

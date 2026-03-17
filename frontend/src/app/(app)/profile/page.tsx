@@ -17,7 +17,7 @@ const schema = z.object({
   age:                z.coerce.number().min(18).max(70).optional(),
   country:            z.string().optional(),
   city:               z.string().optional(),
-  maritalStatus:      z.enum(['single','divorced','widowed']).optional(),
+  maritalStatus:      z.enum(['single','married','divorced','widowed']).optional(),
   religiousPractice:  z.enum(['little','practicing','very_practicing']).optional(),
   prayers:            z.enum(['regular','irregular','rarely']).optional(),
   madhhab:            z.enum(['hanafi','maliki','shafii','hanbali','other']).optional(),
@@ -261,6 +261,7 @@ export default function ProfilePage() {
             <select {...register('maritalStatus')} className="input-field">
               <option value="">Choisir</option>
               <option value="single">Célibataire</option>
+              <option value="married">Marié(e)</option>
               <option value="divorced">Divorcé(e)</option>
               <option value="widowed">Veuf / Veuve</option>
             </select>

@@ -64,6 +64,7 @@ export const aiApi = {
   chat:       (prompt: string) => api.post('/ai/chat', { prompt }),
   getProfile: () => api.get('/ai/profile'),
   getQuestionnaire: () => api.get('/ai/questionnaire'),
+  getHistory: () => api.get('/ai/history'),
 };
 
 // ── Matching ───────────────────────────────────────────────────────────────────

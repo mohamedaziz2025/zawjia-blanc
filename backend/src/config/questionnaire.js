@@ -24,7 +24,7 @@ const REGISTRATION_QUESTIONNAIRE = {
         { key: 'ethnicity', type: 'single_choice', options: ETHNICITIES },
         { key: 'country', type: 'text_or_select' },
         { key: 'city', type: 'text_or_select' },
-        { key: 'maritalStatus', type: 'single_choice', options: ['single', 'divorced', 'widowed'] },
+        { key: 'maritalStatus', type: 'single_choice', options: ['single', 'married', 'divorced', 'widowed'] },
         { key: 'hadPreviousMarriage', type: 'single_choice', options: [true, false] },
         { key: 'children.has', type: 'single_choice', options: [true, false] },
         { key: 'children.count', type: 'number_if_children' },
@@ -73,7 +73,7 @@ const REGISTRATION_QUESTIONNAIRE = {
       fields: [
         { key: 'searchCriteria.ageMin', type: 'number' },
         { key: 'searchCriteria.ageMax', type: 'number' },
-        { key: 'searchCriteria.acceptedMaritalStatuses', type: 'multi_choice', options: ['single', 'divorced', 'widowed', 'any'] },
+        { key: 'searchCriteria.acceptedMaritalStatuses', type: 'multi_choice', options: ['single', 'married', 'divorced', 'widowed', 'any'] },
         { key: 'searchCriteria.acceptWithChildren', type: 'single_choice', options: ['yes', 'no', 'limited', 'any'] },
         { key: 'searchCriteria.preferredNationalities', type: 'multi_text' },
         { key: 'searchCriteria.preferredOrigins', type: 'multi_text' },
@@ -103,7 +103,7 @@ const REGISTRATION_QUESTIONNAIRE = {
       fields: [
         { key: 'searchCriteria.ageMin', type: 'number' },
         { key: 'searchCriteria.ageMax', type: 'number' },
-        { key: 'searchCriteria.acceptedMaritalStatuses', type: 'multi_choice', options: ['single', 'divorced', 'widowed', 'any'] },
+        { key: 'searchCriteria.acceptedMaritalStatuses', type: 'multi_choice', options: ['single', 'married', 'divorced', 'widowed', 'any'] },
         { key: 'searchCriteria.acceptAlreadyMarried', type: 'single_choice', options: ['yes', 'no', 'any'] },
         { key: 'searchCriteria.acceptWithChildren', type: 'single_choice', options: ['yes', 'no', 'conditional', 'any'] },
         { key: 'searchCriteria.preferredNationalities', type: 'multi_text' },

@@ -3,7 +3,7 @@ const Joi = require('joi');
 const searchCriteriaSchema = Joi.object({
   ageMin: Joi.number().integer().min(18).max(99).allow(null),
   ageMax: Joi.number().integer().min(18).max(99).allow(null),
-  acceptedMaritalStatuses: Joi.array().items(Joi.string().valid('single', 'divorced', 'widowed', 'any')).allow(null),
+  acceptedMaritalStatuses: Joi.array().items(Joi.string().valid('single', 'married', 'divorced', 'widowed', 'any')).allow(null),
   acceptPreviouslyMarried: Joi.string().valid('yes', 'no', 'any').allow(null),
   acceptWithChildren: Joi.string().valid('yes', 'no', 'limited', 'conditional', 'any').allow(null),
   childrenLimit: Joi.number().integer().min(0).max(20).allow(null),
@@ -36,7 +36,7 @@ const searchCriteriaSchema = Joi.object({
 const requiredSearchCriteriaSchema = Joi.object({
   ageMin: Joi.number().integer().min(18).max(99).required(),
   ageMax: Joi.number().integer().min(18).max(99).required(),
-  acceptedMaritalStatuses: Joi.array().items(Joi.string().valid('single', 'divorced', 'widowed', 'any')).min(1).required(),
+  acceptedMaritalStatuses: Joi.array().items(Joi.string().valid('single', 'married', 'divorced', 'widowed', 'any')).min(1).required(),
   acceptWithChildren: Joi.string().valid('yes', 'no', 'limited', 'conditional', 'any').required(),
   preferredNationalities: Joi.array().items(Joi.string().max(60)).min(1).required(),
   preferredOrigins: Joi.array().items(Joi.string().max(60)).min(1).required(),
@@ -62,7 +62,7 @@ const registerSchema = Joi.object({
   firstName: Joi.string().max(60).required(),
   country: Joi.string().max(80).required(),
   city: Joi.string().max(80).required(),
-  maritalStatus: Joi.string().valid('single', 'divorced', 'widowed').required(),
+  maritalStatus: Joi.string().valid('single', 'married', 'divorced', 'widowed').required(),
   dateOfBirth: Joi.date().max('now').required(),
   nationality: Joi.string().max(60).required(),
   origin: Joi.string().max(60).required(),
@@ -153,7 +153,7 @@ const updateProfileSchema = Joi.object({
     .allow(null),
   country: Joi.string().max(80),
   city: Joi.string().max(80),
-  maritalStatus: Joi.string().valid('single', 'divorced', 'widowed').allow(null),
+  maritalStatus: Joi.string().valid('single', 'married', 'divorced', 'widowed').allow(null),
   hadPreviousMarriage: Joi.boolean().allow(null),
   children: Joi.object({
     has: Joi.boolean(),

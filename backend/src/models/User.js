@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
   // ── Situation familiale ───────────────────────────────────────────────────────
   maritalStatus: {
     type: String,
-    enum: ['single', 'divorced', 'widowed'],
+    enum: ['single', 'married', 'divorced', 'widowed'],
   },
   hadPreviousMarriage: { type: Boolean },
   children: {
@@ -78,7 +78,7 @@ const userSchema = new mongoose.Schema({
   searchCriteria: {
     ageMin: Number,
     ageMax: Number,
-    acceptedMaritalStatuses: [{ type: String, enum: ['single', 'divorced', 'widowed', 'any'] }],
+    acceptedMaritalStatuses: [{ type: String, enum: ['single', 'married', 'divorced', 'widowed', 'any'] }],
     acceptPreviouslyMarried: { type: String, enum: ['yes', 'no', 'any'] },
     acceptWithChildren: { type: String, enum: ['yes', 'no', 'limited', 'conditional', 'any'] },
     childrenLimit: Number,

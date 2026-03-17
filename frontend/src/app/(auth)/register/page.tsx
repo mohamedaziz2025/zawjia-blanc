@@ -21,7 +21,7 @@ const schema = z.object({
   age:                z.coerce.number().min(18,'18 ans minimum').max(70,'Âge invalide'),
   country:            z.string().min(2,'Pays requis'),
   city:               z.string().min(2,'Ville requise'),
-  maritalStatus:      z.enum(['single','divorced','widowed'], { required_error:'Situation requise' }),
+  maritalStatus:      z.enum(['single','married','divorced','widowed'], { required_error:'Situation requise' }),
   dateOfBirth:        z.string().min(1, 'Date de naissance requise'),
   nationality:        z.string().min(2, 'Nationalité requise'),
   origin:             z.string().min(2, 'Origine requise'),
@@ -45,7 +45,7 @@ const schema = z.object({
   malePolygamyStatus: z.enum(['no','possible','already_married']).optional(),
   criteriaAgeMin: z.coerce.number().min(18, 'Age min requis').max(99, 'Age min invalide'),
   criteriaAgeMax: z.coerce.number().min(18, 'Age max requis').max(99, 'Age max invalide'),
-  criteriaMaritalStatuses: z.array(z.enum(['single','divorced','widowed','any'])).min(1, 'Champ requis'),
+  criteriaMaritalStatuses: z.array(z.enum(['single','married','divorced','widowed','any'])).min(1, 'Champ requis'),
   criteriaAcceptWithChildren: z.enum(['yes','no','limited','conditional','any'], { required_error: 'Champ requis' }),
   criteriaChildrenLimit: z.coerce.number().min(0).max(20).optional(),
   criteriaNationalities: z.string().min(1, 'Champ requis'),
@@ -388,6 +388,7 @@ export default function RegisterPage() {
   const cardBase = { borderRadius:'16px', border:'1px solid rgba(0,0,0,0.08)', background:'rgba(0,0,0,0.04)', padding:'16px 20px' };
   const maritalStatusOptions = [
     { value: 'single', label: 'Célibataire' },
+    { value: 'married', label: 'Marié(e)' },
     { value: 'divorced', label: 'Divorcé(e)' },
     { value: 'widowed', label: 'Veuf / Veuve' },
     { value: 'any', label: 'Peu importe' },
@@ -539,6 +540,7 @@ export default function RegisterPage() {
                   <select {...register('maritalStatus')} className="input-field">
                     <option value="">Choisir</option>
                     <option value="single">Célibataire</option>
+                    <option value="married">Marié(e)</option>
                     <option value="divorced">Divorcé(e)</option>
                     <option value="widowed">Veuf / Veuve</option>
                   </select>

@@ -119,3 +119,20 @@ exports.getAiQuestionnaire = async (req, res) => {
     return res.status(500).json({ message: err.message || 'Erreur lors de la lecture du questionnaire IA' });
   }
 };
+
+exports.getMyHistory = async (req, res) => {
+  try {
+    const profile = await AIProfile.findOne({ userId: req.user._id });
+    if (!profile) return res.json({ messages: [] });
+
+    const messages = (profile.conversationHistory || []).map((m) => ({
+      role: m.role,
+      content: m.content,
+      timestamp: new Date(m.createdAt || Date.now()).getTime(),
+    }));
+
+    return res.json({ messages });
+  } catch (err) {
+    return res.status(500).json({ message: err.message || 'Erreur lors de la lecture de l\'historique IA' });
+  }
+};

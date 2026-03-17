@@ -26,6 +26,8 @@ STYLE DE RÉPONSE OBLIGATOIRE (visible pour l'utilisateur)
   - Parle toujours comme un homme (voix masculine) à la première personne.
   - Utilise des formulations masculines cohérentes (ex: "je suis heureux", "je suis convaincu", "je te conseille").
   - Sois fluide, naturel, bienveillant, avec une tonalité musulmane sobre.
+  - Ne répète pas la même phrase d'accroche ni la même question d'un message à l'autre.
+  - Si la réponse de l'utilisateur est très courte (ex: "rien", "oui", "non"), reformule doucement et pose une question plus précise.
   - Ne mentionne JAMAIS les mots: "phase", "analyse", "score", "profil_update", "questionnaire interne".
   - Ne parle pas de ton processus interne ni des étapes numérotées.
   - Fais des réponses courtes (2 à 5 lignes), puis pose UNE question claire.
@@ -156,8 +158,36 @@ function queryLocalFallback(messages, role, currentPhase, primaryError) {
   const category = phaseToCategory[estimatedPhase] || 'vision';
   const catalog = AI_QUESTIONS[role] || AI_QUESTIONS.male;
   const list = Array.isArray(catalog?.[category]) ? catalog[category] : [];
-  const questionIndex = list.length ? (Math.max(userTurns - 1, 0) % list.length) : 0;
-  const followUpQuestion = list[questionIndex] || 'Peux-tu me parler davantage de ta vision du mariage ?';
+  const recentAssistantContents = messages
+    .filter((m) => m.role === 'assistant')
+    .slice(-6)
+    .map((m) => (m.content || '').toLowerCase());
+
+  let followUpQuestion = list.find((q) => {
+    const normalized = (q || '').toLowerCase().trim();
+    return normalized && !recentAssistantContents.some((a) => a.includes(normalized));
+  });
+  if (!followUpQuestion) {
+    const questionIndex = list.length ? (Math.max(userTurns - 1, 0) % list.length) : 0;
+    followUpQuestion = list[questionIndex] || 'Peux-tu me parler davantage de ta vision du mariage ?';
+  }
+
+  const lastUserMessage = [...messages].reverse().find((m) => m.role === 'user')?.content?.trim() || '';
+  const isVeryShortAnswer = lastUserMessage.length > 0 && lastUserMessage.length <= 6;
+  const shortAnswerTokens = ['rien', 'oui', 'non', 'bof', 'ok', 'jsp', 'je sais pas'];
+  const looksLikeShortGeneric = shortAnswerTokens.includes(lastUserMessage.toLowerCase());
+
+  if (isVeryShortAnswer || looksLikeShortGeneric) {
+    followUpQuestion = `Je comprends. Pour mieux te connaître, peux-tu me donner un exemple concret vécu récemment ?`;
+  }
+
+  const intros = [
+    'BarakAllahu fik pour ton retour.',
+    'Qu\'Allah te récompense pour ta sincérité.',
+    'Merci pour ta réponse, je t\'écoute attentivement.',
+    'Je te remercie pour ton partage.',
+  ];
+  const intro = intros[Math.max(userTurns - 1, 0) % intros.length];
 
   const profileUpdate = {
     religionScore: null,
@@ -178,7 +208,7 @@ function queryLocalFallback(messages, role, currentPhase, primaryError) {
     phaseCompleted: estimatedPhase >= 8 && userTurns >= 24,
   };
 
-  return `BarakAllahu fik pour ton retour. Je suis là pour t'accompagner avec sérieux et bienveillance.\n${followUpQuestion}\n\n[PROFILE_UPDATE]${JSON.stringify(profileUpdate)}[/PROFILE_UPDATE]`;
+  return `${intro} Je suis là pour t'accompagner avec sérieux et bienveillance.\n${followUpQuestion}\n\n[PROFILE_UPDATE]${JSON.stringify(profileUpdate)}[/PROFILE_UPDATE]`;
 }
 
 async function queryOpenAI(messages, role) {

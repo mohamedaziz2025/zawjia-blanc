@@ -22,7 +22,11 @@ exports.chat = async (req, res) => {
     history.push({ role: 'user', content: prompt });
 
     // Appel IA
-    const rawResponse = await queryAI(history, req.user.role === 'female' ? 'female' : 'male');
+    const rawResponse = await queryAI(
+      history,
+      req.user.role === 'female' ? 'female' : 'male',
+      profile.currentPhase || 1
+    );
 
     // Séparer la réponse affichée et les données de profil
     const userFacingResponse = cleanResponse(rawResponse);

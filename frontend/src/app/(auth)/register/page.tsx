@@ -45,7 +45,7 @@ const schema = z.object({
   malePolygamyStatus: z.enum(['no','possible','already_married']).optional(),
   criteriaAgeMin: z.coerce.number().min(18, 'Age min requis').max(99, 'Age min invalide'),
   criteriaAgeMax: z.coerce.number().min(18, 'Age max requis').max(99, 'Age max invalide'),
-  criteriaMaritalStatuses: z.string().min(1, 'Champ requis'),
+  criteriaMaritalStatuses: z.array(z.enum(['single','divorced','widowed','any'])).min(1, 'Champ requis'),
   criteriaAcceptWithChildren: z.enum(['yes','no','limited','conditional','any'], { required_error: 'Champ requis' }),
   criteriaChildrenLimit: z.coerce.number().min(0).max(20).optional(),
   criteriaNationalities: z.string().min(1, 'Champ requis'),
@@ -119,6 +119,8 @@ export default function RegisterPage() {
   const [citySuggestions, setCitySuggestions] = useState<Array<{ name: string; country: string; admin1?: string }>>([]);
   const [showCountrySuggestions, setShowCountrySuggestions] = useState(false);
   const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  const [originSuggestions, setOriginSuggestions] = useState<Array<{ name: string; code: string }>>([]);
+  const [showOriginSuggestions, setShowOriginSuggestions] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState('');
   const [countriesRef, setCountriesRef] = useState<Array<{ name: string; code: string }>>([]);
 
@@ -129,6 +131,9 @@ export default function RegisterPage() {
   const { register, handleSubmit, watch, trigger, setValue, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: 'onChange',
+    defaultValues: {
+      criteriaMaritalStatuses: [],
+    },
   });
 
   const selectedRole = watch('role');
@@ -136,9 +141,12 @@ export default function RegisterPage() {
   const hijra = watch('hijra');
   const countryValue = watch('country') || '';
   const cityValue = watch('city') || '';
+  const originValue = watch('origin') || '';
+  const criteriaMaritalStatuses = watch('criteriaMaritalStatuses') || [];
 
   const countryField = register('country');
   const cityField = register('city');
+  const originField = register('origin');
 
   useEffect(() => {
     let mounted = true;
@@ -178,6 +186,19 @@ export default function RegisterPage() {
     const exact = countriesRef.find((c) => c.name.toLowerCase() === q);
     setSelectedCountryCode(exact?.code || '');
   }, [countryValue, countriesRef]);
+
+  useEffect(() => {
+    if ((originValue || '').trim().length < 2) {
+      setOriginSuggestions([]);
+      setShowOriginSuggestions(false);
+      return;
+    }
+
+    const q = originValue.trim().toLowerCase();
+    const next = countriesRef.filter((c) => c.name.toLowerCase().includes(q)).slice(0, 8);
+    setOriginSuggestions(next);
+    setShowOriginSuggestions(next.length > 0);
+  }, [originValue, countriesRef]);
 
   useEffect(() => {
     if ((cityValue || '').trim().length < 2) {
@@ -225,17 +246,16 @@ export default function RegisterPage() {
     };
   }, [cityValue, selectedCountryCode]);
 
-  const QUESTIONNAIRE_STEPS = [
-    'Profil détaillé',
-    'Critères recherchés',
-    'Validation',
-  ];
+  const QUESTIONNAIRE_STEPS = ['Identité', 'Religion', 'Situation', 'Profil spécifique', 'Critères', 'Validation'];
 
   const nextStep = async () => {
     if (step === 3) {
       const questionnaireFieldsMap: Array<Array<keyof FormData>> = [
         ['dateOfBirth','nationality','origin','ethnicity'],
-        ['religiousPractice','prayers','religiousFollowing','madhhab','wantsChildren','willingToRelocate','hadPreviousMarriage','childrenHas','childrenCount','hijra','hijraCountry','femaleVeil','femaleAcceptPolygamy','femaleWantsToWork','maleProfessionalSituation','maleFinancialStability','malePolygamyStatus','criteriaAgeMin','criteriaAgeMax','criteriaMaritalStatuses','criteriaAcceptWithChildren','criteriaNationalities','criteriaOrigins','criteriaDesiredReligiousPractice','criteriaPrayersExpectation','criteriaPolygamy','criteriaRelocation','criteriaFemaleHijab','criteriaMaleBeard'],
+        ['religiousPractice','prayers','religiousFollowing','madhhab','wantsChildren','willingToRelocate'],
+        ['hadPreviousMarriage','childrenHas','childrenCount','hijra','hijraCountry'],
+        ['femaleVeil','femaleAcceptPolygamy','femaleWantsToWork','maleProfessionalSituation','maleFinancialStability','malePolygamyStatus'],
+        ['criteriaAgeMin','criteriaAgeMax','criteriaMaritalStatuses','criteriaAcceptWithChildren','criteriaNationalities','criteriaOrigins','criteriaDesiredReligiousPractice','criteriaPrayersExpectation','criteriaPolygamy','criteriaRelocation','criteriaFemaleHijab','criteriaMaleBeard'],
         [],
       ];
       const ok = await trigger(questionnaireFieldsMap[questionnaireStep]);
@@ -303,9 +323,7 @@ export default function RegisterPage() {
         searchCriteria: {
           ageMin: data.criteriaAgeMin,
           ageMax: data.criteriaAgeMax,
-          acceptedMaritalStatuses: data.criteriaMaritalStatuses
-            ? data.criteriaMaritalStatuses.split(',').map((v) => v.trim()).filter(Boolean)
-            : undefined,
+          acceptedMaritalStatuses: data.criteriaMaritalStatuses,
           acceptWithChildren: data.criteriaAcceptWithChildren,
           childrenLimit: data.criteriaChildrenLimit,
           preferredNationalities: data.criteriaNationalities
@@ -357,6 +375,20 @@ export default function RegisterPage() {
 
   const errStyle = { color:'rgba(248,113,113,0.85)', fontSize:'11px', marginTop:'5px', display:'block' };
   const cardBase = { borderRadius:'16px', border:'1px solid rgba(0,0,0,0.08)', background:'rgba(0,0,0,0.04)', padding:'16px 20px' };
+  const maritalStatusOptions = [
+    { value: 'single', label: 'Célibataire' },
+    { value: 'divorced', label: 'Divorcé(e)' },
+    { value: 'widowed', label: 'Veuf / Veuve' },
+    { value: 'any', label: 'Peu importe' },
+  ] as const;
+
+  const toggleCriteriaMaritalStatus = (value: (typeof maritalStatusOptions)[number]['value']) => {
+    const current = criteriaMaritalStatuses;
+    const next = current.includes(value)
+      ? current.filter((item) => item !== value)
+      : [...current, value];
+    setValue('criteriaMaritalStatuses', next, { shouldValidate: true, shouldDirty: true });
+  };
 
   return (
     <motion.div initial={{ opacity:0, y:24 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.55, ease:[0.16,1,0.3,1] }}>
@@ -633,17 +665,61 @@ export default function RegisterPage() {
                     <div>
                       <label className="label">Date de naissance</label>
                       <input {...register('dateOfBirth')} type="date" className="input-field"/>
+                      {errors.dateOfBirth && <span style={errStyle}>{errors.dateOfBirth.message}</span>}
                     </div>
                     <div>
                       <label className="label">Nationalité</label>
                       <input {...register('nationality')} placeholder="Française" className="input-field"/>
+                      {errors.nationality && <span style={errStyle}>{errors.nationality.message}</span>}
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="label">Origine</label>
-                      <input {...register('origin')} placeholder="Maghreb, Afrique de l'Ouest..." className="input-field"/>
+                      <div className="relative">
+                        <input
+                          {...originField}
+                          value={originValue}
+                          onChange={(e) => {
+                            originField.onChange(e);
+                            setValue('origin', e.target.value, { shouldValidate: true, shouldDirty: true });
+                            setShowOriginSuggestions(e.target.value.trim().length >= 2);
+                          }}
+                          onFocus={() => {
+                            if ((originValue || '').trim().length >= 2 && originSuggestions.length > 0) {
+                              setShowOriginSuggestions(true);
+                            }
+                          }}
+                          onBlur={() => {
+                            setTimeout(() => setShowOriginSuggestions(false), 120);
+                          }}
+                          placeholder="Maghreb, Afrique de l'Ouest..."
+                          className="input-field"
+                          autoComplete="off"
+                        />
+                        {showOriginSuggestions && originSuggestions.length > 0 && (
+                          <div className="absolute z-20 mt-1 w-full rounded-xl border max-h-52 overflow-auto"
+                               style={{ background: '#fff', borderColor: 'rgba(0,0,0,0.12)' }}>
+                            {originSuggestions.map((item) => (
+                              <button
+                                key={`${item.code}-${item.name}`}
+                                type="button"
+                                className="w-full text-left px-3 py-2 text-sm"
+                                style={{ color: '#111827' }}
+                                onMouseDown={() => {
+                                  setValue('origin', item.name, { shouldValidate: true, shouldDirty: true });
+                                  setShowOriginSuggestions(false);
+                                }}
+                              >
+                                {item.name}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-[11px] mt-1.5" style={{ color:'#9ca3af' }}>Tapez 2 lettres pour voir les suggestions</p>
+                      {errors.origin && <span style={errStyle}>{errors.origin.message}</span>}
                     </div>
                     <div>
                       <label className="label">Ethnie</label>
@@ -658,6 +734,7 @@ export default function RegisterPage() {
                         <option value="latin">Latine</option>
                         <option value="other">Autre</option>
                       </select>
+                      {errors.ethnicity && <span style={errStyle}>{errors.ethnicity.message}</span>}
                     </div>
                   </div>
                 </>
@@ -732,6 +809,11 @@ export default function RegisterPage() {
                   </select>
                 </div>
               </div>
+                </>
+              )}
+
+              {questionnaireStep === 2 && (
+                <>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -774,8 +856,10 @@ export default function RegisterPage() {
                   <input {...register('hijraCountry')} disabled={hijra !== 'possible_with_country'} placeholder="Maroc, Qatar..." className="input-field disabled:opacity-60"/>
                 </div>
               </div>
+                </>
+              )}
 
-              {selectedRole === 'female' && (
+              {questionnaireStep === 3 && selectedRole === 'female' && (
                 <div style={cardBase} className="space-y-3">
                   <p className="text-xs font-semibold uppercase tracking-wider" style={{ color:'#C8384E' }}>Profil spécifique sœur</p>
                   <div className="grid grid-cols-3 gap-3">
@@ -810,7 +894,7 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              {selectedRole === 'male' && (
+              {questionnaireStep === 3 && selectedRole === 'male' && (
                 <div style={cardBase} className="space-y-3">
                   <p className="text-xs font-semibold uppercase tracking-wider" style={{ color:'#C8384E' }}>Profil spécifique frère</p>
                   <div className="grid grid-cols-3 gap-3">
@@ -845,6 +929,7 @@ export default function RegisterPage() {
                 </div>
               )}
 
+              {questionnaireStep === 4 && (
               <div style={cardBase} className="space-y-3">
                 <p className="text-xs font-semibold uppercase tracking-wider" style={{ color:'#C8384E' }}>
                   {selectedRole === 'male' ? 'Ce que le frère recherche' : 'Ce que la sœur recherche'}
@@ -863,7 +948,19 @@ export default function RegisterPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="label">Statuts matrimoniaux acceptés</label>
-                    <input {...register('criteriaMaritalStatuses')} className="input-field" placeholder="single, divorced, widowed"/>
+                    <div className="rounded-xl border p-3 space-y-2" style={{ borderColor: 'rgba(0,0,0,0.12)', background: '#fff' }}>
+                      {maritalStatusOptions.map((option) => (
+                        <label key={option.value} className="flex items-center gap-2 text-sm" style={{ color: '#111827' }}>
+                          <input
+                            type="checkbox"
+                            checked={criteriaMaritalStatuses.includes(option.value)}
+                            onChange={() => toggleCriteriaMaritalStatus(option.value)}
+                          />
+                          {option.label}
+                        </label>
+                      ))}
+                    </div>
+                    {errors.criteriaMaritalStatuses && <span style={errStyle}>{errors.criteriaMaritalStatuses.message}</span>}
                   </div>
                   <div>
                     <label className="label">Avec enfants</label>
@@ -961,10 +1058,11 @@ export default function RegisterPage() {
                   </div>
                 )}
               </div>
+              )}
                 </>
               )}
 
-              {questionnaireStep === 2 && (
+              {questionnaireStep === 5 && (
                 <div style={cardBase} className="space-y-3">
                   <p className="text-sm font-semibold" style={{ color:'#111827' }}>Vérification rapide</p>
                   <p className="text-xs" style={{ color:'#6b7280' }}>

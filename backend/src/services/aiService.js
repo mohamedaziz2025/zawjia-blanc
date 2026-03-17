@@ -87,20 +87,89 @@ ${categoriesBlock}`;
 /**
  * @param {Array<{role: string, content: string}>} messages  Full conversation history
  * @param {'male'|'female'} role
+ * @param {number} currentPhase
  * @returns {Promise<string>} AI response text
  */
-async function queryAI(messages, role = 'male') {
+async function queryAI(messages, role = 'male', currentPhase = 1) {
   const provider = (process.env.AI_PROVIDER || '').toLowerCase();
+  const hasGoogleKey = Boolean(process.env.GOOGLE_AI_API_KEY);
+  const hasOpenAIKey = Boolean(process.env.OPENAI_API_KEY);
 
-  if (provider === 'google' || (!provider && process.env.GOOGLE_AI_API_KEY)) {
-    return queryGoogleAI(messages, role);
+  const tryGoogleFirst = provider === 'google' || (!provider && hasGoogleKey);
+
+  try {
+    if (tryGoogleFirst && hasGoogleKey) {
+      return await queryGoogleAI(messages, role);
+    }
+
+    if ((provider === 'openai' || hasOpenAIKey) && hasOpenAIKey) {
+      return await queryOpenAI(messages, role);
+    }
+
+    if (provider === 'google' && !hasGoogleKey) {
+      throw new Error('GOOGLE_AI_API_KEY not configured');
+    }
+    if (provider === 'openai' && !hasOpenAIKey) {
+      throw new Error('OPENAI_API_KEY not configured');
+    }
+    throw new Error('No AI provider configured. Set GOOGLE_AI_API_KEY or OPENAI_API_KEY.');
+  } catch (primaryError) {
+    try {
+      if (tryGoogleFirst && hasOpenAIKey) {
+        return await queryOpenAI(messages, role);
+      }
+      if (!tryGoogleFirst && hasGoogleKey) {
+        return await queryGoogleAI(messages, role);
+      }
+    } catch (_secondaryError) {
+      // Ignore secondary provider error and continue with local fallback.
+    }
+
+    // Last-resort fallback to keep AI chat operational even without external provider.
+    return queryLocalFallback(messages, role, currentPhase, primaryError);
   }
+}
 
-  if (provider === 'openai' || process.env.OPENAI_API_KEY) {
-    return queryOpenAI(messages, role);
-  }
+function queryLocalFallback(messages, role, currentPhase, primaryError) {
+  const phaseToCategory = {
+    1: 'religion',
+    2: 'personality',
+    3: 'vision',
+    4: 'communication',
+    5: 'lifestyle',
+    6: 'family',
+    7: 'finance_and_projects',
+    8: 'parenting',
+  };
 
-  throw new Error('No AI provider configured. Set GOOGLE_AI_API_KEY or OPENAI_API_KEY.');
+  const userTurns = messages.filter((m) => m.role === 'user').length;
+  const estimatedPhase = Math.max(currentPhase || 1, Math.min(8, Math.ceil(userTurns / 3)));
+  const category = phaseToCategory[estimatedPhase] || 'vision';
+  const catalog = AI_QUESTIONS[role] || AI_QUESTIONS.male;
+  const list = Array.isArray(catalog?.[category]) ? catalog[category] : [];
+  const questionIndex = list.length ? (Math.max(userTurns - 1, 0) % list.length) : 0;
+  const followUpQuestion = list[questionIndex] || 'Peux-tu me parler davantage de ta vision du mariage ?';
+
+  const profileUpdate = {
+    religionScore: null,
+    psychologyScore: null,
+    lifestyleScore: null,
+    personalityTraits: [],
+    marriageVision: null,
+    lifestyle: null,
+    currentPhase: estimatedPhase,
+    physicalCharacteristics: {
+      height: null,
+      bodyType: null,
+      skinColor: null,
+      beard: null,
+      hijab: null,
+      niqab: null,
+    },
+    phaseCompleted: estimatedPhase >= 8 && userTurns >= 24,
+  };
+
+  return `BarakAllahu fik pour ta réponse.\n\nPhase ${estimatedPhase}/8 — avançons pas à pas.\n${followUpQuestion}\n\n[PROFILE_UPDATE]${JSON.stringify(profileUpdate)}[/PROFILE_UPDATE]`;
 }
 
 async function queryOpenAI(messages, role) {

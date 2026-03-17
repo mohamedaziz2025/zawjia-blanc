@@ -182,14 +182,14 @@ export default function LandingPage() {
   const navLinks = ['Concept', 'Sécurité', 'Tarifs'];
 
   const featuresList = [
-    { icon: Brain,         title: 'Nisfi IA Intelligente', desc: 'Une conversation approfondie pour cerner votre personnalité et vos attentes spirituelles.',       gradient: 'bg-rose-600' },
+    { icon: Brain,         title: 'Zawjia Intelligente', desc: 'Une conversation approfondie pour cerner votre personnalité et vos attentes spirituelles.',       gradient: 'bg-rose-600' },
     { icon: Heart,         title: 'Matching de Valeurs',   desc: 'Notre algorithme privilégie la compatibilité profonde au-delà des simples apparences.',           gradient: 'bg-rose-500' },
     { icon: Shield,        title: 'Pudeur & Sécurité',     desc: 'Vos photos sont floutées par défaut. Vous gardez le contrôle total sur votre image.',            gradient: 'bg-rose-700' },
   ];
 
   const plansList = [
     { name: 'Essentiel',  price: '0€',  period: 'gratuit', features: ['Profilage IA (Partiel)', 'Profil anonyme', 'Charte éthique signée'] },
-    { name: 'Premium',    price: '19€', period: 'mois',    features: ['IA complète Nisfi', 'Matchs illimités', 'Lien Wali automatique', 'Priorité algorithmique'], highlight: true },
+    { name: 'Premium',    price: '19€', period: 'mois',    features: ['IA complète Zawjia', 'Matchs illimités', 'Lien Wali automatique', 'Priorité algorithmique'], highlight: true },
     { name: 'Saisonnier', price: '45€', period: '3 mois',  features: ['Tout le Premium', 'Économie de 20%', 'Badge Vérifié Gold', 'Conseils personnalisés'] },
   ];
 
@@ -391,10 +391,10 @@ export default function LandingPage() {
               <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 italic tracking-tighter">
                 Votre <span className="text-rose-600">chemin</span> guidé
               </h2>
-              <p className="text-gray-500 text-lg font-medium">Un processus fluide, sécurisé et guidé par Nisfi IA étape par étape.</p>
+              <p className="text-gray-500 text-lg font-medium">Un processus fluide, sécurisé et guidé par Zawjia étape par étape.</p>
             </div>
             <div className="space-y-10">
-              <Step n={1} title="Profilage par Nisfi IA"  desc="Une conversation intelligente pour comprendre vos attentes spirituelles et familiales réelles." />
+              <Step n={1} title="Profilage par Zawjia"  desc="Une conversation intelligente pour comprendre vos attentes spirituelles et familiales réelles." />
               <Step n={2} title="Matching Intelligent"     desc="Notre algorithme filtre les profils ayant une compatibilité d'âme supérieure à 85%." />
               <Step n={3} title="Échange Respectueux"      desc="Discutez dans un cadre sécurisé. La photo n'est révélée qu'après un accord mutuel." />
               <Step n={4} title="Lien avec le Wali"        desc="Nous facilitons la mise en relation officielle avec la famille pour concrétiser l'union." />
@@ -414,13 +414,13 @@ export default function LandingPage() {
                   <Brain className="text-white" />
                 </div>
                 <div className="text-left">
-                  <h4 className="font-black text-gray-900 italic">Nisfi IA</h4>
+                  <h4 className="font-black text-gray-900 italic">Zawjia</h4>
                   <span className="text-[10px] text-green-500 font-bold uppercase tracking-widest">• En ligne</span>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="bg-rose-50 p-5 rounded-3xl rounded-tl-none max-w-[85%] text-sm text-rose-900 font-medium leading-relaxed text-left">
-                  Assalam alaykoum ! Je suis Nisfi. Pour comprendre votre profil, dites-moi quelle place occupe la prière dans votre futur foyer ?
+                  Assalam alaykoum ! Je suis Zawjia. Pour comprendre votre profil, dites-moi quelle place occupe la prière dans votre futur foyer ?
                 </div>
                 <div className="bg-gray-50 p-5 rounded-3xl rounded-tr-none ml-auto max-w-[85%] text-sm text-gray-600 leading-relaxed italic border border-gray-100 text-right">
                   C&apos;est mon pilier central. Je cherche quelqu&apos;un pour qui la spiritualité est un moteur quotidien...

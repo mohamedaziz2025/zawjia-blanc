@@ -89,6 +89,7 @@ export default function RegisterPage() {
   const setAuth         = useAuthStore(s => s.setAuth);
   const isAuthenticated = useAuthStore(s => s.isAuthenticated);
   const [step, setStep]   = useState(0);
+  const [questionnaireStep, setQuestionnaireStep] = useState(0);
   const [show, setShow]   = useState(false);
   const [show2, setShow2] = useState(false);
 
@@ -105,16 +106,46 @@ export default function RegisterPage() {
   const childrenHas = watch('childrenHas');
   const hijra = watch('hijra');
 
+  const QUESTIONNAIRE_STEPS = [
+    'Profil détaillé',
+    'Critères recherchés',
+    'Validation',
+  ];
+
   const nextStep = async () => {
+    if (step === 3) {
+      const questionnaireFieldsMap: Array<Array<keyof FormData>> = [
+        ['religiousPractice','prayers','wantsChildren'],
+        ['criteriaAgeMin','criteriaAgeMax'],
+        [],
+      ];
+      const ok = await trigger(questionnaireFieldsMap[questionnaireStep]);
+      if (!ok) return;
+      if (questionnaireStep < QUESTIONNAIRE_STEPS.length - 1) {
+        setQuestionnaireStep((s) => s + 1);
+        return;
+      }
+      setStep((s) => Math.min(s + 1, STEPS.length - 1));
+      return;
+    }
+
     const fieldsMap: Array<Array<keyof FormData>> = [
       ['role'],
       ['email','password','confirmPassword'],
       ['firstName','age','country','city','maritalStatus'],
-      ['religiousPractice','prayers','wantsChildren'],
+      [],
       ['hasAcceptedCharter'],
     ];
     const ok = await trigger(fieldsMap[step]);
     if (ok) setStep(s => Math.min(s+1, STEPS.length-1));
+  };
+
+  const prevStep = () => {
+    if (step === 3 && questionnaireStep > 0) {
+      setQuestionnaireStep((s) => s - 1);
+      return;
+    }
+    setStep((s) => Math.max(s - 1, 0));
   };
 
   const onSubmit = async (data: FormData) => {
@@ -218,7 +249,10 @@ export default function RegisterPage() {
             <h1 className="font-display font-bold" style={{ fontSize:'1.75rem', letterSpacing:'-0.03em', color:'#111827' }}>
               {STEPS[step].title}
             </h1>
-            <p className="text-sm mt-1" style={{ color:'#6b7280' }}>{STEPS[step].sub}</p>
+            <p className="text-sm mt-1" style={{ color:'#6b7280' }}>
+              {STEPS[step].sub}
+              {step === 3 ? ` · ${questionnaireStep + 1}/${QUESTIONNAIRE_STEPS.length}` : ''}
+            </p>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -368,6 +402,19 @@ export default function RegisterPage() {
           {step === 3 && (
             <motion.div key="s3" initial={{ opacity:0,x:30 }} animate={{ opacity:1,x:0 }} exit={{ opacity:0,x:-30 }}
               transition={{ duration:0.3 }} className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  {QUESTIONNAIRE_STEPS.map((label, i) => (
+                    <div key={label} className="flex-1">
+                      <div className="h-1.5 rounded-full" style={{ background: i <= questionnaireStep ? '#C8384E' : 'rgba(0,0,0,0.1)' }}/>
+                      <p className="text-[10px] mt-1" style={{ color: i === questionnaireStep ? '#C8384E' : '#9ca3af' }}>{label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {questionnaireStep === 0 && (
+                <>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="label">Date de naissance</label>
@@ -380,8 +427,11 @@ export default function RegisterPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
+                </>
+              )}
                 <div>
-                  <label className="label">Origine</label>
+              {questionnaireStep === 1 && (
+              <div style={cardBase} className="space-y-3">
                   <input {...register('origin')} placeholder="Maghreb, Afrique de l'Ouest..." className="input-field"/>
                 </div>
                 <div>
@@ -695,6 +745,17 @@ export default function RegisterPage() {
                   </div>
                 )}
               </div>
+              )}
+
+              {questionnaireStep === 2 && (
+                <div style={cardBase} className="space-y-3">
+                  <p className="text-sm font-semibold" style={{ color:'#111827' }}>Vérification rapide</p>
+                  <p className="text-xs" style={{ color:'#6b7280' }}>
+                    Vos réponses questionnaire sont enregistrées en plusieurs étapes pour faciliter l'inscription.
+                    Cliquez sur Continuer pour passer à la charte éthique.
+                  </p>
+                </div>
+              )}
             </motion.div>
           )}
 
@@ -748,7 +809,7 @@ export default function RegisterPage() {
         {/* Navigation */}
         <div className="flex gap-3 mt-8">
           {step > 0 && (
-            <button type="button" onClick={() => setStep(s => s-1)} className="btn-secondary flex-1">
+            <button type="button" onClick={prevStep} className="btn-secondary flex-1">
               <ChevronLeft size={16}/> Retour
             </button>
           )}

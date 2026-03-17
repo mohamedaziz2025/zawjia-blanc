@@ -22,20 +22,20 @@ const schema = z.object({
   country:            z.string().min(2,'Pays requis'),
   city:               z.string().min(2,'Ville requise'),
   maritalStatus:      z.enum(['single','divorced','widowed'], { required_error:'Situation requise' }),
-  dateOfBirth:        z.string().optional(),
-  nationality:        z.string().optional(),
-  origin:             z.string().optional(),
-  ethnicity:          z.enum(['arab','african','turkish','caucasian','asian','indian','latin','other']).optional(),
-  hadPreviousMarriage:z.enum(['true','false']).optional(),
-  childrenHas:        z.enum(['true','false']).optional(),
+  dateOfBirth:        z.string().min(1, 'Date de naissance requise'),
+  nationality:        z.string().min(2, 'Nationalité requise'),
+  origin:             z.string().min(2, 'Origine requise'),
+  ethnicity:          z.enum(['arab','african','turkish','caucasian','asian','indian','latin','other'], { required_error: 'Ethnie requise' }),
+  hadPreviousMarriage:z.enum(['true','false'], { required_error: 'Champ requis' }),
+  childrenHas:        z.enum(['true','false'], { required_error: 'Champ requis' }),
   childrenCount:      z.coerce.number().min(0).max(20).optional(),
-  religiousPractice:  z.enum(['little','practicing','very_practicing']).optional(),
-  prayers:            z.enum(['regular','irregular','rarely']).optional(),
-  religiousFollowing: z.enum(['none','self_taught','student']).optional(),
-  madhhab:            z.enum(['hanafi','maliki','shafii','hanbali','none']).optional(),
-  wantsChildren:      z.enum(['yes','no','undecided']).optional(),
-  willingToRelocate:  z.enum(['true','false']).optional(),
-  hijra:              z.enum(['already_done','possible_with_country','not_desired']).optional(),
+  religiousPractice:  z.enum(['little','practicing','very_practicing'], { required_error: 'Champ requis' }),
+  prayers:            z.enum(['regular','irregular','rarely'], { required_error: 'Champ requis' }),
+  religiousFollowing: z.enum(['none','self_taught','student'], { required_error: 'Champ requis' }),
+  madhhab:            z.enum(['hanafi','maliki','shafii','hanbali','none'], { required_error: 'Champ requis' }),
+  wantsChildren:      z.enum(['yes','no','undecided'], { required_error: 'Champ requis' }),
+  willingToRelocate:  z.enum(['true','false'], { required_error: 'Champ requis' }),
+  hijra:              z.enum(['already_done','possible_with_country','not_desired'], { required_error: 'Champ requis' }),
   hijraCountry:       z.string().optional(),
   femaleVeil:         z.enum(['hijab','niqab','none']).optional(),
   femaleAcceptPolygamy:z.enum(['yes','no','conditional']).optional(),
@@ -43,17 +43,17 @@ const schema = z.object({
   maleProfessionalSituation:z.enum(['student','employee','entrepreneur','other']).optional(),
   maleFinancialStability:z.enum(['stable','building']).optional(),
   malePolygamyStatus: z.enum(['no','possible','already_married']).optional(),
-  criteriaAgeMin: z.coerce.number().min(18).max(99).optional(),
-  criteriaAgeMax: z.coerce.number().min(18).max(99).optional(),
-  criteriaMaritalStatuses: z.string().optional(),
-  criteriaAcceptWithChildren: z.enum(['yes','no','limited','conditional','any']).optional(),
+  criteriaAgeMin: z.coerce.number().min(18, 'Age min requis').max(99, 'Age min invalide'),
+  criteriaAgeMax: z.coerce.number().min(18, 'Age max requis').max(99, 'Age max invalide'),
+  criteriaMaritalStatuses: z.string().min(1, 'Champ requis'),
+  criteriaAcceptWithChildren: z.enum(['yes','no','limited','conditional','any'], { required_error: 'Champ requis' }),
   criteriaChildrenLimit: z.coerce.number().min(0).max(20).optional(),
-  criteriaNationalities: z.string().optional(),
-  criteriaOrigins: z.string().optional(),
+  criteriaNationalities: z.string().min(1, 'Champ requis'),
+  criteriaOrigins: z.string().min(1, 'Champ requis'),
   criteriaEthnicities: z.string().optional(),
   criteriaDesiredResidence: z.enum(['same_country','europe_only','worldwide','any']).optional(),
-  criteriaDesiredReligiousPractice: z.enum(['little','practicing','very_practicing','any']).optional(),
-  criteriaPrayersExpectation: z.enum(['regular_required','progress_accepted','any']).optional(),
+  criteriaDesiredReligiousPractice: z.enum(['little','practicing','very_practicing','any'], { required_error: 'Champ requis' }),
+  criteriaPrayersExpectation: z.enum(['regular_required','progress_accepted','any'], { required_error: 'Champ requis' }),
   criteriaMadhhabType: z.enum(['same','any','specific']).optional(),
   criteriaMadhhabSpecific: z.string().optional(),
   criteriaReligiousFollowing: z.enum(['student','self_taught','serious_self_taught','any']).optional(),
@@ -67,13 +67,36 @@ const schema = z.object({
   criteriaMaleProfessionalMinimum: z.enum(['student_ok','employee_min','entrepreneur','any']).optional(),
   criteriaMaleFinancialStabilityReq: z.enum(['required','building_ok','any']).optional(),
   criteriaMaleAmbition: z.enum(['very_ambitious','stable','any']).optional(),
-  criteriaPolygamy: z.enum(['yes','no','conditional','future_possible','monogamy_only','any']).optional(),
+  criteriaPolygamy: z.enum(['yes','no','conditional','future_possible','monogamy_only','any'], { required_error: 'Champ requis' }),
   criteriaAcceptAlreadyMarried: z.enum(['yes','no','any']).optional(),
   criteriaWantsChildren: z.enum(['yes','no','undecided','any']).optional(),
   criteriaDesiredChildrenCount: z.coerce.number().min(0).max(12).optional(),
-  criteriaRelocation: z.enum(['required','flexible','not_required','yes','no','any']).optional(),
+  criteriaRelocation: z.enum(['required','flexible','not_required','yes','no','any'], { required_error: 'Champ requis' }),
   hasAcceptedCharter: z.literal(true, { errorMap: () => ({ message:'Vous devez accepter la charte' }) }),
-}).refine(d => d.password === d.confirmPassword, { message:'Mots de passe différents', path:['confirmPassword'] });
+}).refine(d => d.password === d.confirmPassword, { message:'Mots de passe différents', path:['confirmPassword'] })
+  .superRefine((d, ctx) => {
+    if (d.childrenHas === 'true' && (d.childrenCount == null || Number.isNaN(d.childrenCount))) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['childrenCount'], message: 'Nombre d\'enfants requis' });
+    }
+    if (d.hijra === 'possible_with_country' && !d.hijraCountry?.trim()) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['hijraCountry'], message: 'Pays de hijra requis' });
+    }
+    if (d.role === 'female') {
+      if (!d.femaleVeil) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['femaleVeil'], message: 'Champ requis' });
+      if (!d.femaleAcceptPolygamy) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['femaleAcceptPolygamy'], message: 'Champ requis' });
+      if (!d.femaleWantsToWork) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['femaleWantsToWork'], message: 'Champ requis' });
+      if (!d.criteriaMaleBeard) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['criteriaMaleBeard'], message: 'Champ requis' });
+    }
+    if (d.role === 'male') {
+      if (!d.maleProfessionalSituation) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['maleProfessionalSituation'], message: 'Champ requis' });
+      if (!d.maleFinancialStability) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['maleFinancialStability'], message: 'Champ requis' });
+      if (!d.malePolygamyStatus) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['malePolygamyStatus'], message: 'Champ requis' });
+      if (!d.criteriaFemaleHijab) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['criteriaFemaleHijab'], message: 'Champ requis' });
+    }
+    if (d.criteriaAgeMin > d.criteriaAgeMax) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['criteriaAgeMax'], message: 'Age max doit etre >= age min' });
+    }
+  });
 type FormData = z.infer<typeof schema>;
 
 const STEPS = [
@@ -92,6 +115,12 @@ export default function RegisterPage() {
   const [questionnaireStep, setQuestionnaireStep] = useState(0);
   const [show, setShow]   = useState(false);
   const [show2, setShow2] = useState(false);
+  const [countrySuggestions, setCountrySuggestions] = useState<Array<{ name: string; code: string }>>([]);
+  const [citySuggestions, setCitySuggestions] = useState<Array<{ name: string; country: string; admin1?: string }>>([]);
+  const [showCountrySuggestions, setShowCountrySuggestions] = useState(false);
+  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  const [selectedCountryCode, setSelectedCountryCode] = useState('');
+  const [countriesRef, setCountriesRef] = useState<Array<{ name: string; code: string }>>([]);
 
   useEffect(() => {
     if (isAuthenticated()) router.replace('/dashboard');
@@ -105,6 +134,96 @@ export default function RegisterPage() {
   const selectedRole = watch('role');
   const childrenHas = watch('childrenHas');
   const hijra = watch('hijra');
+  const countryValue = watch('country') || '';
+  const cityValue = watch('city') || '';
+
+  const countryField = register('country');
+  const cityField = register('city');
+
+  useEffect(() => {
+    let mounted = true;
+    fetch('https://restcountries.com/v3.1/all?fields=name,cca2')
+      .then((r) => r.json())
+      .then((data) => {
+        if (!mounted || !Array.isArray(data)) return;
+        const normalized = data
+          .map((c: { name?: { common?: string }; cca2?: string }) => ({
+            name: c?.name?.common || '',
+            code: c?.cca2 || '',
+          }))
+          .filter((c: { name: string; code: string }) => c.name && c.code)
+          .sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name, 'fr'));
+        setCountriesRef(normalized);
+      })
+      .catch(() => {
+        setCountriesRef([]);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if ((countryValue || '').trim().length < 2) {
+      setCountrySuggestions([]);
+      setShowCountrySuggestions(false);
+      return;
+    }
+
+    const q = countryValue.trim().toLowerCase();
+    const next = countriesRef.filter((c) => c.name.toLowerCase().includes(q)).slice(0, 8);
+    setCountrySuggestions(next);
+    setShowCountrySuggestions(next.length > 0);
+
+    const exact = countriesRef.find((c) => c.name.toLowerCase() === q);
+    setSelectedCountryCode(exact?.code || '');
+  }, [countryValue, countriesRef]);
+
+  useEffect(() => {
+    if ((cityValue || '').trim().length < 2) {
+      setCitySuggestions([]);
+      setShowCitySuggestions(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(async () => {
+      try {
+        const params = new URLSearchParams({
+          name: cityValue.trim(),
+          count: '8',
+          language: 'fr',
+          format: 'json',
+        });
+        if (selectedCountryCode) params.set('countryCode', selectedCountryCode);
+
+        const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?${params.toString()}`, {
+          signal: controller.signal,
+        });
+        const data = await res.json();
+        const rows = Array.isArray(data?.results)
+          ? data.results.map((r: { name?: string; country?: string; admin1?: string }) => ({
+              name: r.name || '',
+              country: r.country || '',
+              admin1: r.admin1 || '',
+            }))
+          : [];
+
+        setCitySuggestions(rows.filter((r: { name: string }) => r.name).slice(0, 8));
+        setShowCitySuggestions(rows.length > 0);
+      } catch {
+        if (!controller.signal.aborted) {
+          setCitySuggestions([]);
+          setShowCitySuggestions(false);
+        }
+      }
+    }, 280);
+
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [cityValue, selectedCountryCode]);
 
   const QUESTIONNAIRE_STEPS = [
     'Profil détaillé',
@@ -115,8 +234,8 @@ export default function RegisterPage() {
   const nextStep = async () => {
     if (step === 3) {
       const questionnaireFieldsMap: Array<Array<keyof FormData>> = [
-        ['religiousPractice','prayers','wantsChildren'],
-        ['criteriaAgeMin','criteriaAgeMax'],
+        ['dateOfBirth','nationality','origin','ethnicity'],
+        ['religiousPractice','prayers','religiousFollowing','madhhab','wantsChildren','willingToRelocate','hadPreviousMarriage','childrenHas','childrenCount','hijra','hijraCountry','femaleVeil','femaleAcceptPolygamy','femaleWantsToWork','maleProfessionalSituation','maleFinancialStability','malePolygamyStatus','criteriaAgeMin','criteriaAgeMax','criteriaMaritalStatuses','criteriaAcceptWithChildren','criteriaNationalities','criteriaOrigins','criteriaDesiredReligiousPractice','criteriaPrayersExpectation','criteriaPolygamy','criteriaRelocation','criteriaFemaleHijab','criteriaMaleBeard'],
         [],
       ];
       const ok = await trigger(questionnaireFieldsMap[questionnaireStep]);
@@ -386,12 +505,107 @@ export default function RegisterPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="label">Pays</label>
-                  <input {...register('country')} placeholder="France" className="input-field"/>
+                  <div className="relative">
+                    <input
+                      {...countryField}
+                      value={countryValue}
+                      onChange={(e) => {
+                        countryField.onChange(e);
+                        setValue('country', e.target.value, { shouldValidate: true, shouldDirty: true });
+                        setShowCountrySuggestions(e.target.value.trim().length >= 2);
+                      }}
+                      onFocus={() => {
+                        if ((countryValue || '').trim().length >= 2 && countrySuggestions.length > 0) {
+                          setShowCountrySuggestions(true);
+                        }
+                      }}
+                      onBlur={() => {
+                        setTimeout(() => setShowCountrySuggestions(false), 120);
+                      }}
+                      placeholder="France"
+                      className="input-field"
+                      autoComplete="off"
+                    />
+                    {showCountrySuggestions && countrySuggestions.length > 0 && (
+                      <div className="absolute z-20 mt-1 w-full rounded-xl border max-h-52 overflow-auto"
+                           style={{ background: '#fff', borderColor: 'rgba(0,0,0,0.12)' }}>
+                        {countrySuggestions.map((item) => (
+                          <button
+                            key={`${item.code}-${item.name}`}
+                            type="button"
+                            className="w-full text-left px-3 py-2 text-sm"
+                            style={{ color: '#111827' }}
+                            onMouseDown={() => {
+                              setValue('country', item.name, { shouldValidate: true, shouldDirty: true });
+                              setSelectedCountryCode(item.code);
+                              setShowCountrySuggestions(false);
+                              setValue('city', '', { shouldValidate: true, shouldDirty: true });
+                              setCitySuggestions([]);
+                            }}
+                          >
+                            {item.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-[11px] mt-1.5" style={{ color:'#9ca3af' }}>Tapez 2 lettres pour voir les suggestions</p>
                   {errors.country && <span style={errStyle}>{errors.country.message}</span>}
                 </div>
                 <div>
                   <label className="label">Ville</label>
-                  <input {...register('city')} placeholder="Paris" className="input-field"/>
+                  <div className="relative">
+                    <input
+                      {...cityField}
+                      value={cityValue}
+                      onChange={(e) => {
+                        cityField.onChange(e);
+                        setValue('city', e.target.value, { shouldValidate: true, shouldDirty: true });
+                        setShowCitySuggestions(e.target.value.trim().length >= 2);
+                      }}
+                      onFocus={() => {
+                        if ((cityValue || '').trim().length >= 2 && citySuggestions.length > 0) {
+                          setShowCitySuggestions(true);
+                        }
+                      }}
+                      onBlur={() => {
+                        setTimeout(() => setShowCitySuggestions(false), 120);
+                      }}
+                      placeholder="Paris"
+                      className="input-field"
+                      autoComplete="off"
+                    />
+                    {showCitySuggestions && citySuggestions.length > 0 && (
+                      <div className="absolute z-20 mt-1 w-full rounded-xl border max-h-52 overflow-auto"
+                           style={{ background: '#fff', borderColor: 'rgba(0,0,0,0.12)' }}>
+                        {citySuggestions.map((item, idx) => (
+                          <button
+                            key={`${item.name}-${item.country}-${idx}`}
+                            type="button"
+                            className="w-full text-left px-3 py-2 text-sm"
+                            style={{ color: '#111827' }}
+                            onMouseDown={() => {
+                              setValue('city', item.name, { shouldValidate: true, shouldDirty: true });
+                              if (!selectedCountryCode && item.country) {
+                                const found = countriesRef.find((c) => c.name.toLowerCase() === item.country.toLowerCase());
+                                if (found) {
+                                  setValue('country', found.name, { shouldValidate: true, shouldDirty: true });
+                                  setSelectedCountryCode(found.code);
+                                }
+                              }
+                              setShowCitySuggestions(false);
+                            }}
+                          >
+                            {item.name}
+                            <span style={{ color: '#6b7280' }}>
+                              {item.admin1 ? `, ${item.admin1}` : ''}{item.country ? `, ${item.country}` : ''}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-[11px] mt-1.5" style={{ color:'#9ca3af' }}>Tapez 2 lettres pour voir les suggestions</p>
                   {errors.city && <span style={errStyle}>{errors.city.message}</span>}
                 </div>
               </div>
